@@ -1,0 +1,548 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{float}
+\usepackage{cancel}
+\usepackage{graphicx}
+
+
+\newcommand{\partd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\partdd}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+%\newcommand{\coth}{\text{coth}}
+\newcommand{\csch}{\text{csch}}
+\newcommand{\kay}{\frac{1}{4 \pi \epsilon_0}}
+
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Electrodynamics - Homework 4 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Problem 1}
+
+We are asked to investigate the Diriclet problem in prolate spheroidal coordinates via separation of variables. Like any similar problem involving curvilinear coordinates our first task is to cast the Laplacian into the appropriate form so that we can write Laplace's equation:
+
+\begin{align}
+\nabla^2 \Phi = 0
+\end{align}
+
+The general form of the Laplacian in curvilinear coordinates is given by
+
+\begin{align}
+\nabla \cdot \nabla = \nabla^2 = \frac{1}{h_1 h_2 h_3}\left[\partd{}{u_1}\left(\frac{h_2 h_3}{h_1}\partd{}{u_2}\right) + \partd{}{u_2}\left(\frac{h_3h_1}{h_2}\partd{}{u_2}\right) + \partd{}{u_3}\left(\frac{h_1h_2}{h_3}\partd{}{u_3}\right)\right]
+\end{align}
+
+Where the $h_i$ are the scale factors and run over all the coordinates relevant to the space - in the case of prolate spheroidal coordinates, these are $\alpha, \beta$, and $\phi$. These parameters are given in cartesian coordinates as
+
+\begin{align}
+x &= c \sinh(\alpha)\sin(\beta)\cos(\phi) \\
+y &= c \sinh(\alpha)\sin(\beta)\sin(\phi) \\
+z &= c\cosh(\alpha)\cos(\beta)
+\end{align}
+
+Whereas the scale factors themselves are given by 
+
+\begin{align}
+h_i &= \left|\partd{\vec{r}}{q_i} \right| \\
+&= \sqrt{\partd{\vec{r}}{q_i} \cdot \partd{\vec{r}}{q_i}} \\
+\end{align}
+
+For $\vec{r} = x\hat{x} + y\hat{y} + z\hat{z}$. We need to plug in our coordinate transformations to the components of our position vector and then take derivatives with respect to those coordinates to get the scale factors. The position vector looks like
+
+\begin{align}
+\vec{r} &= c\sinh(\alpha)\sin(\beta)\cos(\phi)\hat{x} + c\sinh(\alpha)\sin(\beta)\sin(\phi)\hat{y} + c\cosh(\alpha)\cos(\beta)\hat{z} \\
+\partd{\vec{r}}{\alpha} &= c\cosh(\alpha)\sin(\beta)\cos(\phi)\hat{x} + c\cosh(\alpha)\sin(\beta)\sin(\phi)\hat{y} + c\sinh(\alpha)\cos(\beta)\hat{z}\\
+\end{align}
+
+Dotting this with itself gives
+
+\begin{align}
+\partd{\vec{r}}{\alpha} \cdot \partd{\vec{r}}{\alpha} &= c^2 \cosh^2(\alpha)\sin^2(\beta)\cos^2(\phi) + c^2 \cosh^2(\alpha)\sin^2(\beta)\sin^2(\phi) + c^2 \sinh^2(\alpha)\cos^2(\beta) \\
+&= c^2\cosh^2(\alpha)\sin^2(\beta)(\cos^2(\phi) + \sin^2(\phi)) + c^2 \sinh^2(\alpha)\cos^2(\beta) \\
+&= c^2\left[\cosh^2(\alpha)\sin^2(\beta) + \sinh^2(\alpha)\cos^2(\beta)\right] \\
+&= c^2\left[(1 + \sinh^2(\alpha))\sin^2(\beta) + \sinh^2(\alpha)(1 - \sin^2(\beta))\right] \\
+&= c^2\left[\cancel{\sinh^2(\alpha)\sin^2(\beta)} + \sin^2(\beta) - \cancel{\sinh^2(\alpha)\sin^2(\beta)} + \sinh^2(\alpha)\right]\\
+h_{\alpha} &= \sqrt{\sin^2(\beta) + \sinh^2(\alpha)} 
+\end{align}
+
+Similarly for the other coordinates
+
+\begin{align}
+\partd{\vec{r}}{\beta}\cdot \partd{\vec{r}}{\beta}&= c^2\sinh^2(\alpha)\cos^2(\beta)\cos^2(\phi) + c^2\sinh^2(\alpha)\cos^2(\beta)\cos^2(\phi) + c^2 \cosh^2(\alpha)\sin^2(\beta) \\ 
+&= c^2\sinh^2(\alpha)\cos^2(\beta) + c^2 \cosh^2(\alpha)\sin^2(\beta) \\
+&= c^2\left[\sinh^2(\alpha)(1-\sin^2(\beta)) + (\sinh^2(\alpha) + 1)\sin^2(\beta)\right]\\
+&= c^2\left[\sinh^2(\alpha) - \cancel{\sinh^2(\alpha)\sin^2(\beta)} + \cancel{\sinh^2(\alpha)\sin^2(\beta)} + \sin^2(\beta)\right] \\
+h_{\beta} &= \sqrt{c^2\sinh^2(\alpha) +\sin^2(\beta)} 
+\end{align}
+
+\begin{align}
+\partd{\vec{r}}{\phi} \cdot \partd{\vec{r}}{\phi} &= c^2\sinh^2(\alpha)\sin^2(\beta)\sin^2(\phi) + \sinh^2(\alpha)\sin^2(\beta)\cos^2(\phi) \\
+&= c^2\sinh^2(\alpha)\sin^2(\beta)(\sin^2(\phi) + \cos^2(\phi)) \\
+&= c^2\sinh^2(\alpha)\sin^2(\beta) \\
+h_{\phi} &= \sqrt{c^2\sinh^2(\alpha)\sin^2(\beta)}
+\end{align}
+
+Since $h_1 = h_2$ the definition of the Laplacian reduces in this case to
+
+\begin{align}
+\frac{1}{h_1h_2h_3}\left[\partd{}{\alpha}h_3\partd{}{\alpha} + \partd{}{\beta}h_3\partd{}{\beta} + \partd{}{\phi}\frac{h_1h_2}{h_3}\partd{}{\phi}\right] \\
+\end{align}
+
+The term in the brackets simplifies as 
+
+\begin{align}
+&=\partd{}{\alpha}(\sinh(\alpha)\sin(\beta))\partd{}{\alpha}\partd{}{\alpha} + \partd{}{\beta}(\sinh(\alpha)\sin(\beta))\partd{}{\beta} + \partd{}{\phi}\left(\frac{c^2(\sin^2(\beta)+\sinh^2(\alpha))}{c\sinh(\alpha)\sin(\beta)}\right)\partd{}{\phi} \\
+&= \cosh(\alpha)\sin(\beta)\partd{}{\alpha} + \sinh(\alpha)\sin(\beta)\partdd{}{\alpha} + \sinh(\alpha)\cos(\beta)\partd{}{\beta} + \sinh(\alpha)\sin(\beta)\partdd{}{\beta} ... \\
+&+ \left(\frac{c^2(\sin^2(\beta)+\sinh^2(\alpha))}{c\sinh(\alpha)\sin(\beta)}\right)\partdd{}{\phi}
+\end{align}
+
+Dividing out the $\sinh(\alpha)\sin(\beta)$ term from the prefactor gets us the final Laplacian:
+
+\begin{align}
+\nabla^2 = \frac{1}{c^2(\sin^2\beta)+\sinh^2(\alpha)}\left[\coth(\alpha)\partd{}{\alpha} + \cot(\beta)\partd{}{\beta}+ \partdd{}{\alpha} + \partdd{}{\beta} + (\csch(\alpha) + \csc(\beta))\partdd{}{\phi}\right]
+\end{align}
+
+We are given that the problem has azimuthal symmetry, so the ($\phi$) derivatives are zero. This leads us to assume a solution of the form $\Phi = A(\alpha)B(\beta)$. Acting our Laplacian, sans the $\phi$ derivative part, on our ansatz gets us the following
+
+\begin{align}
+\partdd{A}{\alpha}B + \partdd{B}{\beta}A + B\coth(\alpha)\partd{A}{\alpha} + A\cot(\beta)\partd{B}{\beta} &= 0 \\
+\frac{1}{A}\partdd{A}{\alpha} + \frac{1}{B}\partdd{B}{\beta} + \frac{\coth(\alpha)}{A}\partd{A}{\alpha} + \frac{\cot(\beta)}{B}\partd{B}{\beta} &= 0
+\end{align}
+
+As usual the only way two functions of separate varibles can be equal for all values of their respective arguments are if they are both equal to the same constant. In anticipation for transforming our result into Legendre's differential equation we select $l(l+1)$ for our constant and arrive at the following two second order ODEs as our solutions:
+
+\begin{align}
+\partdd{A}{\alpha} + \coth(\alpha)\partd{A}{\alpha} - Al(l+1) &= 0 \\
+\partdd{B}{\beta} + \cot(\beta)\partd{B}{\beta} + Bl(l+1) &= 0
+\end{align}
+
+Starting with the equation for $A$, we would like to transform our derivatives from $\partd{}{\alpha}$ to $\partd{}{\cosh(\alpha)}$. We can write $\partd{}{\alpha} = \partd{\cosh(\alpha)}{\alpha}\partd{}{\cosh(\alpha)} = \sinh(\alpha)\partd{}{\cosh(\alpha)}$. Taking another derivative of this expression via product rule, we get $\partd{}{\alpha}\left[\sinh(\alpha)\partd{}{\cosh(\alpha)}\right] = \cosh(\alpha)\partd{}{\cosh(\alpha)} + \sinh(\alpha)\left[\sinh(\alpha)\partd{}{\cosh(\alpha)}\partd{}{\cosh(\alpha)}\right] = \cosh(\alpha)\partd{}{\cosh(\alpha)} + \sinh^2(\alpha)\partdd{}{\cosh(\alpha)}$. With this information the equation for $A$ transforms as 
+
+
+\begin{align}
+\cosh(\alpha)\partd{A}{\cosh(\alpha)} + \sinh^2(\alpha)\partdd{A}{\cosh(\alpha)} + \coth(\alpha)\sinh(\alpha)\partd{A}{\cosh(\alpha)} - Al(l+1) = 0 \\
+\cosh(\alpha)\partd{A}{\cosh(\alpha)} + \sinh^2(\alpha)\partdd{A}{\cosh(\alpha)} + \cosh(\alpha)\partd{A}{\cosh(\alpha)} - Al(l+1) = 0 \\
+\sinh^2(\alpha)\partdd{A}{\cosh(\alpha)} + 2 \cosh(\alpha)\partd{A}{\alpha} - Al(l+1)) = 0 \\
+-(1-\cosh^2(\alpha))\partdd{A}{\cosh(\alpha)} + 2\cosh(\alpha)\partd{A}{\alpha}-Al(l+1) = 0 \\
+(1-\cosh^2(\alpha))\partdd{A}{\cosh(\alpha)} - 2\cosh(\alpha)\partd{A}{\alpha} + Al(l+1) = 0
+\end{align}   
+
+Which is Legendre's equation for $A(\alpha)$. As for the $B$ equation, we want the argument of the resulting Legendre polynomials to be $\cos(\beta)$. So we note that $\partd{}{\beta} = \partd{\cos(\beta)}{\beta}\partd{}{\cos(\beta)} = -\sin(\beta)\partd{}{\cos(\beta)}$ and $\partdd{}{\beta} = \partd{}{\beta}\left[-\sin(\beta)\partd{}{\cos(\beta)}\right] = -\cos(\beta)\partd{}{\cos(\beta)} + \sin^2(\beta)\partdd{}{\cos(\beta)}$. Acting the revised operators on $B$ yields
+
+\begin{align}
+\sin^2(\beta)\partdd{B}{\cos(\beta)} - \cos(\beta)\partd{B}{\cos(\beta)} - \cot(\beta)\sin(\beta)\partd{B}{\cos(\beta)} + Bl(l+1) &= 0 \\
+(1-\cos^2(\beta))\partdd{B}{\cos(\beta)} - 2 \cos(\beta)\partd{B}{\cos(\beta)} + Bl(l+1) &= 0
+\end{align}    
+
+Which is again Legendre's equation for $B(\beta)$. Thus we can represent our solution as 
+
+\begin{align}
+\Phi = \sum_n A_n P_n(\cosh(\alpha)P_n(\cos(\beta))
+\end{align}
+
+Which is the desired result.
+
+\section{Problem 2}
+
+We want to the scalar monopole moment, vector dipole moment, and tensor quadrupole moment for the two charge distributions pictured above, for both cartesian and spherical coordinates. The moments themselves are defined as follows:
+
+\begin{align}
+M &= \kay \int_v \rho(\vec{r'})d^3\vec{r'} = \ \text{Total Charge}  \\
+\vec{P} &= \kay \int_v \vec{r'}\rho(\vec{r})d^3\vec{r'} = \ \text{Dipole Moment Vector} \\
+Q_{ij} &= \kay \int_v (3x_ix_j - r_i^2\delta_{ij})\rho(\vec{r'})d^3(r') = \ \text{Quadrupole Moment Tensor Components}
+\end{align}
+
+We note that the total charge of the system sums to zero. Thus we have no monopole moment for the charge distribution. As for the dipole moment, the relevant formula in the discrete case would have to be 
+
+\begin{align}
+\vec{P}_i &= \sum_{n=1}^3 r_i^{(n)}q_i^{(n)} \ \text{\textit{Component i} of the dipole vector} \\
+\end{align}
+
+\subsection{Distribution 1}
+
+Labelling the charges as shown in the figure, the dipole moment  would come out to be $qa\hat{z} - qa\hat{z} -\cancel{2q(0)} = 0$, when summing over all the charges. Thus the dipole moment of the first charge distribution is also zero. The discrete quadrupole formula written as a summation over a discrete charge distribution must be 
+
+\begin{align}
+Q_{ij} = \sum_{n=1}^3 (3x_i^{(n)}x_j^{(n)} - (r_i^{(n)})^2\delta_{ij})q^{(n)}
+\end{align}
+
+For the charge distribution in question we can expand this formula as follows:
+
+\begin{align}
+Q_{ij} &= (3x_i^{(1)}x_j^{(1)} - (r_i^{(1)})^2\delta_{ij})q^{(1)} + (3x_i^{(2)}x_j^{(2)} - (r_i^{(2)})^2\delta_{ij})q^{(2)} + (3x_i^{(3)}x_j^{(3)} - (r_i^{(3)})^2\delta_{ij})q^{(3)} \\
+\end{align}
+
+Let's look at the off-diagonal case first. If $i \neq j$, then obviously all the $\delta_{ij}$ cancel. Furthermore, when we notice that the charges lie only on the $z$ axis, we find that since \textit{at least one} of the coordinates ($i$ or $j$) must \textit{not} be $z$, all of the other products cancel too. Thus we conclude that all of the off-diagonal elements in this tensor are zero. This leaves us with three to calculate:
+
+\begin{align}
+Q_{11} &= (3x_1^{(1)}x_1^{(1)} - (r_1^{(1)})^2)q^{(1)} + (3x_1^{(2)}x_1^{(2)} - (r_1^{(2)})^2)q^{(2)} + (3x_1^{(3)}x_1^{(3)} - (r_1^{(3)})^2)q^{(3)} \\
+&= (\cancel{3(0)(0)} - a^2)q - 2\cancel{(3(0)(0) - 0^2)q} + (\cancel{3(0)(0)} - a^2)q \\ 
+&= -2a^2q \\
+Q_{22} &= (3x_2^{(1)}x_2^{(1)} - (r_2^{(1)})^2)q^{(1)} + (3x_2^{(2)}x_2^{(2)} - (r_2^{(2)})^2)q^{(2)} + (3x_2^{(3)}x_2^{(3)} - (r_2^{(3)})^2)q^{(3)} \\
+&= (\cancel{3(0)(0)} - a^2)q - 2\cancel{(3(0)(0) - 0^2)q} + (\cancel{3(0)(0)} - a^2)q \\
+&= -2a^2q \\
+Q_{33} &= (3x_3^{(1)}x_3^{(1)} - (r_3^{(1)})^2)q^{(1)} + (3x_3^{(2)}x_3^{(2)} - (r_3^{(2)})^2)q^{(2)} + (3x_3^{(3)}x_3^{(3)} - (r_3^{(3)})^2)q^{(3)} \\
+&= (3a^2 - a^2)q - 2\cancel{(3(0)(0) - 0^2)q} + (3a^2 - a^2)q \\
+&= 4a^2q
+\end{align}
+
+Thus, the quadrupole moment tensor, which we note is traceless, is 
+
+\begin{align}
+Q = 2a^2
+\begin{bmatrix}
+-1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & 2
+\end{bmatrix}
+\end{align}
+
+To translate to spherical coordinates, we make use of Jackson equations 4.4 through 4.6. Since the total charge and dipole moments are known to be zero, the $l=0$ and $l=1$ $q$'s are all zero. Furthermore, if all the off diagonal terms of $Q$ are zero, $q_{21}$ is automatically zero. Even more, $q_{22} = \text{const.} * (Q_{11} - \cancel{iQ_{12}} - Q_{22})$ is zero because $Q_{11} = Q_{22}$. This leaves only the $q_{20}$ moment to calculate. 
+
+\begin{align}
+q_{20} = \frac{1}{2}\sqrt{\frac{5}{4\pi}}Q_{33} = \frac{1}{2}\sqrt{\frac{5}{4\pi}}(4a^2) = \sqrt{\frac{5}{\pi}}a^2
+\end{align}
+
+As the only nonzero $q_{lm}$.
+
+\subsection{Distribution 2}
+
+We note that as before the total charge over the system is zero. So we must have a monopole moment that vanishes. The components of the dipole moment vector $\vec{P}$ would be as follows: 
+
+\begin{align}
+P_x &= r_x^{(1)}q^{(1)} + r_x^{(2)}q^{(2)} + r_x^{(3)}q^{(3)} + r_x^{(4)}q^{(4)} \\
+&= a(-q) + \cancel{0(q)} -a(-q) + \cancel{a(0)} = 0  \\
+P_y &= r_y^{(1)}q^{(1)} + r_y^{(2)}q^{(2)} + r_y^{(3)}q^{(3)} + r_y^{(4)}q^{(4)} \\
+&= \cancel{(0)-q} -a(q) +\cancel{(0)(-q)} -a(-q) = 0 \\
+P_z &= 0+0+0+0 = 0
+\end{align}
+
+So we conclude, explicitly, that $\vec{P} = 0$ for this distribution as well. The components of the Quadrupole tensor can be found through the same process as above. For this case, we note that any and all terms involving $z$ are automatically zero because the charges are in the $xy$ plane. That elminiates 5 of 9 components that we need to calculate. Furthermore, since we know that $Q_{33}$ is zero, we have the additonal constraint that $Q_{22} = - Q_{11}$ for the tensor to remain traceless. This leaves us with only two components to calculate:
+
+\begin{align}
+Q_{11} &= (3x_1^{(1)}x_1^{(1)} - (r_1^{(1)})^2)q^{(1)} + (3x_1^{(2)}x_1^{(2)} - (r_1^{(2)})^2)q^{(2)} + (3x_1^{(3)}x_1^{(3)} - (r_1^{(3)})^2)q^{(3)}  ... \\
+&+ (3x_1^{(4)}x_1^{(4)} - (r_1^{(4)})^2)q^{(4)}\\
+&= -(3 a^2 - a^2)(-q) + (3(0)(0) - a^2)(q) + (3 a^2 - a^2)(-q) - (3(0)(0) - a^2)q \\
+&= -6a^2 \\
+Q_{12} &= (3x_1^{(1)}x_2^{(1)})q^{(1)} + (3x_1^{(2)}x_2^{(2)})q^{(2)} + (3x_1^{(3)}x_2^{(3)})q^{(3)}+(3x_1^{(4)}x_2^{(4)})q^{(4)} \\
+&= \cancel{(3(a)(0))q} + \cancel{(3(0)(a))q} + \cancel{(3(0)(a))q} + \cancel{(3(a)(0))q} = 0 
+\end{align}
+
+Which in retrospect was obvious because no individual charge has both an $x$ and $y$ component. The quadrupole moment tensor is, then, 
+
+\begin{align}
+Q = -6a^2
+\begin{bmatrix}
+-1 & 0 & 0\\
+0 &1 & 0 \\
+0 & 0 & 0 
+\end{bmatrix}
+\end{align} 
+
+In spherical coordinates, using the same logic as above, no monopole or dipole moments means $q_{1m}$ and $q_{00}$ vanish. This time, $q_{20}$ also vanishes because $Q_{33}=0$. The only nonzero $q_{lm}$ is, then:
+
+\begin{align}
+q_{22} =  \frac{1}{12}\sqrt{\frac{15}{2\pi}}(Q_{11} - Q_{22}) = \frac{1}{12}\sqrt{\frac{15}{2\pi}}(8a^2) = \frac{2}{3}\sqrt{\frac{15}{2\pi}}a^2
+\end{align} 
+
+\subsection{Far Field Potential}
+
+Using Jackson Equation 4.1 and plugging in our results from above, we have, for the first source distribution,
+
+\begin{align}
+\Phi &= \kay \sum_{l=0}^{\infty}\sum_{m=-l}^l \frac{4\pi}{2l + 1}q_{lm}\frac{Y_{lm}(\theta,\phi)}{r^{l+1}} \\
+&=
+\begin{cases}
+\frac{1}{\cancel{4 \pi} \epsilon_0} \sqrt{\frac{5}{\pi}}a^2 \frac{\cancel{4\pi}}{5}\frac{1}{4}\sqrt{\frac{5}{\pi}}\left[3\cos^2(\theta)-1\right]r^{-3} = \frac{a^2}{4 \pi}\left[3\cos^2(\theta)-1\right]r^{-3}, & \ \text{Distribution 1} \\ 
+\frac{1}{4 \pi \epsilon_0}\frac{4 \pi}{5}\frac{2}{3}\sqrt{\frac{15}{2\pi}}a^2\left[\frac{1}{4}\sqrt{\frac{15}{2\pi}}\right]\sin^2(\theta)e^{2i\phi}r^{-3} = \frac{a^2}{\epsilon_0 \pi}\sin^2(\theta)e^{2i\phi}r^{-3}, & \ \text{Distribution 2} 
+\end{cases}
+\end{align}
+
+\section{Problem 3}
+ 
+We are given a "localized" charge distribution in spherical coordinates with the following form:
+
+\begin{align}
+\rho(\vec{r}) = \frac{1}{64 \pi}r^2 e^{-r}\sin^2(\theta)
+\end{align}
+
+\subsection{Multipole Moments}
+
+The formula for multipole moments is given in Jackson as
+
+\begin{align}
+q_{lm} &= \int_v Y^*_{lm}(\theta',\phi')r'^l\rho(\vec{r'})d^3\vec{r'} 
+\end{align}
+
+Right off the bat we make two observations that simplify our task. Firstly, the problem is azimuthally symmetric. Thus we can write our spherical harmonics, per Jackson equation 3.57, as
+
+\begin{align}
+Y_{l0}(\theta) = \sqrt{\frac{2l + 1}{4 \pi}}P_l(\cos(\theta)) 
+\end{align} 
+
+Secondly, we note that since the charge distribution has \textit{at most} a $sin^2(\theta)$ term, we are guaranteed that we will not have multipole moments higher then $l=2$, as those contain Legendre polynomails that carry $\sin^3(\theta)$ terms and higher. This leaves us with no more then 6 coefficients to evaluate, since the $-m$ versions are related to the $+m$ versions via $q_{l, -m} = (-1)^m q^*_{lm}$. The general formula for the $q_{l0}$ then is as follows, plugging in our particular charge distribution:
+
+\begin{align}
+q_{l0} &= \int_v \sqrt{\frac{2l + 1}{4\pi}}P_l(\cos(\theta'))r'^l*\left[\frac{1}{64\pi}r'^2 e^{-r'}\sin^2(\theta')\right]r'^2\sin(\theta')dr'd\theta'd\phi' \\
+&= \sqrt{\frac{2l + 1}{4 \pi}}\frac{1}{64\pi} \int_{r=0}^{r=\infty}\int_{\theta=0}^{\theta=\pi}\int_{\phi=0}^{\phi=2\pi}r'^{l+4}e^{-r}\sin^3(\theta')P_l(\cos(\theta'))d\phi'd\theta'dr'
+\end{align}
+
+$\phi$ integrates out and we pick up a factor of $2 \pi$. The $\theta$ and $r$ integrals are independent and thus factorize.
+ 
+\begin{align}
+q_{l0} &= \sqrt{\frac{2l + 1}{4 \pi}}\frac{1}{32}\left[\int_0^\infty r'^{l+4}e^{-r}dr\right]\left[\int_0^{\pi}\sin^3(\theta')P_l(\cos(\theta')d\theta'\right]
+\end{align} 
+
+The $\theta$ integral can be accomplished via change of variables $x=\cos(\theta)$. Then $dx = -\sin(\theta)d\theta$ and $d\theta = -\frac{dx}{\sin(\theta)}$. Noting that $\sin^3(\theta) = \sin^2(\theta)\sin(\theta) = \sin(\theta)[1-\cos^2(\theta)]$, we know that the factor $\sin^3(\theta)d\theta = (1 - x^2)dx$. Finally, the limits of integration change as $x = \cos(0) \rightarrow 1$  and $x = \cos(\pi) \rightarrow -1$. 
+
+\begin{align}
+q_{l0} &= \sqrt{\frac{2l + 1}{4 \pi}}\frac{1}{32}\left[\int_0^\infty r'^{l+4}e^{-r}dr\right]\left[\int_{-1}^{1}(1-x^2)P_l(x)dx\right]
+\end{align} 
+
+Splitting the $x$ integral up into two pieces, one sees that the first piece,
+
+\begin{align}
+\int_{-1}^{1}P_l(x)dx
+\end{align}
+
+Can be written as 
+\begin{align}
+\int_{-1}^{1}P_l(x)P_0(x)dx
+\end{align}
+
+Since $P_0(x) = 1$. Then, by orthogonality of the Legendre polynomials, we have that $\int_{-1}^1 P_l(x)P_n(x)dx = \frac{2}{2l+1}\delta_{nl}$, Since $P_0(x) = 1$. Then, by orthogonality of the Legendre polynomials, we have that $\int_{-1}^1 P_l(x)P_n(x)dx = \frac{2}{2l+1}\delta_{nl}$. This means that the integral above is zero unless $l=0$, in which case it just equals $2$. The second integral is more annoying and requires Jackson equation 3.32:
+
+\begin{align}
+\int_{-1}^1x^2P_l(x)P_n(x)dx = \begin{cases}
+\frac{2(n+1)(n+2)}{(2n+1)(2n+1)(2n+3)}, & l=n+2\\
+\frac{2(2n^2 + 2n - 1)}{(2n-1)(2n+1)(2n+5)}, & l=n\\
+\ \ \ \ \ \ \ \ \ \  0, & l = \text{Anything Else}
+\end{cases}
+\end{align}
+
+In our case $n=0$ and we are concerned with the $l=0$ and $l=2$ cases. We have thus concluded that the $\theta$ portion of the integral, and thus the entire integral, and thus the multipole moment, is zero for all values of $l$ except for $l=0$ and $l=2$. Simplifying the $\theta$ integral for the two nonzero cases we get
+
+\begin{align}
+\int_{\theta} = 
+\begin{cases}
+2 - \int_{-1}^1 x^2 P_0(x)P_l(x)dx = 2 - \frac{2}{3} = \frac{4}{3}, & l=0 \\
+-\int_{-1}^1 x^2 P_0(x)P_2(x)dx = -\frac{4}{15}, & l=2  
+\end{cases}
+\end{align} 
+
+This leaves us with the integral over $r$ which we recognize as the definition of the factorial function for the exponent of $r$:
+
+\begin{align}
+\int_0^{\infty}r^n e^{-r}dr \equiv n!
+\end{align} 
+ 
+So we have 
+
+\begin{align}
+\int_r = 
+\begin{cases}
+\int_0^{\infty}r^4e^{-r}dr = 4! = 24, & l=0 \\
+\int_0^{\infty}r^6e^{-r}dr = 6! = 720, & l=2
+\end{cases}
+\end{align}
+
+Combining everything together we have:
+
+\begin{align}
+q_{l0} = 
+\begin{cases}
+\sqrt{\frac{1}{4\pi}}\frac{1}{32}\left(\frac{4}{3}\right)(24) = \sqrt{\frac{1}{4\pi}}, & l=0 \\
+\sqrt{\frac{4 + 1}{4\pi}}\frac{1}{32}\left(-\frac{4}{15}\right)(720) = -3\sqrt{\frac{5}{\pi}}, & l=2
+\end{cases}
+\end{align} 
+
+This means that if the general formula for the multipole expansion is 
+
+\begin{align}
+\Phi = \kay \sum_{l=0}^{\infty}\sum_{m=-l}^{l}\frac{4\pi}{2l + 1}q_{lm}Y_{lm}(\theta,\phi)r^{-(l+1)}
+\end{align}
+
+Then we would have 
+
+\begin{align}
+\Phi &= \kay \left[\cancel{\frac{4\pi}{1}}\cancel{\sqrt{\frac{1}{4 \pi}}}P_0(\cos(\theta))\cancel{\sqrt{\frac{1}{4\pi}}}r^{-1} + \cancel{\frac{4\pi}{5}}\left(-3\cancel{\sqrt{\frac{5}{\pi}}}\right)\cancel{\frac{1}{4}\sqrt{\frac{5}{\pi}}}P_2(\cos(\theta))r^{-3}  \right] \\
+&= \kay \left[\frac{1}{r} - \frac{3}{2r^3}(3\cos^2(\theta) - 1)\right]
+\end{align}
+
+As our final expression. In the far-field, we can probably neglect the $r^{-3}$ term, which would give us just the potential of a point charge, $\Phi = \kay \frac{1}{r}$ as our answer.
+
+\section{Problem 4}
+By calculating the moments up to quadrupolar order, we wish to show tha the charge distribution $\rho(\vec{r}) = -(\vec{P}\cdot \nabla)\delta(\vec{r})$ represents an elementary dipole with dipole moment $\vec{P}$ located at the origin, given the hint that this is most easily accomplished in cartesian coordinates.
+
+\subsection{Monopole Moment}
+
+Directly integrating the charge distribution over space gives us an integral which we can expand as follows:
+
+\begin{align}
+&= - \int_v (\vec{P}\cdot \nabla)\delta(\vec{r})d^3(\vec{r'}) \\
+&= -\int_{x=-\infty}^{x=\infty} \int_{y=-\infty}^{y=\infty} \int_{z=-\infty}^{z=\infty}\left[P_x \partd{}{x} + P_y \partd{}{y} + P_z \partd{}{z}\right] \delta (x) \delta (y) \delta (z) dx dy dz
+\end{align}
+
+Picking out just the $x$ term, we have
+
+\begin{align}
+&= \int_{-\infty}^{\infty}\delta(y)dy\int_{-\infty}^{\infty}\delta(z)dz \int_{-\infty}^{\infty}P_x\partd{}{x}\delta(x)dx  \\
+&= \int_{-\infty}^{\infty}P_x\partd{\delta(x)}{x}dx
+\end{align}
+
+Integrating by parts with $u = P_x, du = P'_x dx, dv = \delta'(x)dx, v=\delta(x)$, we have
+
+\begin{align}
+\cancel{P_x \delta(x)\bigg|_{-\infty}^{\infty}} - \int_{-\infty}^{\infty}\delta(x)P'_x(x)dx
+\end{align}
+
+The first term vanishes at the boundaries because $\delta(x) = 0$ everywhere except $x=0$. The second, integral term vanishes as long as $\vec{P} = $ const. This implies that the $x$ integral is zero, and applying the same logic to the other portions of the total integral, we get a monopole term that vanishes completely, as is expected for a pure dipole.
+
+\subsection{Dipole Moment}
+
+This is an integral of the form
+
+\begin{align}
+-\int_v \vec{r}\left[\vec{P} \cdot \nabla\right] d^3(\vec{r})
+\end{align}
+
+Which can be expanded explicitly in cartesian coordinates as
+
+\begin{align}
+-\int_{x=-\infty}^{x=\infty} \int_{y=-\infty}^{y=\infty} \int_{z=-\infty}^{z=\infty}\left[x\hat{x} +y\hat{y} + z\hat{z}\right]\left[P_x\partd{}{x} + P_y\partd{}{y} + P_z\partd{}{z}\right]\delta(x)\delta(y)\delta(z)dxdydz
+\end{align}
+
+From this we can see that the integral breaks up into two types of terms:
+
+\begin{enumerate}
+\item \textit{Uniform} types of the form $\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}x\hat{x}P_x\partd{}{x}\delta(x)\delta(y)\delta(z) dxdydz$
+\item \textit{Mixed} types of the form $\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}x\hat{x}P_y\partd{}{y}\delta(x)\delta(y)\delta(z)dxdydz$ 
+\end{enumerate}
+
+Examining the uniform case in $x$, we integrate by parts with $u=xP_x \hat{x}, du=P_xdx\hat{x}, v=\delta'(x)dx, v = \delta(x)$ and including the negative out front, obtain
+
+\begin{align}
+\cancel{-xP_x\delta(x)\bigg|_{-\infty}^{\infty}} + \int_{-\infty}^{\infty}P_x\delta(x)dx\hat{x}
+\end{align}
+
+Which produces the value of $P_x\hat{x}$ from the term on the right hand side. However, the \textit{mixed} integral cases look like
+
+\begin{align}
+\int_{-\infty}^{\infty}x\hat{x}\delta(x)dx\int_{-\infty}^{\infty}\delta(z)dz\cancel{\int_{-\infty}^{\infty}P_y\partd{}{y}\delta(y)dy} = 0
+\end{align} 
+
+The last integral factor on the right hand side is zero, because it is of the exact same form as the monopole integral above. Applying the same logic to the other 7 integrals, we end up with simply $P_x \hat{x} + P_y \hat{y} + P_z\hat{z}$, which corresponds to a pure dipole of magnitude $P$ located at the origin.
+
+\subsection{Quadrupole Moment}
+
+The integral for the quadrupole moment tensor components, given in Jackson, is
+
+\begin{align}
+Q_{ij} = \int_v \left[3x_ix_j - r^2\delta_{ij}\right]\rho(x)d^3(x)
+\end{align}
+
+Inserting our charge distribution yields the integral
+
+\begin{align}
+\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\int_{-\infty}^{\infty}\left[3x_ix_j - r^2 \delta_{ij}\right]\left[P_x\partd{}{x} + P_y\partd{}{y} + P_z\partd{}{z}\right]\delta(x)\delta(y)\delta(z)dxdydz
+\end{align}
+
+Let's examine the first term in brackets. For $i=j$, we have, for instance $3x^2 - x^2 - y^2 - z^2 = 2x^2 - y^2 - z^2$. For $i\neq j$, we have terms that look like just $xy$. The first term of the diagonal case reads 
+
+\begin{align}
+-2\int_{-\infty}^{\infty}\delta(x)dx\int_{-\infty}^{\infty}\delta(y)dy\int_{-\infty}^{\infty}x^2P_x\delta'(x)dx
+\end{align}
+
+Integrating the $x-$factor by parts with $u=x^2P_x, du=2xP_x dx, dv=\delta'(x)dx, v=\delta(x)$ the boundary term cancels as usual and the resulting integral is 
+
+\begin{align}
+-2\int_{-\infty}^{\infty} \delta(x)xP_xdx 
+\end{align}
+ 
+Which vanishes, because the integrand $x|_{x=0} = 0$ at the location of the delta function. The other terms in the $xx$ case are integrals of the form
+
+\begin{align}
+-2\int_{-\infty}^{\infty}x^2\delta(x)dx \int_{-\infty}^{\infty}\delta(z)dz \cancel{\int_{-\infty}^{\infty}P_y\partd{}{y}\delta(y)dy} 
+\end{align}
+
+The last factor on the right vanishes as it is another monopole-like integral already shown to be zero. The same construction of course works for the other diagonal elements. That just leaves the off diagonal case, which consists of integrals like
+
+\begin{align}
+3\int_{-\infty}^{\infty}xP_x\delta'(x)\cancel{\int_{-\infty}^{\infty}y\delta(y)dy}\int_{-\infty}^{\infty}\delta(z)dz
+\end{align}
+
+and 
+
+\begin{align}
+3\int_{-\infty}^{\infty}x\delta{x}dx\int_{-\infty}^{\infty}y\delta(y)dy\int_{-\infty}^{\infty}P_z\partd{}{z}\delta{z}dz
+\end{align}
+
+In the latter case, \textit{all three} integral factors are zero, making the three out of nine cases that look like this one \textit{exceptionally} zero.
+
+\end{document}
