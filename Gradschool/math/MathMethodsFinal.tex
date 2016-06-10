@@ -1,0 +1,636 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{cancel}
+\usepackage{pdfpages}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Methods of Theoretical Physics Final Exam \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Q1 Part 1}
+
+We are asked to solve the following initial value problem:
+
+\begin{align}
+y'' + 4y' + 4y = 0
+\end{align}
+
+Using the initial conditions $y(0) = 1$, and $y'(0) = 3$. The equation relates $y$ to its derivatives in a manner that seems to state that $y$ and its derivatives have the same dimension - this suggests exponential solutions of the form
+
+\begin{align}
+y &= e^{\alpha x} \\
+y' &= \alpha e^{\alpha x} \\
+y'' &= \alpha^2 e^{\alpha x}
+\end{align} 
+
+Plugging these expressions into equation 1.1 gives us:
+
+\begin{align}
+\alpha^2 e^{\alpha x} + 4 \alpha e^{\alpha x} + 4 e^{\alpha x} = 0
+\end{align}
+
+Cancelling the exponential behavior yields a quadratic equation in $\alpha$:
+
+\begin{align}
+\alpha^2 + 4 \alpha + 4 &= 0 \\
+(\alpha + 2)^2 &= 0
+\end{align}
+
+There is a repeated root at $\alpha = -2$. This indicates that we have a general solution of the form 
+
+\begin{align}
+y(x) = c_1 e^{-2x} + c_2 x e^{-2x}
+\end{align}
+
+With two undetermined constants $c_1$ and $c_2$ that must be set by the initial conditions. To figure them out we need to go get two equations in two unknowns from the derivatives of our general solution:
+
+\begin{align}
+y' &= e^{-2 x} (-2 c_1 -2 c_2x + c_2) \\
+y'' &= 4 e^{-2x} (c_1 + c_2(x-1))
+\end{align}
+
+So we know the following must hold at $x=0$:
+
+\begin{align}
+y(0) &= c_1 = 1\\ 
+y'(0) &= c_2 - 2c_1 = 3 \\
+\rightarrow c_2 &= 5
+\end{align}
+
+Meaning we can write down the solution to the initial value problem in full:
+
+\begin{align}
+y(x) = e^{-2x} + 5x e^{-2x}
+\end{align}
+
+This solution was verified by Mathematica. \checkmark
+
+\section{Q1 Part 2}
+We are asked to find a general solution for $x > 0$ for the differential equation:
+
+\begin{align}
+\frac{1}{x}\frac{dy}{dx} - \frac{2}{x} y = x \cos(x)
+\end{align}
+
+We begin by multiplying through by $x$ to cast the ODE into the standard form of Arfken equation 7.11.
+
+\begin{align}
+\frac{dy}{dx} - 2y = x^2 \cos(x)
+\end{align}
+
+With $P(x) = -2$ and $Q(x) = x^2 \cos(x)$. Then, from Arfken equation 7.15, we find the Integrating Factor $\alpha(x)$:
+
+\begin{align}
+\alpha(x) &= e^{\int^{x} P(x) dx} \\
+&= e^{-\int^{x} 2 dx} \\
+&= e^{- 2x}
+\end{align}
+
+With $\alpha$ in hand, we directly apply Arfken equation 7.16, which states that 
+
+\begin{align}
+y(x) &= \frac{1}{\alpha(x)} \left[ \int^{x} \alpha(x) Q(x) dx + C \right] \\
+&= e^{2x} \left[ \int^{x} e^{-2x}x^2\cos(x) + C \right]
+\end{align}
+
+The integral evaluates to
+
+\begin{align}
+\frac{1}{125} e^{-2 x} \left[\left(25 x^2+40 x+22\right) \sin(x) -2 \left(25 x^2+15 x+2\right) \cos(x) \right]
+\end{align}
+
+Multiplying by the $e^{2x}$ out front takes the total exponent to $0$ so we may cancel the exponential off the solution completely, leaving us with the solution
+
+\begin{align}
+y(x) =  \frac{1}{125} \left[\left(25 x^2+40 x+22\right) \sin(x) -2 \left(25 x^2+15 x+2\right) \cos(x) \right]
+\end{align}  
+
+This solution has been verified by Mathematica. \checkmark
+
+\section{Q1 Part 3}
+
+We are asked to consider the differential equation
+
+\begin{align}
+2y - 6x + \left(3x - \frac{4 x^2}{y}\right)\frac{dy}{dx} = 0
+\end{align}
+
+We begin by casting the ODE into the standard form of Arfken equation 7.6.
+
+\begin{align}
+P(x,y)dx + Q(x,y)dy &= 0 \\ 
+(2y - 6x)dx + \left(3x - \frac{4x^2}{y}\right)dy &= 0
+\end{align}
+
+Meaning we must have that $P(x,y) = 2y - 6x$ and $Q(x,y) = 3x - \frac{4x^2}{y}$. To constitute an exact equation, we must have that 
+
+\begin{align}
+\frac{\partial P(x,y)}{\partial y} = \frac{\partial Q(x,y)}{\partial x}
+\end{align} 
+
+And currently we have $\frac{\partial P(x,y)}{\partial y} = 2$ and $\frac{\partial Q(x,y)}{\partial x} = 3 - \frac{8x}{y}$. So, our equation is not exact. However, when we multiply the entire equation by the integrating factor $xy^2$: 
+
+\begin{align}
+x y^2 (2y - 6x)dx + x y^2 \left(3x - \frac{4x^2}{y}\right)dy &= 0 \\
+(2 x y^3 - 6 x^2 y^2)dx + \left(3 x^2 y^2 - 4 x^3 y \right)dy &= 0
+\end{align}
+
+In this modified situation, we have $P'(x,y) = (2xy^3 - 6x^2y^2)$ and $Q'(x,y) = (3x^2 y^2 - 4 x^3 y)$. Note that the primes do not denote differentiation. Merely that these are different functions. Then we have $\frac{\partial P'(x,y)}{\partial y} = (6 x y^2 - 12 x^2 y)$ and  $\frac{\partial Q'(x,y)}{\partial x} = (6 x y^2 - 12 x^2 y)$. \checkmark
+
+\hspace{2mm}
+We now seek to actually solve the equation. We expect that in the exact equation case, both $P'$ and $Q'$ can be written as derivatives of the solution 
+
+\begin{align}
+P'(x,y) &= \frac{\partial \Psi}{\partial x} \\
+Q'(x,y) &= \frac{\partial \Psi}{\partial y} 
+\end{align}
+
+It doesn't really matter which function we choose to integrate for this next step, I'm picking the $x$ derivative. Thus 
+
+\begin{align}
+\Psi &= \int \left( 2 x y^3 - 6 x^2 y^2 \right)dx \\
+&= \int 2xy^3 dx - \int 6x^2 y^2 dx \\
+&= x^2 y^3 - 2x^3 y^2 + C(y)
+\end{align}
+
+Where the "constant" of integration is really a function of $y$, as any such function will cancel when differentiated with respect to $x$. So we go ahead and differentiate again with respect to the \textit{other} variable, $y$.
+
+\begin{align}
+3x^2 y^2 - 4 x^3 y + C'(y)
+\end{align}
+
+And set this equal to $Q'(x,y)$
+
+\begin{align}
+\cancel{3x^2 y^2} - \cancel{4x^3 y} + C'(y) &= \cancel{3x^2 y^2}- \cancel{4 x^3 y} \\
+\rightarrow C'(y) &= 0 \\
+C(y) &= K
+\end{align}
+
+Where $K$ is the constant of integration. We may now write the full solution to the original differential equation:
+
+\begin{align}
+\Psi = x^2 y^3 - 2 x^3 y^2 + K
+\end{align}
+
+\section{Q1 Part 4}
+We are asked to find a general solution, on the interval $-\frac{\pi}{2}, \frac{\pi}{2}$, to the differential equation:
+
+\begin{equation}
+\frac{d^2 y}{dx^2} + y = \tan(x)
+\end{equation}
+
+We will use the method of variation of parameters which begins by finding the solutions to the homogenous equation:
+
+\begin{align}
+\frac{d^2 y}{dx^2} + y = 0
+\end{align}
+
+The solutions to this equation are simple triginometric functions $y_1(x) = \sin(x)$, $y_2(x) = \cos(x)$. They have simple derivatives $y'_1(x) = \cos(x)$, $y'_2(x) = -\sin(x)$.
+
+\hspace{2mm}
+
+This means that the simeltaneous equations for Variation of Parameters read:
+
+\begin{align}
+y_1 u'_1 + y_2 u'_2 &= 0 \\
+y'_1 u'_1 + y'_2 u'_2 &= F(x)
+\end{align}
+
+Where $F(x)$ is the function corresponding to the source term in the differential equation.
+
+\begin{align}
+\sin(x)u'_1(x) + \cos(x)u'_2(x) &= 0 \\
+\cos(x)u'_1(x) - \sin(x)u'_2(x) &= \tan(x)
+\end{align}
+
+%Squaring both equations:
+
+%\begin{align}
+%\sin^2(x)u'^2_1(x) + 2 \sin(x) \cos(x) u'_1(x) u'_2(x) + \cos^2 u'^2_2(x) &= 0 \\
+%\cos^2(x)u'^2_1(x) - 2 \sin(x) \cos(x) u'_1(x) u'_2(x) + \sin^2 u'^2_2(x) &= \tan^2(x)
+%\end{align}
+
+%Adding now both equations, the cross terms cancel, and we end up with
+
+%\begin{equation}
+%u'^2_1(x) + u'^2_2(x) = \tan^2(x)
+%\end{equation}
+
+%But from the first equation we have that $u'_2(x) = - \tan(x)u'_1(x)$. Substituting this into the second equation, we have that $\cos(x)u'_1(x) - \sin(x)(-\tan(x))u'_1(x) = \tan(x)$ 
+
+These two algebraic equations for the derivatives of the functions $u_i$ may be solved to yield the following values:
+
+\begin{align}
+u'_1(x) &= \sin(x) \\
+u'_2(x) &= -\sin(x)\tan(x)
+\end{align}
+
+The integrals are thus 
+
+\begin{align}
+u_1(x) &= \int \sin(x) dx = -\cos(x) + c \\
+u_2(x) &= -\int \sin(x) \tan(x) = \ln |\sec(x) + \tan(x)| - \sin(x) + c
+\end{align}
+
+Variation of Parameters started out by assuming we can write our particular solution as these two functions $u_i$ times our homogenous solutions:
+
+
+\begin{align}
+y_p(x) &= u_1(x)y_1(x) + u_2(x)y_2(x) \\
+&= [-\cos(x)][\sin(x)] + [-\ln |\sec(x) + \tan(x)| + \sin(x)][\cos(x)]\\
+&= \cancel{\cos(x)\sin(x)} - \cancel{\cos(x)\sin(x)} - \cos(x)\ln|\sec(x) + \tan(x)| \\
+&= - \cos(x)\ln|\sec(x) + \tan(x)|
+\end{align}
+
+Meaning we can write the \textit{most general} solution to the differential equation as the sum of the two homogenous solutions plus the particular solution thanks to the source term:
+
+\begin{align}
+y(x) = c_1 \sin(x) + c_2 \cos(x) - \cos(x)\ln|\sec(x) + \tan(x)|
+\end{align}
+
+Completing the problem.
+
+\section{Q1 Part 5}
+
+Given that $\cos(x)$ is a solution, we are asked to find the general solution to the equation
+
+\begin{align}
+\sin(x) y'' - 2 \cos(x) y' - \sin(x) y = 0
+\end{align}
+
+On the interval $0 < x < \pi$. We remind ourselves that given an ODE solution we may construct a second linearly independent solution with the Wronskian double integral (Arfken equation 7.67):
+
+\begin{align}
+y_2(x) = y_1(x) \int^{x} \frac{e^{-\int^{s} P(t) dt}}{y_1(s)^2} ds
+\end{align}
+
+The variables are initially confusing but we notice it is just set up so that the integral in the exponential is a function of $s$ and so the whole integral is a function of $x$. 
+
+\hspace{2mm}
+
+We rewrite the ODE in standard form:
+
+\begin{align}
+y'' - 2\cot(x) y' - y = 0
+\end{align}
+
+Here $P(x)$ is the coefficient on the $y'$ term:
+
+\begin{align}
+P(x) = - 2 \cot(x)
+\end{align}
+
+Taking first the integral inside the exponential function, we have a negative sign from the sign of hte integral and another one from the $P(x)$ making the integral \textit{positive}. Doing it the other way gets you the complete wrong answer
+
+\begin{align}
+2\int \cot(x) dx & \\
+\rightarrow 2 \ln (\sin(x)) & \\
+\rightarrow  \ln (\sin(x)^{2}) & \\
+\end{align}
+
+So our Wronskian double integral reads:
+
+\begin{align}
+y_2(x) &= \cos(x) \int \frac{e^{\ln(\sin^2(x))}}{\cos^2(x)} dx \\
+&= \cos(x) \int \frac{\sin^2(x)}{\cos^2(x)} dx \\
+&= \cos(x) \int \tan^2(x) dx \\
+&= \cos(x) (\tan(x) - x) \\ 
+&= \sin(x) - x\cos(x)
+\end{align}
+
+Thus the most general solution to this homogenous differential equation looks like:
+
+\begin{align}
+y(x) = c_1 \cos(x) + c_2 \left[\sin(x) - x \cos(x) \right]
+\end{align}
+
+\section{Q1 Part 6}
+
+We are asked to find a power series expansion for the second order differential equation
+
+\begin{align}
+(1 + x^2) y'' - y' + y = 0 
+\end{align}
+
+If we cast the ODE into standard form, we would just get 
+
+\begin{align}
+y'' - \frac{1}{1 + x^2} y' + \frac{1}{1+x^2}y = 0
+\end{align}
+
+Since we are expanding around the point $x=0$, we check this equation for singularities indicating the necessity of the Frobenius method. Finding none, we assume a power series solution of the form
+
+\begin{align}
+y(x) &= \sum_{n=0}^{\infty} a_n x^n \\
+y'(x) &= \sum_{n=1}^{\infty} a_n n x^{n-1} \\
+y''(x) &= \sum_{n=2}^{\infty} a_n n(n-1) x^{n-2}
+\end{align} 
+
+We lose an index on the bottom each time we take a derivative, because the original series is something like $a_0 + a_1 x + a_2 x^2 ...$, so the first derivative cancels the first term, the second gets rid of the second term, and so on, and so forth. 
+
+\hspace{2mm}
+
+Substituting this into the original differential equation gives us
+
+\begin{align}
+\sum_{n=2}^{\infty} a_n n(n-1) x^{n-2} - x^2 \sum_{n=2}^{\infty} a_n n(n-1) x^{n-2} - \sum_{n=1}^{\infty} a_n n x^{n-1} + \sum_{n=0}^{\infty} a_n x^n &= 0\\
+\sum_{n=2}^{\infty} a_n n(n-1) x^{n-2} - \sum_{n=2}^{\infty} a_n n(n-1) x^{n} - \sum_{n=1}^{\infty} a_n n x^{n-1} + \sum_{n=0}^{\infty} a_n x^n &= 0\\
+\end{align}
+
+%We want to get everything under one summation so we can say something about the coefficients $a_n$. Do do this we need all the summations to start at the same point, and ideally we need all the powers of $x$ to be the same as well.
+
+%\hspace{2mm}
+
+%To the first summation, we apply the transformation $m = n - 2 \rightarrow n = m + 2$:
+
+%\begin{align}
+%\sum_{n=2}^{\infty} a_n n (n-1) x^{n-2} \rightarrow \sum_{m + 2 = 2}^{\infty} a_{m+2} (m + 2)(m + 2 - 1)x^{m + 2 - 2} \rightarrow \sum_{m = 0}^{\infty} a_{m+2}(m+2)(m+1)x^m
+%\end{align}
+
+%To the third summation, we apply the transformation $m = n - 1 \rightarrow n = m + 1$:
+
+%\begin{align}
+%\sum_{n=1}^{\infty} a_n n x^{n-1} \rightarrow \sum_{m + 1 = 1}^{\infty} a_{m+1}(m+1) x^{m + 1 - 1} \rightarrow \sum_{m=0}^{\infty} a_{m+1}(m+1)x^m
+%\end{align}
+
+%As for the second summation, we might as well write it as a sum from $0$ anyways, seeing as how the $n=0$ and $n=1$ are zero anyways. Thus we should have 
+
+%\begin{align}
+%\sum_{n=0}^{\infty} a_{n+2} \left[(n+2)(n+1)\right] - a_n n(n-1)x^n - a_{n+1} (n+1)x^n + a_n x^n &=0 \\
+%\sum_{n=0}^{\infty} a_{n+2} \left[(n+2)(n+1)\right] 
+%\end{align}
+
+There are some ways that we could rearrange this into one power series with a single expression for all the coefficients $a_n$. But since we are only asked to evaluate the first few terms, we'll use the following process. 
+
+\hspace{2mm}
+
+Sometimes, in an infinite sum, two terms that occur at different values of $n$ may cancel each other. But in a power series, we can never cancel a power of $x$ with a different power of $x$, they just behave fundamentally differently and don't cancel. So we know individually that the coefficients on each power of $x$ must themselves all vanish. 
+
+\hspace{2mm}
+
+We might as well set all of the lower indices of the summations to zero, the terms will cancel for all the appropriate values of $n$. 
+
+\hspace{2mm}
+
+The $x^0$ terms:
+
+\begin{align}
+a_2(2(2-1))x^0 - \cancel{a_0(0(0-1))x^0} &- a_1(1)x^0 + a_0x^0 = 2a_2 + a_1 +  a_0 = 0 \\
+&\rightarrow a_2 = -\frac{a_1 + a_0}{2}
+\end{align}
+
+The $x^1$ terms:
+
+\begin{align}
+&a_3(3(3-1))x^1 - \cancel{a_1(1(1-1))x^1} - a_2(2)x^1 + a_1 x^1 = 6a_3 - 2 a_2 + a_1 = 0 \\
+&\rightarrow a_3 = \frac{2a_2 - a_1}{6} = \frac{2 (-\frac{a_1 + a_0}{2}) - a_1}{6} = \frac{a_0 - 2 a_1}{6}
+\end{align}
+
+The $x^2$ terms:
+
+\begin{align}
+&a_4(4(4-1))x^2 - a_2(2(2-1))x^2 - a_3(3)x^2 + a_2 x^2 = 12a_4 - \cancel{a_2} - 3a_3 + \cancel{a_2} = 0 \\
+&\rightarrow a_4 = \frac{a_3}{4} = \frac{a_0 - 2a_1}{24} 
+\end{align}
+
+%The $x^3$ terms:
+
+%\begin{align}
+%&a_5(5(5-1))x^3 - a_3(3(3-1))x^3 - a_4(4)x^3 + a_3x^3 = 20a_5 - 6a_3 - 4a_4 + a_3 = 0 \\
+%&\rightarrow 20a_5 - 5a_3 - 4a_4 = 0  
+%\end{align}
+
+Since this is a second order differential equation, we know there must be two undetermined coefficients. These are $a_0$ and $a_1$. Since we have information about the coefficients of powers up through $x^4$ from demanding each power individually goes to zero, we can write the power series expansion as follows:
+
+\begin{align}
+y(x) = a_0 + a_1 x - \frac{a_1 + a_0}{2} x^2 + \frac{a_0 - 2a_1}{6}x^3 + \frac{a_0 - 2a_1}{24}x^4 ....
+\end{align}
+
+We can theoretically iterate this process ad infinitum and get all the terms. But we will stop here.
+
+\hspace{2mm}
+
+Fuch's Theorem can give us some information about the radius of convergence of the series solutions. It states that the radius of convergence of the power series solution to a differential equation is at least as large as the smaller of the two radii of convergence of $P(x)$ and $Q(x)$ from the standard form equation. Here $P(x) = -\frac{1}{1 + x^2}$ and $Q(x) = \frac{1}{1+x^2}$. Both of these have, with opposite sign, the power series expansion:
+
+\begin{align}
+\sum_{n=0}^{\infty}(-1)^n x^{2n} \rightarrow R.O.C. = 1
+\end{align}
+
+So we know by Fuch's Theorem that the power series solution to our particular differential equation must have a radius of convergence $R>1$.
+
+\section{Q2 Part 1}
+
+We are asked to investigate the full asymptotic behavior of the integral
+
+\begin{align}
+\int_0^1 e^{i x t^2} dt, \ \ x \rightarrow + \infty
+\end{align}
+
+My solution follows notes from Bender and Orszag, \textbf{\textit{Advanced Mathematics for Scientists and Engineers, Asymptotic Methods and Perturbation Theory, Ch.6}}. The method of Steepest Descent concerns integrals of the form 
+
+\begin{align}
+I(\lambda) = \int_{C} e^{\lambda P(t)}Q(t) dt
+\end{align}
+
+We recognize the "constant" $\lambda = x$ meaning our function $P(t) = i t^2$ and $Q(t) = 1$. The critical points of $P(t)$ occur when $\frac{dP(t)}{dt} = 0$ or when $2 i t = 0 \rightarrow t=0$. 
+
+\hspace{2mm}
+
+The objective is to use Cauchy's theorem to deform the contour $0 < t < 1$, which is along the real axis of the complex plane, into some kind of contour of constant complex phase. We also want it to pass through the critical point so we are looking for a contour of constant complex phase that passes through $t=0$.
+
+Letting 
+
+\begin{align}
+t &= u + iv \\
+t^2 &= u^2 + 2 i u v - v^2 \\
+P(t) &= i(u^2 - v^2) - 2 u v
+\end{align}
+
+But at $t = 0$ we must have that the imaginary part of $P(t)$ equals zero. This is equivalent to requiring $u = \pm v$ on the contour in question. If we take the contours for which $u = -v$, then we would have that the real part, 
+
+\begin{align}
+\Re{P(t)} &= 2v^2 \\
+|e^{xP(t)}| &= e^{2xv^2} 
+\end{align} 
+
+Since $t = u + iv$ and $u = -v$ we have that $t = (-v + iv) = (i - 1)v$. But as $t \rightarrow \infty$ the real part of $P(t)$ blows up. Since the modified exponential doesn't have a maximum (only a minimum, in fact) on the chosen contour we can't use Laplace's method. However the other choice, $u = v$, gives us the opposite case
+
+\begin{align}
+\Re{P(t)} &= -2v^2 \\
+|e^{xP(t)}| &= e^{-2xv^2} 
+\end{align} 
+
+Except this time we pick up an extra negative sign from the definition of $t$ as a complex number and we get $t = (i + 1)v$. Now things are inverted and the exponential actually has a maximum at $t=0$.
+
+\hspace{2mm}
+
+Now we need to apply similar analysis to the other endpoint of the integral. Here the imaginary part o f $P(t)$ must be equal to $1$. So we have $u^2 - v^2 = 1 \rightarrow u = \sqrt{1 + v^2}$. Plugging this back into the defintion of $t$ gives us the second required contour, $t = \sqrt{1 + v^2} + iv$. Our results are:
+
+\begin{align}
+&C_1: t = (1+i)v \\
+&C_3: t = \sqrt{1 + v^2} + iv
+\end{align}
+
+We need to deform the original path along the real axis into the contours $C_1 + C_3$. Both contours have constant complex magnitude, but since both of the contours have \textit{different} constant complex magnitudes ($0$ vs $1$) it's impossible to deform the original path into both of them at once. Thus we need some contour somewhere out in the complex plane that bridges between the two paths, $C_2$. If $V$ is the magnitude of the complex part of the contour, let's bridge the contours with a horizontal line joining the points $V + iV$ and $\sqrt{1 + V^2} + iV$ somewhere very far off in the complex plane. As $V\rightarrow \infty$, the contribution from $C_2$ vanishes anyways.
+
+\hspace{2mm}
+
+Thus we can write the original integral as follows:
+
+\begin{align}
+I(x) = \int_{C_1} e^{i x t^2} + \int_{C_3} e^{i x t^2} dt
+\end{align}
+
+We wish to evaluate the first integral exactly. Along the contour, $t = (1 + i)v$, $dt = (1 + i)dv$. We substitute this in and set the bounds of the integral to be $0 \rightarrow \infty$, which is what our contour has to be for us to have assumed that the contribution from $C_2 = 0$
+
+\begin{align}
+\int_{C_1} &= e^{i x ((1 + i)v^2)}(1 + i) dv \\
+&= (1 + i) \int_{0}^{\infty} e^{i x (2 i v^2)} dv \\
+&= (1 + i) \int_{0}^{\infty} e^{- 2 x v^2} dv \\
+&= (1 + i) \frac{1}{2}\sqrt{\frac{\pi}{2x}} \\
+\end{align}
+
+The factor $1 + i$ is like drawing a $45^\circ$ right triangle in the first quadrant of the complex plane and so we can convert this factor to the corresponding complex exponential:
+
+\begin{align}
+1 + i = e^{\frac{i \pi}{4}}
+\end{align}
+
+Giving us the result that the integral along $C_1$ is equal to $e^{\frac{i \pi}{4}} \frac{1}{2} \sqrt{\frac{\pi}{2x}}$.
+
+\hspace{2mm}
+
+When we apply the same arguments to the integral along $C_3$, we have $t = \sqrt{1 + v^2} + iv$. Plugging this in gives
+
+\begin{align}
+&=\int_{C_3}e^{ix (\sqrt{1 + v^2} + iv)^2} dt \\
+&\rightarrow \int_{C_3}e^{ix (1 + 2 i v \sqrt{1 + v^2})}dt \\
+&\rightarrow \int_{C_3}e^{ix - 2xv \sqrt{1 + v^2}} dt \\
+&\rightarrow \int_{C_3}e^{ix}e^{-2xv \sqrt{1 + v^2}} dt
+\end{align}
+
+
+If we make the change of variables $it^2 \rightarrow  i - s$, for $s = 2v \sqrt{1 + v^2}$ we can rewrite the integral as 
+
+\begin{align}
+e^{ix} \int_{C_3} e^{-sx} dv
+\end{align}
+
+To rewrite $dt$ in terms of $ds$ we notice that $t^2 = 1 + is \rightarrow t = \sqrt{is + 1}$ So $dt = \frac{1}{2} (1 + is)^{- \frac{1}{2}}(i) = \frac{1}{2\sqrt{1 + is}}$. Then we can write
+
+\begin{align}
+ie^{ix} \int_{C_3} \frac{e^{-sx}}{2 \sqrt{1 + is}} ds
+\end{align} 
+
+This is now of a form appropriate for use of Watson's Lemma. Using the Taylor Expansion:
+
+\begin{align}
+(1 + is)^{-\frac{1}{2}} &= \sum_{n=0}^{\infty}(-is)^n \frac{\Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) n!} \\  
+(1 + is)^{-\frac{1}{2}} &= \sum_{n=0}^{\infty}(-i)^n(s)^n \frac{\Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) n!}   
+\end{align} 
+
+This is of the form $\sum_{n=1}^{\infty} a_n (-is)^n$. Watson's Lemma applies to integrals of the form
+
+\begin{align}
+\int e^{-xs}f(s)ds
+\end{align}
+
+And states that if the function $f(s)$ has asymptotic expansion $f(s) \sim s^{\alpha} \sum_{n=0}^{\infty} a_n s^{\beta n}$, then the integral $I(x)$ has the asymptotic behavior
+
+\begin{align}
+I(x) \sim \sum_{n=0}^{\infty} \frac{a_n \Gamma( \alpha + \beta n + 1)}{x^{\alpha + \beta n + 1}}
+\end{align}
+
+In our case we have the Taylor expansion for $f(s)$, which is exact, so surely $f(s)$ is asymptotic to said series as well. From equation 7.26, we identify that $\alpha = 0$ since the series  has no power of $s$ out front. Likewise since the power of $s$ inside the series is just $n$ we identify that $\beta = 1$. Finally we identify the coefficient $n$ dependence as $a_n = \frac{(-i)^n \Gamma(n + \frac{1}{2}}{\Gamma(\frac{1}{2}) n!}$. 
+
+
+Plugging into the formula for Watson's Lemma, we have: 
+
+\begin{align}
+\int_{C_3} e^{i x t^2} dt &\sim \frac{1}{2}i e^{ix} \sum_{n=0}^{\infty} \frac{(-i)^n \Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) n!} \frac{\Gamma(0 + n + 1)}{x^{0 + n + 1}} \\
+&\sim \frac{1}{2}i e^{ix} \sum_{n=0}^{\infty} \frac{(-i)^n \Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) \cancel{n!}} \frac{\cancel{\Gamma(n + 1)}}{x^{n + 1}} \\
+&\sim \frac{1}{2}i e^{ix} \sum_{n=0}^{\infty} (-i)^n \frac{\Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) x^{n+1}}
+\end{align}
+
+Combining with the first integral over $C_1$, we have the full asymptotic behavior:
+
+\begin{align}
+e^{\frac{i \pi}{4}} \frac{1}{2} \sqrt{\frac{\pi}{2x}} \frac{1}{2}i e^{ix} + \frac{1}{2} i e^{ix} \sum_{n=0}^{\infty} (-i)^n \frac{\Gamma(n + \frac{1}{2})}{\Gamma(\frac{1}{2}) x^{n+1}}
+\end{align}
+
+\includepdf[pages={1-2}]{FinalMath.pdf}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\end{document}
