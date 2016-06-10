@@ -1,0 +1,461 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{cancel}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Electrodynamics - Homework 1 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Problem 1}
+
+
+\subsection{Part A}
+
+We wish to prove the following statement 
+
+\begin{align}
+\int_v \nabla \circ = \int_s \vec{ds}  \ \circ
+\end{align}
+
+We assume that we may write the vector $\vec{A}$ as some $\vec{A} = \rho(r) \cdot \vec{c}$. The divergence theorem reads
+
+\begin{align}
+\int_v \nabla \cdot \vec{A} = \int_s \vec{A}\cdot\vec{ds}
+\end{align}
+
+Applying the vector ansatz gets us 
+
+\begin{align}
+\int_v \nabla \cdot (\rho \vec{c})dv &= \int_s (\rho \vec{c}) \cdot \vec{ds} \\
+\int_v \left[\nabla \rho \cdot \vec{c} + \rho \cancel{\nabla \cdot \vec{c}}\right]dv &=  \int_s (\rho \vec{c}) \cdot \vec{ds}\\
+\rightarrow \vec{c} & \ \  \text{is constant} \\
+\vec{c} \cdot \int_v \nabla \rho dv &= \vec{c} \cdot \int_s \rho \vec{ds}
+\end{align}
+
+Since the last line must be true for any $\vec{c}$, the integral components must be equal and we have arrived at the end of the proof for the ordinary product. 
+
+To prove the cross product case, we make the vector ansats $\vec{A} = \vec{c} \times \vec{B}(r)$. Applying the divergence theorem yields
+
+\begin{align}
+\int_v \nabla \cdot (\vec{c} \times \vec{B}) dv &= \int_s (\vec{c} \times \vec{B}) \cdot \vec{ds} \\
+\int_v \left[\vec{c} \cdot (\nabla \times \vec{B}) - \vec{B} \cdot (\cancel{\nabla \times \vec{c}})\right]dv &= \int_s (\vec{B} \times \vec{ds}) \cdot \vec{c} \\
+\vec{c} \cdot \int_v \nabla \times \vec{B} dv &= \vec{c} \cdot \int_s \vec{B} \times \vec{ds} 
+\end{align}
+
+On the second line, the cyclic property of the vector triple product was used. Since the last line must be true for any $\vec{c}$, the integral operators on the vector $\vec{B}$ must perform the same action, and thus are equal, proving the second part of the general theorem.
+
+Next we wish to prove the following for the ordinary and dot products:
+
+\begin{align}
+\int_s (\vec{ds} \times \nabla) \circ &= \int_c \vec{dr}  \ \circ 
+\end{align}
+
+Using stokes theorem, which reads:
+
+\begin{align}
+\int_s (\nabla \times \vec{A})\cdot \vec{ds} &= \int_c \vec{A} \cdot \vec{dr}
+\end{align}
+
+We make the vector ansatz $\vec{A} = \vec{a}\phi$, where $\vec{a}$ is an arbitrary constant vector and $\phi$ is an arbitrary scalar field. Substituting this into stokes theorem yields
+
+\begin{align}
+\int_s (\nabla \times \vec{a}\phi) \cdot \vec{ds} &= \int_c \phi\vec{a} \cdot \vec{dr} \\
+\int_s \left[\phi \cancel{\nabla \times \vec{a}} + \nabla \phi \times \vec{a} \right]\cdot \vec{ds} &= \int_c \phi\vec{a} \cdot \vec{dr} \\
+\int_s \nabla \phi \times \vec{a} \cdot \vec{ds} &= \int_c \phi \vec{a} \cdot \vec{dr} \\
+-\int_s \vec{a} \times \nabla \phi \cdot \vec{ds} &= \int_c \phi \vec{a} \cdot \vec{dr} \\
+-\vec{a} \cdot \int_s \nabla \phi \times \vec{ds} &= \vec{a} \cdot \int_c \phi \vec{dr} \\
+\vec{a} \cdot \left[\int_c \phi \vec{dr} + \int_s \nabla \phi \times \vec{ds}\right] &=  0 \\
+\vec{a} \cdot \left[\int_c \phi \vec{dr} - \int_s \vec{ds} \times \nabla \phi\right] &=  0 \\
+\end{align}
+
+Since $\vec{a}$ is arbitrary the quantity in the brackets must be zero, completing the proof for the ordinary product. Finally we want the dot product version. We make the vector ansatz $\vec{A} = \vec{a} \times \vec{P}$, where once again $\vec{a}$ is an arbitrary constant vector. Plugging this into stokes theorem gives us
+
+\begin{align}
+\int_s (\nabla \times (\vec{a} \times \vec{P}))\cdot \vec{ds} &= \int_c \vec{a} \times \vec{P} \cdot \vec{dr} \\
+\int_s \left[\vec{a}(\nabla \cdot \vec{P}) - \vec{P}(\cancel{\nabla \cdot \vec{a}}) + \cancel{(\vec{P} \cdot \nabla)\vec{a}} - \vec{P}(\vec{a} \cdot \nabla)\right]\cdot \vec{ds} &= \int_c \vec{P} \times \vec{dr} \cdot \vec{a} \\
+\vec{a} \cdot \int_v \left[\vec{ds}(\nabla \cdot \vec{P}) - \nabla ( \cancel{\vec{P} \cdot \vec{ds}})\right] &= \vec{a} \cdot \int_c \vec{P}\times \vec{dr} \\
+\end{align}
+
+Again, $\vec{a}$ is arbitrary allowing us to equate the integral parts, completing the proof.
+
+\section{Problem 2}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{problem2.eps}
+\end{center}
+\end{figure}
+
+\subsection{Part A}
+The field must be zero inside both conductors. Furthermore, infinite sheets project field lines in a uniform fashion from their origin out to infinity. Consider the gaussian cylinder in figure A. Nominally the electric field $\vec{E}$ would point normally out of the endcaps of the cylinder and would be proportional to $\rho_{enc}$. However the restriction that $\vec{E} = 0$ inside the conductors leads us to the conclusion that $\rho_{enc} = 0$. Unless the plates are uncharged this indicates that the charges must be equal and opposite.  
+\subsection{Part B}
+The visual argument follows figure B. Given from part A that the surface charge densities on the inner surfaces are equal and opposite. We define the bottom surface of the upper plate $\sigma_{1,b}$ as positive and thus the top surface of the bottom plate $\sigma_{2,t} = -\sigma_{1,b}$. Pictured here is the case where the surface charge densities on the outer surfaces $\sigma_{1,t}$ and $\sigma_{2,b}$ carry positive charge, although the argument is exactly the same for the negative case. 
+
+The arrows in the figure correspond to the direction of the electric field in a region due to the surface charge of the corresponding color. Arrows for negative charges always point towards the source surface. Arrows for positive charges always point away from the source surface. We see that inside the conductors, the red and blue fields from the inside surfaces already balance. This indicates that the outer, cyan and magenta surfaces must contribute in such a manner as to be opposite in the interior regions of the plates. This can only happen if they are equal in magnitude and sign.  
+
+\subsection{Part C}
+
+The fields themselves can be found by imposing the following conditions from the problem description:
+
+\begin{align}
+\sigma_{1,T} + \sigma_{1,B} = q_1 \\
+\sigma_{2,T} + \sigma_{2,B} = q_2 \\
+\end{align}
+
+Plugging in the fact that $\sigma_{2,T} = - \sigma_{1,B}$ and that $\sigma_{2,B} = \sigma_{1,T}$ gives us
+
+\begin{align}
+\sigma_{1,T} + \sigma_{1,B} = q_1 \\
+\sigma_{1,T} - \sigma_{1,B} = q_2 
+\end{align}
+
+Adding the two equations gives us
+
+\begin{align}
+\sigma_{1,T} = \sigma_{2,B} = \frac{q_1 + q_2}{2} \\
+\rightarrow \vec{E_{out}} = \frac{q_1 + q_2}{2 \epsilon_0}
+\end{align}
+
+Whereas subtracting the two equations gives us
+
+\begin{align}
+\sigma_{1,B} = -\sigma_{2,T} = \frac{q_1 - q_2}{2} \\
+\rightarrow \vec{E_{in}} = \frac{q_1 - q_2}{2 \epsilon_0}
+\end{align}
+
+If $q_1 = -q_2 = Q$, then $E_{in} = \frac{2Q}{\epsilon_0}$ and $E_{out} = 0$, which makes sense as this corresponds to a standard parallel plate capacitor: No field outside and double the field from two parallel plates inside. 
+
+
+\section{Problem 3}
+
+Consider figure A. This is the normal situation in which both plates of the capacitor are copper, and gets us the normal geometric capacitence $C_g = \frac{Q_g}{V_g}$. In figure B, we replace one of the plates with graphene, whose structure allows for the density of charge carriers within the material to vary in the presence of appropriate forces driving such a change. 
+
+Let the change in the energy due to such a process be defined by the total differential:
+
+\begin{align}
+\Delta E = \frac{\partial E}{\partial N} \Delta N \\
+\end{align}
+
+Given $\Delta N$ new charge carriers within the graphene, the total change in charge would be $\Delta Q = q_e \Delta N$. Solving for $\Delta N$ gives us:
+
+\begin{align}
+\Delta N &= \frac{\Delta Q}{q_e} \\
+\Delta E &= \frac{\partial E}{\partial N} \frac{\Delta Q}{q_e} \\
+\rightarrow & \ \ \text{Divide by $q_e$} \\
+\frac{\Delta E}{q_e} &= \frac{\partial E}{\partial N}\frac{\Delta Q}{q_e^2}
+\end{align}
+
+But the left hand side is just the definition of $\Delta V$ as potential energy per unit charge. This allows us to directly relate $\Delta V$ and $\Delta Q$:
+
+\begin{align}
+\Delta V &= \frac{\partial E}{\partial N}\frac{\Delta Q}{q_e^2} \\
+\frac{\Delta Q}{\Delta V} = C_q &= q_e^2 \frac{\partial N}{\partial E}
+\end{align}
+
+The derivative on the right is the density of states - thus if we know the geometric capacitence, and we know the \textit{measured} capacitence, we can directly infer the density of states as long as we know the total charge of a charge carrier.
+
+\section{Problem 4}
+
+If the separation distance between the two conductors is large relative to their size, we can consider them to be point charges. The voltages on each of the conductors is the superposition of two terms - one due to the charge on the conductor itself and its self capacitence
+
+\begin{align}
+V_1 = \frac{q_1}{c_1} + \frac{1}{4 \pi \epsilon_0} \frac{q_2}{r} \\
+V_2 = \frac{q_2}{c_2} + \frac{1}{4 \pi \epsilon_0} \frac{q_1}{r}
+\end{align} 
+
+If we let $c_0 = 4 \pi \epsilon_0 r$, then we have
+
+\begin{align}
+V_1 = \frac{q_1}{c_1} + \frac{q_2}{c_0} \\
+V_2 = \frac{q_2}{c_2} + \frac{q_1}{c_0} 
+\end{align}
+
+Solving both equtions for $q_1$ gives us
+
+\begin{align}
+V_1 - \frac{q_2}{c_0} = \frac{q_1}{c_1} \rightarrow q_1 = V_1 c_1 - \frac{q_2 c_1}{c_0} \\
+V_2 - \frac{q_2}{c_2} = \frac{q_1}{c_0} \rightarrow q_1 = V_2 c_0 - \frac{q_2 c_0}{c_2}
+\end{align}
+
+Equating the two expressions gives 
+
+\begin{align}
+V_1 c_1 - \frac{q_2 c_1}{c_0} &= V_2 c_0 - \frac{q_2 c_0}{c_2} \\
+V_1 c_1 - V_2 c_0 &= \frac{q_2 c_1}{c_0} - \frac{q_2 c_0}{c_2} \\
+& = q_2 \left[ \frac{c_1}{c_0} - \frac{c_0}{c_2} \right] \\
+& = q_2 \left[ \frac{c_2 c_1 - c_0^2}{c_0 c_2} \right] \\
+q_2 &= \left(V_1 c_1 - V_2 c_0 \right) \left[\frac{c_0 c_2}{c_2 c_1 - c_0^2}\right]
+\end{align}
+
+Letting $\beta$ denote the unitless factor in brackets in the above equation we have 
+
+\begin{align}
+q_2 = \beta \left(V_1 c_1 - V_2 c_0\right)
+\end{align}
+
+Repeating the process solving the equations for $q_2$ now yields:
+
+\begin{align}
+V_1 - \frac{q_1}{c_1} = \frac{q_2}{c_0} \rightarrow q_2 = V_1 c_0 - \frac{q_1 c_0}{c_1} \\
+V_2 - \frac{q_1}{c_0} = \frac{q_2}{c_2} \rightarrow q_2 = V_2 c_2 - \frac{q_1 c_2}{c_0}
+\end{align}
+
+Equating the two expressions gives
+
+\begin{align}
+V_1 c_0 - \frac{q_1 c_0}{c_1} &=  V_2 c_2 - \frac{q_1 c_2}{c_0} \\
+V_1 c_0 - V_2 c_2 &= \frac{q_1 c_0}{c_1} - \frac{q_1 c_2}{c_0} \\
+&= \left[ \frac{c_0}{c_1} - \frac{c_2}{c_0} \right] q_1 \\
+&= \left[ \frac{c_0^2 - c_1 c_2}{c_0 c_1} \right] q_1 \\
+q_1 &= \left( V_1 c_0 - V_2 c_2 \right) \left[ \frac{c_0 c_1}{c_0^2 - c_1 c_2} \right]
+\end{align}
+
+Letting $\gamma$ denote the factor in brackets in the above equation we have
+
+\begin{align}
+q_1 = \gamma \left(V_1 c_0 - V_2 c_2\right)
+\end{align}
+
+The force between the two conductors is given by Coulomb's Law:
+
+\begin{align}
+F &= \frac{K q_1 q_2}{r^2} \\
+&= \frac{K}{r^2} \beta \gamma \left(V_1 c_0 - V_2 c_2 \right) \left(V_1 c_1 - V_2 c_0 \right) \\
+&=\frac{K}{r^2} \left[\frac{c_0 c_1}{c_0^2 - c_1 c_2} \right]\left[\frac{c_0 c_2}{c_2 c_1 - c_0^2} \right] \left(V_1 c_0 - V_2 c_2 \right) \left(V_1 c_1 - V_2 c_0 \right) \\
+&= -\frac{K}{r^2} \left[\frac{c_0^2 c_1 c_2}{\left(c_0^2 - c_1 c_2\right)^2}\right]\left(V_1c_0 - V_2 c_2\right)\left(V_1 c_1 - V_2 c_0\right)\\
+&= \frac{K}{r^2} \left[\frac{c_0^2 c_1 c_2}{\left(c_0^2 - c_1 c_2\right)^2}\right]\left(V_1 c_0 - V_2 c_2\right)\left(V_2c_0 - V_1 c_1\right)
+\end{align}
+
+Noting that $K c_0 = r$, and rearranging, we have
+
+\begin{align}
+F = 4 \pi \epsilon_0 c_1 c_2\left[\frac{\left(4 \pi \epsilon_0 V_1 - V_2 c_2\right)\left(4 \pi \epsilon_0 V_2 - V_1 c_2\right)}{\left(\left(4 \pi \epsilon_0 r\right)^2 - c_1 c_2\right)^2}\right]
+\end{align}
+
+Completing the proof.
+
+%&= \frac{K}{r^2} \beta \gamma \left(V_1^2 c_0 c_1 - V_1 V_2 c_0^2 - V_1 V_2 c_1 c_2 + V_2^2 c_0 c_2 \right)
+%From the second equation we have $V_2 c_2 = q_2 + p_{12}q_1c_2 \rightarrow q_2 = V_2 c_2 - p_{12}q_1 c_2$. Substituting this into the other equation gives us
+
+
+
+
+
+%\begin{align}
+%V_1 &= \frac{q_1}{c_1} + p_{12} (V_2 c_2 - p_{12}q_1 c_2) \\
+%& = \frac{q_1}{c_1} + p_{12} V_2 c_2 - p_{12}^2 q_1 c_2 \\ 
+%V_1 - p_{12} V_2 c_2 &= \left[\frac{1}{c_1} - p_{12}^2 c_2 \right]q_1 \\
+%q_1 &= \frac{V_1 - p_{12} V_2 c_2}{\frac{1}{c_1} - p_{12}^2 c_2} \\
+%& = \frac{V_1}{\frac{1}{c_1} - p_{12}^2 c_2} - \frac{p_{12} V_2 c_2}{\frac{1}{c_1} - p_{12}^2 c_2}\\
+%& = \frac{V_1}{\frac{1 - p_{12}^2 c_2 c_1}{c_1}} - \frac{p_{12} V_2 c_2}{\frac{1 - p_{12}^2 c_2 c_1}{c_1}} \\
+%& = \frac{V_1 c_1}{1 - p_{12}^2 c_2 c_1} - \frac{p_{12} V_2 c_2 c_1}{1 - p_{12}^2 c_2 c_1} \\
+%&= \frac{V_1 c_1 - p_{12}V_2 c_2 c_1}{1 - p_{12}^2 c_1 c_2}
+%\end{align}
+
+%This implies that 
+
+%\begin{align}
+%q_2 &= V_2 c_2 - p_{12} c_2 \left[ \frac{V_1 c_1 - p_{12}V_2 c_2 c_1}{1 - p_{12}^2 c_1 c_2} \right] \\ 
+%& = V_2 c_2 - \frac{p_{12} V_1 c_1 c_2 - p_{12}^2 v_2 c_1 c_2^2}{1 - p_{12}^2 c_1 c_2}
+%\end{align}
+
+%The Coulomb force law allows us to find the force between the two charges:
+
+%\begin{align}
+%F &= \frac{1}{4 \pi \epsilon_0}\frac{q_1 q_2}{r^2} \\ 
+%&= \frac{k q_1 q_2}{r^2} \\
+%&= \frac{k}{r^2} \left[ \frac{V_1 c_1 - p_{12}V_2 c_2 c_1}{1 - p_{12}^2 c_1 c_2} \right] \left[ V_2 c_2 - \frac{p_{12} V_1 c_1 c_2 - p_{12}^2 v_2 c_1 c_2^2}{1 - p_{12}^2 c_1 c_2} \right] \\
+%\end{align}
+
+\section{Problem 5}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{problem5.eps}
+\end{center}
+\end{figure}
+
+The coefficients in the capacitence matrix are the result of the geometry of the system and not the configuration of the potentials or charges on the system - in fact the voltages and charges in any physical scenario will adjust themselves such that they obey the following definition for the $c_{ij}$:
+
+\begin{align}
+c_{ij} = \frac{\partial q_i}{\partial V_j}
+\end{align} 
+
+We can thus charge the system in any manner we see fit and the $c_{ij}$ will always be the same, meaning we can invent whatever scenario is most convenient to produce an expression for $q_i(V_j)$ whose derivative we can take. For element $c_{11}$ we need to relate $V_1$ and $q_1$, we designate these $V_i$ and $q_i$.  Let the outer shell be grounded at potential $V_o = 0$ and the inner shell be at some potential $v_i$. Both shells will carry charges $q_o$ and $q_i$ respectively. The potential $v_i$ can be found starting from the definition and using the field from the inner spherical shell with charge $q_i$:
+
+\begin{align}
+V_b - V_a &= -\int_a^b \vec{E}\cdot\vec{dl} \\ 
+V_i - \cancel{V_o} &= -\int_{r_o}^{r_i} \frac{k q_i}{r^2}\hat{r}\cdot\hat{r}dr \\
+V_i &= - k q_i \left[ - \frac{1}{r}\right]_{r_o}^{r_i} \\
+&= - k q_i \left[\frac{1}{r_o} - \frac{1}{r_i}\right] \\
+&= - k q_i \left[\frac{r_i - r_o}{r_o r_i}\right] \\
+V_i &= \ \ \ k q_i \left[\frac{r_o - r_i}{r_o r_i} \right]
+\end{align} 
+
+Solving for $q_i$ and taking a derivative gets us 
+
+\begin{align}
+q_i &= \frac{V_i}{k} \left[\frac{r_o r_i}{r_o - r_i}\right] \\
+\frac{\partial q_i}{\partial V_i} &= \left[\frac{r_o r_i}{k\left(r_o - r_i\right)}\right] = c_{ii} = c_{11}
+\end{align}
+
+This quantity is positive and has units of inverse $k$ times length, which is capacitence. In a similar manner we solve for $c_{12} = c_{21} = c_{io}$. This time we choose to ground the \textit{inner} shell at $V_i = 0$ and let the outer shell exist at potential $V_o$, because we want to relate $q_i$ with $V_o$. The potential would then be given by the following, since the electric field is exactly the same: 
+
+\begin{align}
+V_o - \cancel{V_i} &= -\int_{r_i}^{r_o} \frac{k q_i}{r^2}\hat{r}\cdot\hat{r}dr \\
+V_o &= - k q_i \left[ - \frac{1}{r}\right]_{r_i}^{r_o} \\
+&=  k q_i \left[\frac{1}{r_o} - \frac{1}{r_i}\right] \\
+V_o &=  k q_i \left[\frac{r_i - r_o}{r_i r_o}\right] \\
+\end{align}  
+
+Solving for $q_i$ and taking a derivative gets us
+
+\begin{align}
+q_i &= \frac{V_o}{k}\left[\frac{r_i r_o}{r_i - r_o}\right] \\
+\frac{\partial q_i}{\partial V_o} &= \frac{r_i r_0}{k\left(r_i - r_o\right)} = c_{io} = c_{12}\\
+&= - c_{11}
+\end{align}
+
+We note here that the off diagonal coefficients are apparently, in this case, the negative of the upper left hand element. The final element is $c_{22}$, solving for which requires us to relate $V_o$ and $q_o$. The trick here is that we need to get $q_o$ in our expression somehow. This is in contrast to the previous three coefficients which can be found just by investigating the field between the two spheres due to $q_i$. This time we ground the inner surface so that $V_i = 0$ and note that the potential $V_\infty = 0$, at $r = \infty$. We investigate the field at $r > r_o$. By gauss law, the electric field is proportional to the sum of the enclosed charges:
+
+\begin{align}
+\vec{E} &= \frac{k \left(q_i + q_o\right)}{r^2}\hat{r} \\
+V_o - \cancel{V_\infty} &= -\int_{\infty}^{r_o} \frac{k \left(q_i + q_o\right)}{r^2}\hat{r}\cdot\hat{r}dr \\
+&= \frac{k\left(q_i + q_o\right)}{r_o}
+\end{align}    
+
+We need to somehow eliminate $q_1$ from the equation. We can thankfully use the fundamental linear relationship for $q_1$ in this system, noting that $V_i = 0$ in this particular physical scenario:
+
+\begin{align}
+q_i &= \cancel{c_{11}V_1} + c_{12}V_2 \\
+&= c_{io}V_o
+\end{align}
+
+We know $c_{12}$ from the previous direct calculation. Substituting it in we would get 
+
+\begin{align}
+V_o &= \frac{k V_o \left(\frac{r_i r_o}{k\left(r_i - r_o\right)}\right) + kq_o}{r_o}\\
+&= \frac{\cancel{k} V_o r_i \cancel{r_o}}{\cancel{r_o} \cancel{k} \left(r_i - r_o\right)} + \frac{kq_o}{r_o} \\
+V_o &= \frac{V_o r_i}{r_i - r_o} + \frac{k q_o}{r_o} \\
+V_o\left(1 - \frac{r_i}{r_i - r_o}\right) &= \frac{k q_o}{r_o} \\
+V_o \left(\frac{\cancel{r_i} - r_o - \cancel{r_i}}{r_i - r_o}\right) &= \frac{k q_o}{r_o} \\
+V_o\left(\frac{r_o}{r_o - r_i}\right) &= \frac{k q_o}{r_o} \\
+q_o &= \frac{V_o}{k}\left(\frac{r_o^2}{r_o - r_i}\right) \\
+\frac{\partial q_o}{\partial V_o} &= \frac{r_o^2}{k\left(r_o - r_i\right)} = c_{oo} = c_{22}
+\end{align}
+
+We can now form the whole matrix:
+\begin{align}
+\begin{bmatrix}
+q_i \\
+q_o
+\end{bmatrix}
+= \frac{r_o}{k\left(r_o - r_i\right)}
+\begin{bmatrix}
+r_i & - r_i \\
+- r_i & r_o
+\end{bmatrix}
+\begin{bmatrix}
+V_i \\
+V_o
+\end{bmatrix}
+\end{align}
+
+To relate this to what we would normally call mutual capacitence, we need to define $q_o = - q_i$, and go back to the definition 
+
+\begin{align}
+V_i = -p_{ii}Q + p_{io}Q \\
+V_o = -p_{oi}Q + p_{oo}Q
+\end{align}
+
+The potential difference $V_o - V_i = (p_{ii} + p_{oo} - 2p_{io})Q$, and $C_{mutual} = \frac{Q}{\Delta V}$, so $C_{mutual} = (p_{ii} + p_{oo} - 2 p_{io})^{-1}$. The matrix $P$ can be found by the inversion rule for symetric 2x2 matrices:
+
+\begin{align}
+P = C^{-1} = \frac{1}{c_{ii}c_{oo} -  c_{io}^2}
+\begin{bmatrix}
+c_{oo} & - c_{io} \\
+- c_{io} & c_{ii} 
+\end{bmatrix}
+\end{align}
+
+This implies that the following formula for $C_{mutual}$:
+
+\begin{align}
+C_{mutual} &= \frac{c_{ii}c_{oo} - c_{io}^2}{c_{oo} + c_{ii} - 2c_{io}} \\
+&= \frac{\left[\frac{r_o}{k(r_o - r_i)}\right]^2(r_i r_o - r_i^2)}{\left[\frac{r_o}{k(r_o - r_i)}\right](r_o + r_i - 2 r_i)} \\
+&= \frac{r_o r_i}{k(r_o - r_i)} \checkmark
+\end{align}
+
+This completes the proof.
+
+\end{document}
