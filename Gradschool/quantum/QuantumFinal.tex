@@ -1,0 +1,427 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{cancel}
+\usepackage{pdfpages}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Quantum Mechanics, Final Exam \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Problem 1}
+
+Consider a wavefunction given by
+
+\begin{align}
+\Psi(\vec{x}) = (x + y + 3z)f(r)
+\end{align}
+
+I wish to check if $\Psi$ is an eigenfunction of the $L^2$ operator in three dimensions. I know that in the spherical coordinate basis, the $L^2$ operator can be represented as (Shankar Equation 12.5.36):
+
+\begin{align}
+L^2 = \hbar^2 \left[ \frac{1}{\sin(\theta)}\frac{\partial}{\partial \theta}\sin(\theta)\frac{\partial}{\partial \theta} + \frac{1}{\sin^2(\theta)}\frac{\partial ^2}{\partial \phi^2} \right]
+\end{align}
+
+Using the transformations from cartiesian to spherical coordinates
+
+\begin{align}
+x &= r \cos(\phi)\sin(\theta) \\
+y &= r \sin(\phi)\sin(\theta) \\
+z &= r \cos(\theta)
+\end{align}
+
+The radial wavefunction reads
+
+\begin{align}
+\Psi &= (r\cos(\phi)\sin(\theta) + r\sin(\phi)\sin(\theta) + 3 r \cos(\theta))f(r) \\
+&= r(\cos(\phi)\sin(\theta) + \sin(\phi)\sin(\theta) + 3 \cos(\theta))f(r) 
+\end{align}
+
+
+I now act upon the whole wavefunction with the $L^2$ operator in the coordinate basis and attempt to simplify the results. Starting from the last term first, I need two derivatives of the wavefunction with respect to $\phi$.
+
+\begin{align}
+\frac{d}{d\phi}\Psi &= rf(r)\frac{\partial}{\partial \phi} (\cos(\phi)\sin(\theta) + \sin(\phi)\sin(\theta) + \cancel{3 \cos(\theta))} \\
+&= rf(r)(-\sin(\phi)\sin(\theta) + \cos(\phi)\sin(\theta)) \\
+\text{2nd. }&\rightarrow \ \text{need} \ \frac{\partial}{\partial \phi} (-\sin(\phi)\sin(\theta) + \cos(\phi)\sin(\theta))  \\
+&= rf(r)(-\cos(\phi)\sin(\theta) - \sin(\phi)\sin(\theta)) \\ 
+\text{Times $\frac{1}{\sin^2(\theta)}$} &\rightarrow -rf(r)\left[\frac{\cos(\phi)}{\sin(\theta)} + \frac{\sin(\phi)}{\sin(\theta)} \right]
+\end{align}
+
+We need a derivative with respect to $\theta$:
+
+\begin{align}
+\frac{\partial}{\partial \theta}\Psi &=  \frac{\partial}{\partial \theta} rf(r)(\cos(\phi)\sin(\theta) + \sin(\phi)\sin(\theta) + 3 \cos(\theta)) \\
+&= rf(r)(\cos(\phi)\cos(\theta) + \sin(\phi)\cos(\theta) - 3 \sin(\theta)) \\
+\text{Times $\sin(\theta)$} &\rightarrow rf(r)(\cos(\phi)\cos(\theta)\sin(\theta) + \sin(\phi)\cos(\theta)\sin(\theta) - 3 \sin^2(\theta)) \\
+&\rightarrow \frac{\partial}{\partial \theta} rf(r)(\cos(\phi)\cos(\theta)\sin(\theta) + \sin(\phi)\cos(\theta)\sin(\theta) - 3 \sin^2(\theta))
+\end{align}
+\begin{align} 
+&= rf(r)\left[\cos(\phi)(\cos(2 \theta)) + \sin(\phi)(\cos(2 \theta)) - 3\sin(2 \theta)\right] \\
+\text{Times $\frac{1}{\sin(\theta)}$} &\rightarrow rf(r)\frac{1}{\sin(\theta)} \left[\cos(\phi)(\cos(2 \theta)) + \sin(\phi)(\cos(2 \theta)) - 3\sin(2 \theta)\right]
+\end{align}
+
+%Now, using the identity that $\cos^2(\theta) - \sin^2(\theta) = \cos(\2\theta)$
+
+At this point I should be able to piece together the action of the whole operator on $\Psi$:
+
+\begin{align}
+rf(r)\left[ \frac{1}{\sin(\theta)} \left[\cos(\phi)(\cos(2 \theta)) + \sin(\phi)(\cos(2 \theta)) - 3\sin(2 \theta)\right] -  \left[\frac{\cos(\phi)}{\sin(\theta)} + \frac{\sin(\phi)}{\sin(\theta)} \right] \right]
+\end{align}
+
+I'm not sure how exactly the trig identities make this work out, but \textit{Mathematica} \textbf{(code included)} this simplifies to
+
+
+\begin{align}
+h&= -2 (\sin (\theta ) (\sin (\phi )+\cos (\phi ))+3 \cos (\theta )) \\
+\end{align}
+
+Multiplying by the $-\hbar^2$ in front of the $L^2$ operator, we arrive at the fact that
+
+\begin{align}
+L^2 \Psi = 2 \hbar^2 \Psi
+\end{align}
+
+Meaning that $\Psi$ is an eigenstate of $L^2$ with the eigenvalue $2 \hbar^2$. Since we must have eigenvalues of the form $l(l+1) \hbar^2$, we know $l(l+1) = 2$, which indicates that $l=1$ for this eigenstate. This in turn indicates that $m_l$ can run from $-l$ to $l$ or that $m_l$ can take on the values $-1, 0$, and $1$. We should be able to get the probabilities of each of these states by expanding the angular part of the original state as a linear combination of spherical harmonics:
+
+\begin{align}
+\Psi(\theta, \phi) &= (\cos(\phi)\sin(\theta) + \sin(\phi)\sin(\theta) + 3 \cos(\theta)) \\
+&=\left[ \left(\frac{e^{i \phi} + e^{- i \phi}}{2} \right) \sin(\theta) + \left(\frac{e^{i \phi} - e^{- i \phi}}{2i}\right)\sin(\theta) + 3 \cos(\theta) \right] \\
+&= \left[\frac{1}{2}e^{i \phi}\sin(\theta) + \frac{1}{2}e^{-i \phi}\sin(\theta) - \frac{i}{2}e^{i \phi}\sin(\theta) + \frac{i}{2}e^{- i \phi}\sin(\theta) + 3 \cos(\theta)\right] \\
+&= \left[\frac{1}{2}(1 - i)e^{i \phi}\sin(\theta) + \frac{1}{2}(1 + i)e^{-i \phi}\sin(\theta) + 3 \cos(\theta)\right]
+\end{align}
+
+Where I plugged in the standard definitons of sine and cosine as complex exponentials. Now, the $l=0$ and $l=1$ spherical harmonics read:
+
+\begin{align}
+Y^0_0 &= \sqrt{\frac{3}{4 \pi}} \cos(\theta) \\
+Y^{\pm 1}_1 &= \mp \sqrt{\frac{3}{8 \pi}}\sin(\theta)e^{\pm i \phi}
+\end{align}
+
+I want to substitute these into the wavefunction in its current state. To do this I note that, for instance:
+
+\begin{align}
+3\cos(\theta) &= A\sqrt{\frac{3}{4 \pi}}\cos(\theta) \\
+\end{align}
+
+This is like asking "how much of that particular spherical harmonic is this term", then we can simply solve for $A$ to get to correct coefficients. 
+
+\begin{align}
+&= \left[\frac{\frac{1}{2}(1 - i)}{-\sqrt{\frac{3}{8 \pi}}}Y^1_1 + \frac{\frac{1}{2}(1 + i)}{\sqrt{\frac{3}{8 \pi}}}Y^{-1}_1 + \frac{3}{\sqrt{\frac{3}{4 \pi}}}Y^0_0 \right] \\
+&= \left[(i - 1)\sqrt{\frac{2 \pi}{3}}Y^1_1 + (1 + i)\sqrt{\frac{2 \pi}{3}}Y^{-1}_1 + 2 \sqrt{3 \pi}Y^0_0 \right]
+\end{align}
+
+The probabilities of getting each of the states are the squares of the moduli of each of the coefficients on the spherical harmonics, where $\Gamma$ is the sum of the squares of the moduli of the coefficients. Each one is individual divided by total. Gamma is:
+
+\begin{align}
+\Gamma &= \left|(i - 1)\sqrt{\frac{2 \pi}{3}}\right|^2 + \left|2 \sqrt{3 \pi}\right|^2 + \left|(1 + i)\sqrt{\frac{2 \pi}{3}}\right|^2 \\ 
+&= \frac{44 \pi}{3} 
+\end{align}
+
+\begin{align}
+P(m_l = -1) &= \frac{\left|(i - 1)\sqrt{\frac{2 \pi}{3}}\right|^2}{\Gamma} = \frac{1}{11} \\
+P(m_l = 0) &= \frac{\left|2 \sqrt{3 \pi}\right|^2}{\Gamma} = \frac{9}{11}\\
+P(m_l = 1) &= \frac{\left|(1 + i)\sqrt{\frac{2 \pi}{3}}\right|^2}{\Gamma} = \frac{1}{11} \\
+\end{align}
+
+Note the probability of finding the system in \textit{some state} adds up to 1.
+
+\hspace{2mm}
+
+If we know that $\Psi$ is an energy eigenfunction with eigenvalue $E$, we can find the potential using the schrodinger equation. To do this we would rewrite the radial schrodinger equation as 
+
+\begin{align}
+-\frac{\hbar^2}{2m}\frac{d^2 u}{dr^2} + \left[V(r) + \frac{L^2}{2m r^2}\right]u = Eu
+\end{align}
+
+Since we have the eigenvalues of $L^2$, all we would do is take a bunch of derivatives of the $r$-dependent part, and then solve algebraically for $V(r)$. We have a wavefunction $\Psi = rf(r)g(\theta,\phi) = u(r)g(\theta,\phi)$ using the standard convention for the definiton of $u(r)$. Substituting in $-2\hbar^2$ for $L^2$ and expanding, we get
+
+\begin{align}
+-\frac{\hbar^2}{2m}\frac{d^2 u }{dr^2} + V(r)u + \frac{\hbar^2 u }{m r^2} = E u \\  
+E u + \frac{\hbar^2}{m}\left[\frac{1}{2}\frac{d^2 u}{dr^2}  -\frac{u^2}{r^2}\right] = V(r)
+\end{align}
+
+Completing the problem.
+
+\section{Problem 2}
+
+We are asked to investigate a two spin-$\frac{1}{2}$, mass $m$ particle system interacting through the potential 
+
+\begin{align}
+V(r) = \frac{g}{r}\sigma_1 \cdot \sigma_2
+\end{align}
+
+Where $g$ is a constant greater then zero and $\sigma_i$ are the pauli spin matrices for the $i'th$ particle.
+
+I am interpreting $\sigma_1$ and $\sigma_2$ as some kind of vector of pauli matrices including the $x,y$, and $z$ components. The total spin operator is given by 
+
+\begin{align}
+S = \frac{\hbar}{2}(\sigma_1 + \sigma_2)
+\end{align}
+
+So that $S \cdot S$ is given by
+
+\begin{align}
+\frac{\hbar^2}{4}(\sigma_1^2 + \sigma_2^2 + 2 \sigma_1 \cdot \sigma_2)
+\end{align}
+
+But we know that $\sigma_i^2 = \sigma_i \cdot \sigma_i = \sigma_i^x \sigma_i^x + \sigma_i^y \sigma_i^y + \sigma_i^z \sigma_i^z$. Now, any component pauli matrix squared equals the identity. So we have that $(\sigma_i^j)^2 = I$ for all of the components. This gets us to the fact that $\sigma_i^2 = 3I$.
+
+\hspace{2mm}
+
+Now we can write $S \cdot S$ as:
+
+\begin{align}
+S \cdot S &= \frac{\hbar^2}{4}(3I +3I + 2 \sigma_1 \cdot \sigma_2) \\
+&= \frac{\hbar^2}{4}(6I + 2\sigma_1\cdot\sigma_2)
+\end{align} 
+
+Rewriting the left hand side using the known eigenvalues for the $S \cdot S$ operator we have 
+
+\begin{align}
+\cancel{\hbar^2} S(S+1) = \frac{\cancel{\hbar^2}}{4}(6I + 2 \sigma_1 \cdot \sigma_2)
+\end{align}
+
+From here we can solve the equation for the term $\sigma_1 \cdot \sigma_2$:
+
+\begin{align}
+&4  S(S + 1) = 6I + 2 \sigma_1 \cdot \sigma_2 \\
+&4  S(S + 1) - 6I = 2 \sigma_1 \cdot \sigma_2 \\
+&2  S(S + 1) - 3I = \sigma_1 \cdot \sigma_2 
+\end{align}
+
+Substituting this expression into the potential we have that 
+
+\begin{align}
+V(r) = \frac{g}{r}\left[2 S(S+1) - 3I\right]
+\end{align}
+
+We can plug in a few values of $S$ to examine bound states. Evidently, if the total spin $S=1$, then $V(r) = \frac{g}{r}\left[4 - 3I\right]$ which is greater then zero and gives rise to repulsive potentials. The $S=0$ state has potential $V(r) = -\frac{3g}{r}$ which is attractive and gives rise to bound states. 
+
+
+
+\hspace{2mm}
+
+Since this is a quantum mechanical two body problem with an attractive potential, the energy eigenvalues for this system must be something like the same ones for a hydrogen atom. Those are 
+
+\begin{align}
+E_n = \frac{m}{2 \hbar^2 n^2} \left[\frac{e^2}{4 \pi \epsilon_0}\right]^2
+\end{align}
+
+Where the potential was $V(r) = -\frac{1}{4 \pi \epsilon_0 r}$. Therefore it is not unreasonable to expect energy eigenvalues something like:
+
+\begin{align}
+E_n = \frac{m}{2 \hbar^2 n^2}\left[3g\right]^2 = \frac{9 m g}{2 \hbar^2 n^2}
+\end{align}
+
+For the spin dependent potential.
+
+\section{Problem 3}
+
+We are asked to find the eigenstates for $S^2$ and $S_z$ for a three spin-$\frac{1}{2}$ particle system including no orbital angular momentum. We look to express the $2x2x2 = 8$ eigenstates in terms of the individual basis states. Since $[S^2, S_z] = 0$, we know that the two operators share a common eigenbasis. So it will suffice just to find the eigenstates of $S^2$. Since there are 3 such particles, the maximum possible value of $S$ is equal to $\frac{3}{2}$. This means that $m$ can take on values of $-\frac{3}{2}, -\frac{1}{2}, \frac{1}{2}$, and $\frac{3}{2}$.
+
+\hspace{2mm}
+
+We search for linear combinations of the individual basis states:
+
+\begin{align}
+1.\ket{\uparrow \uparrow \uparrow} \\
+2.\ket{\downarrow \uparrow \uparrow} \\
+3.\ket{\uparrow \downarrow \uparrow} \\
+4.\ket{\uparrow \uparrow \downarrow} \\ 
+5.\ket{\downarrow \downarrow \uparrow} \\
+6.\ket{\downarrow \uparrow \downarrow} \\
+7.\ket{\uparrow \downarrow \downarrow} \\
+8.\ket{\downarrow \downarrow \downarrow}
+\end{align}
+
+We begin by showing that $\ket{\uparrow \uparrow \uparrow}$ is an eigenstate of $S^2$. We can do so by showing that it is in fact just an eigenstate of $S_z$. If $S^T_z = S^1_z + S^2_z + S^3_z$, then
+
+\begin{align}
+S^T_z\ket{\uparrow \uparrow \uparrow} &= (S^1_z + S^2_z + S^3_z)\ket{\uparrow \uparrow \uparrow} \\
+&= S^1_z\ket{\uparrow}\ket{\uparrow}\ket{\uparrow} + \ket{\uparrow}S^2_z\ket{\uparrow} + \ket{\uparrow}\ket{\uparrow}S^3_z\ket{\uparrow} \\
+&= \frac{\hbar}{2}\ket{\uparrow}\ket{\uparrow}\ket{\uparrow} + \ket{\uparrow}\frac{\hbar}{2}\ket{\uparrow} + \ket{\uparrow}\ket{\uparrow}\frac{\hbar}{2}\ket{\uparrow} \\
+&= \frac{3\hbar}{2}\ket{\uparrow\uparrow\uparrow}
+\end{align}
+
+Which confirms that $\ket{\uparrow \uparrow \uparrow}$ is already an eigenstate both of $S_z$ and $S^2$. We can now get at least three other eigenstates of $S^2$ by acting the lowering operator on the top state:
+
+\begin{align}
+S^T_-\ket{\uparrow \uparrow \uparrow} &= (S^1_- + S^2_- + S^3_-) \ket{\uparrow \uparrow \uparrow} \\
+&= S^1_-\ket{\uparrow}\ket{\uparrow}\ket{\uparrow} + \ket{\uparrow}S^2_-\ket{\uparrow}\ket{\uparrow} + \ket{\uparrow}\ket{\uparrow}S^3_-\ket{\uparrow} \\ 
+&= \hbar \ket{\downarrow \uparrow \uparrow} + \hbar \ket{\uparrow \downarrow \uparrow} + \hbar \ket{\uparrow \uparrow \downarrow} \\
+\text{Normalize.} &\rightarrow \frac{\hbar}{\sqrt{3}} \left( \ \ket{\downarrow \uparrow \uparrow} + \ket{\uparrow \downarrow \uparrow} + \ket{\uparrow \uparrow \downarrow} \ \right)
+\end{align}
+
+The above corresponds to the $\ket{\frac{3}{2}, \frac{1}{2}}$ state. By the same logic we can show that the bottom state, corresponding to $\ket{\downarrow \downarrow \downarrow}$ or $\ket{\frac{3}{2}, -\frac{3}{2}}$ is also an eigenstate of $S^2$ and therefore $S_z$:
+
+\begin{align}
+S^T_z\ket{\downarrow \downarrow \downarrow} &= (S^1_z + S^2_z + S^3_z)\ket{\downarrow \downarrow \downarrow} \\
+&= -\frac{3\hbar}{2}\ket{\downarrow \downarrow \downarrow}
+\end{align}
+
+Applying now a \textit{raising} operator to this eigenstate gives
+
+\begin{align}
+S^T_+\ket{\downarrow \downarrow \downarrow} &= (S^1_+ + S^2_+ + S^3_+)\ket{\downarrow \downarrow \downarrow} \\
+&= S^1_+\ket{\downarrow}\ket{\downarrow}\ket{\downarrow} + \ket{\downarrow}S^2_+\ket{\downarrow}\ket{\downarrow} + \ket{\downarrow}\ket{\downarrow}S^3_+\ket{\downarrow} \\
+&= \hbar \ket{\uparrow \downarrow \downarrow} + \hbar \ket{\downarrow \uparrow \downarrow} + \hbar \ket{\downarrow \downarrow \uparrow} \\
+\text{Normalize.} &\rightarrow \frac{\hbar}{3} \left( \ \ket{\uparrow \downarrow \downarrow} + \ket{\downarrow \uparrow \downarrow} + \ket{\downarrow \downarrow \uparrow} \ \right)
+\end{align}
+
+I can get at least two more states by just adding a spin-up or spin-down particle to a singlet for two particles:
+
+\begin{align}
+\frac{\hbar}{\sqrt{2}}( \ \ket{\uparrow \downarrow \uparrow} + \ket{\downarrow \uparrow \uparrow} \ ) \\
+\frac{\hbar}{\sqrt{2}}( \ \ket{\uparrow \downarrow \downarrow} + \ket{\downarrow \uparrow \downarrow} \ )
+\end{align}
+
+I get the last two by treating two spin-$\frac{1}{2}$ particles as a single particle of spin 1 and using the $1x\frac{1}{2}$ entry in the Clebsch-Gordan table:
+
+\begin{align}
+\frac{\hbar}{\sqrt{6}}( \ 2\ket{\uparrow \uparrow \downarrow} + \ket{\downarrow \uparrow \uparrow} + \ket{\uparrow \downarrow \uparrow} \ ) \\
+\frac{\hbar}{\sqrt{6}}( \ 2\ket{\downarrow \downarrow \uparrow} + \ket{\uparrow \downarrow \downarrow} \ket{\downarrow \uparrow \downarrow} \ )
+\end{align}
+
+Or, really, just finding one and then flipping all of the spins over. 
+
+\section{Problem 4}
+
+We are asked to estimate the energy levels for a quartic potential in one dimension of the form $\lambda x^4$. The Schrodinger equation for this situation reads:
+
+\begin{align}
+-\frac{\hbar^2}{2m}\frac{\partial^2 \Psi}{\partial x^2} + \lambda x^4 \Psi = E \Psi
+\end{align}
+
+I will use the WKB approximation. Following \textit{Griffiths} equation 8.51, we have that the wavefunctions must match up in the region between the turning points $x_1$ and $x_2$.
+
+\begin{align}
+\int_{x_1}^{x_2} p(x) dx = \left(n - \frac{1}{2}\right)\pi \hbar
+\end{align}
+
+At a turning point, we must have that the potential energy is equal to the energy:
+
+\begin{align}
+E &= \lambda x^4 \\
+\frac{E}{\lambda} &= x^4 \\
+\left(\frac{E}{\lambda}\right)^{\frac{1}{4}} &= x_{1,2}
+\end{align}
+
+The potential is an even function allowing us to double the integral for $p(x)$ and plug in the value we just found for the upper limit:
+
+\begin{align}
+2 \int_0^{\left(\frac{E}{\lambda}\right)^{\frac{1}{4}}} \sqrt{2m(E - \lambda x^4)} dx
+\end{align}
+
+As it stands this integral is completely impossible. Make the substitution:
+
+\begin{align}
+z &= x^4 \\
+x &= z^{\frac{1}{4}} \\
+dz &= 4x^3 dx \\
+&= 4 (z^{\frac{1}{4}})^3 dx \\
+&= 4 z^{\frac{3}{4}} dx \\
+\rightarrow &= dx = \frac{1}{4}z^{-\frac{3}{4}} dz
+\end{align}
+
+We also need to transform the upper limit of integration:
+
+\begin{align}
+(\frac{E}{\lambda}^{\frac{1}{4}})^{4} = \frac{E}{\lambda}
+\end{align}
+
+So we have
+
+\begin{align}
+2 \int_{0}^{\frac{E}{\lambda}} \sqrt{2m(E - \lambda z)}\left[\frac{1}{4}z^{-\frac{3}{4}}\right] dz
+\end{align}
+
+
+Integrating with Mathematica (code attached) I get
+
+\begin{align}
+\frac{E^{3/4} \sqrt{2 \pi m} \Gamma \left(\frac{5}{4}\right)}{\sqrt[4]{\lambda } \Gamma \left(\frac{7}{4}\right)}= \left(n - \frac{1}{2}\right)\pi \hbar
+\end{align}
+
+Solving this expression for $E$ gives me
+
+\begin{align}
+E = \left[\left(n - \frac{1}{2}\right)\pi\hbar \frac{\Gamma(\frac{7}{4})(4 \lambda^{\frac{1}{4}})}{\Gamma(\frac{1}{4})\sqrt{2 \pi m}} \right]^{\frac{4}{3}}
+\end{align}
+
+These should be the energy levels for a quartic potential.
+
+\includepdf[pages={1-1}]{quantumfinal.pdf}
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+
+\end{document}
