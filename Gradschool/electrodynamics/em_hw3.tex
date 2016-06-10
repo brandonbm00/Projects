@@ -1,0 +1,543 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{float}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Electrodynamics - Homework 3 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Problem 1}
+
+\subsection{Potential and Image Potential}
+
+We are asked to investigate the inverse image charge problem, this time on the interior region of the sphere. We approach the problem as any standard image charge problem, and set the known charge $q$ a distance $d$ along the $\theta = 0$ axis with the image charge $q'$ at some unknown distance $x$. Requiring that the potential be zero at the marked points leads us to two equations in two unknowns:
+
+\begin{align}
+\frac{1}{4 \pi \epsilon_0}\frac{q}{R - d} + \frac{1}{4 \pi \epsilon_0}\frac{q'}{x - R} &= 0 \\
+\frac{1}{4 \pi \epsilon_0}\frac{q}{R + d} + \frac{1}{4 \pi \epsilon_0}\frac{q'}{x + R} &= 0
+\end{align}  
+
+Solving these for $q'$ and $x$ leads to the familiar result as marked in the figure:
+
+\begin{align}
+x &= \frac{R^2}{d} \\
+q' &= -\frac{q R}{d}
+\end{align}
+
+This means that we can write the potential as the superposition of two terms, one from the real charge and the other from the image charge. Using the standard formula $\frac{1}{\vec{r} - \vec{r'}} = (r^2 + r'^2 - 2rr'\cos(\theta))^{-\frac{1}{2}}$, we have
+
+\begin{align}
+\Phi = \frac{1}{4 \pi \epsilon_0}\left[\frac{q}{\sqrt{r^2 + d^2 - 2 r d \cos(\theta)}} - \frac{\frac{qR}{d}}{\sqrt{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta)}}\right] \\
+\Phi = \frac{1}{4 \pi \epsilon_0}\left[\frac{q}{\sqrt{r^2 + d^2 - 2 r d \cos(\theta)}} - \frac{q}{\sqrt{\frac{r^2d^2}{R^2} + R^2 - 2 r d\cos(\theta)}}\right]\\ 
+\end{align}
+
+The desired result.
+
+\subsection{Surface Charge Density}
+
+The boundary conditions on the electric field require that the discontinuity in $\vec{E}$ be proportional to $\sigma$, or equivalently, that $\sigma = -\epsilon_0 \frac{\partial \Phi}{\partial r}$. We need a derivative of the potential above.
+
+\begin{align}
+-4 \pi \epsilon_0 \frac{\partial \Phi}{\partial r} &= \frac{q(2r - 2d\cos(\theta))}{2(r^2 + d^2 - 2 r d \cos(\theta))^{\frac{3}{2}}} - \frac{q\left(\frac{2rd^2}{R^2} - 2 d \cos(\theta)\right)}{2\left(\frac{r^2d^2}{R^2} + R^2 - 2 r d \cos(\theta)\right)^{\frac{3}{2}}} \\ 
+\rightarrow & \text{At $r=R$, this becomes} \rightarrow \\
+&= \frac{q(2R - 2d\cos(\theta))}{2(R^2 + d^2 - 2 R d \cos(\theta))^{\frac{3}{2}}} - \frac{q\left(\frac{2Rd^2}{R^2} - 2 d \cos(\theta)\right)}{2\left(\frac{R^2d^2}{R^2} + R^2 - 2 R d \cos(\theta)\right)^{\frac{3}{2}}} \\ 
+&= \frac{q(2R - 2d\cos(\theta))}{2(R^2 + d^2 - 2 R d \cos(\theta))^{\frac{3}{2}}} - \frac{q\left(\frac{2}{R}d^2 - 2 d \cos(\theta)\right)}{2\left(d^2 + R^2 - 2 R d \cos(\theta)\right)^{\frac{3}{2}}} \\
+&= \frac{q(R - \frac{d^2}{R})}{(d^2 + R^2 - 2 R d \cos(\theta))^{\frac{3}{2}}} \\
+\end{align}
+
+Multiplying both top and bottom by $R$ and rearranging we have
+
+\begin{align}
+\sigma &= -\frac{1}{4 \pi} \left[\frac{q(R^2 - d^2)}{R(d^2 + R^2 - 2 R d \cos(\theta))^{\frac{3}{2}}}\right] \\
+\end{align}
+
+\subsection{Forces}
+
+The force can be found directly from Coulomb's law taking the distance between the charges as $|\vec{r} - \vec{r'}|$:
+
+\begin{align}
+|F| &= \frac{1}{4 \pi \epsilon_0}\frac{q_1 q_2}{|\vec{r}-\vec{r'}|^2} \\
+&= \frac{1}{4 \pi \epsilon_0}\frac{-\frac{q^2 R}{d}}{(\frac{R^2}{d} - d)^2} \\
+&= -\frac{q^2}{4 \pi \epsilon_0} \frac{1}{(\frac{d}{R})(\frac{R^4}{d^2} - 2R^2 + d^2)} \\
+&= -\frac{q^2}{4 \pi \epsilon_0} \frac{1}{\left(\frac{R^3}{d} - 2 Rd + \frac{d^3}{R}\right)}
+\end{align}
+
+\subsection{Modifications}
+Like the previous homework, adding extra charge to a system that has already equilibrated through the image charge does not change the situation. The new added charge would have no reason to be biased towards any region of the sphere, since the surface is maintained already as an equipotential by the charge and image charge pair. Similarly adding a potential does not change any properties of the system as it does not affect the gradient of the potential in any location, and thus does not effect the overall dynamics of the system.
+
+\section{Problem 2}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{doubleline_geom.eps}
+\end{center}
+\end{figure}
+
+
+We place two line charges a distance $a$ from the $x-$axis in the $xy$ plane as shown. Per the geometry in the figure, the two distances to the line charges, $r_+$ and $r_-$ are given as the following:
+
+\begin{align}
+r_+ &= \sqrt{(y-a)^2 + z^2} \\
+r_- &= \sqrt{(y+a)^2 + z^2}  
+\end{align}
+
+The known potential from a line charge is given by $V = \frac{\lambda}{2 \pi \epsilon_0}\ln\left[\frac{r}{r_0}\right]$, where $r_0$ is the reference distance to the zero point of the potential, which is equal for both wires due to symmetry. The superposition of the potentials from the two wires then is
+
+\begin{align}
+\Phi &= \frac{\lambda}{2 \pi \epsilon_0}\ln\left[\frac{\sqrt{(y-a)^2 + z^2}}{r_0}\right] - \frac{\lambda}{2\pi\epsilon_0}\ln\left[\frac{\sqrt{(y+a)^2 + z^2}}{r_0}\right] \\
+&= \frac{\lambda}{2 \pi \epsilon_0}\ln\left[\sqrt{\frac{(y-a)^2 + z^2}{(y+a)^2 + z^2}}\right] \\
+&= \frac{\lambda}{4 \pi \epsilon_0}\ln\left[\frac{(y-a)^2 + z^2}{(y+a)^2 + z^2}\right]
+\end{align}
+
+A specific equipotential is found by setting the above formula equal to a constant, $\Phi_0$. We absorb all the available constants into the left hand side and exponentiate, defining $C = e^{\frac{4 \pi \epsilon_0 \Phi_0}{\lambda}}$, yielding 
+
+\begin{align}
+\left[\frac{(y-a)^2 + z^2}{(y+a)^2 + z^2}\right] &= C \\
+y^2 - 2 y a + a^2 + z^2 &= C(y^2 + 2ya + a^2 + z^2) \\
+y^2(1-c) - 2ya(1+c) + a^2(1-c) + z^2(1-c) &= 0 \\
+(1-c)(y^2 + z^2 + a^2) &= 2ya(1+c)\\
+y^2 + z^2 + a^2 = 2ya\left(\frac{1+c}{1-c}\right)
+\end{align}
+
+This corresponds to the equation of a circle $(y-y_0)^2 + z^2 = R^2 \rightarrow y^2 + z^2 - 2yy_0 + a^2 = R^2$ with $y_0 = a\left(\frac{1+c}{1-c}\right)$. Consider the following:
+
+\begin{align}
+(y - y_0)^2 &= y^2 - 2yy_0 + y_0^2 \\
+\end{align}
+
+Whereas our equation reads
+\begin{align}
+y^2 + z^2 + a^2 - 2ya\left(\frac{1+c}{1-c}\right) = 0
+\end{align}
+
+It would seem that if we add the quantity $a^2 \left(\frac{c+1}{c-1}\right)^2$ to both sides we can identify $y_0 = a\left(\frac{c+1}{c-1}\right)$ and do the following:
+
+\begin{align}
+y^2 - 2y\left(\frac{c + 1}{c-1}\right)a + a^2\left(\frac{c+1}{c-1}\right)^2 + a^2 + z^2 &= a^2 \left(\frac{c+1}{c-1}\right)^2 \\
+\left(y - a\left(\frac{c+1}{c-1}\right)\right)^2 + z^2 &= a^2\left(\frac{c+1}{c-1}\right)^2 - a^2 
+\end{align}
+
+These are circles with radii that are the square root of the right hand side, recalling that $c$ contains a dependence on the equipotential in question.
+
+\begin{align}
+R &= \sqrt{a^2\left(\frac{c+1}{c-1}\right)^2 - a^2} \\
+y_0 &= a\left(\frac{c+1}{c-1}\right) 
+\end{align}
+
+\section{Problem 3}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{cyl_geom.eps}
+\end{center}
+\end{figure}
+
+\subsection{Part A - Greens Function}
+
+In the context of an infinite cylinder, the fundamental unit of charge is the infinite line charge. This is analogous to the point charge in the case of the sphere. As shown in the figure, we have a conceptually similar situation, in which we place such a line charge at $r<R$ and $\theta = 0$. This induces the equivalent of an \textit{image line charge} outside the boundary. 
+
+\hspace{2mm}
+
+If one looks down upon the top of the cylinder, one sees a circular cross section, in which the problem of finding the distance to the image line charge is geometrically equivalent to that of finding the distance to the image \textit{point charge} in the spherical case. Thus if the known distance to the real line charge is denoted $d$, the distance to the image line charge must be $d' = \frac{R^2}{d}$.
+
+\hspace{2mm}
+
+The following is the potential, found from Gauss's law, of an infinite line charge for a test particle a perpandicular distance $x$ from the line charge itself:
+
+\begin{align}
+\Phi = \frac{\lambda}{2 \pi \epsilon_0}\ln\left(\frac{r}{r_0}\right) \\
+\end{align}
+
+Where $r_0$ is the reference distance to the zero point of the potential. Our total potential is composed of two components, one from the real wire, and one from the image wire. We note that the reference distance to the zero point of the potential  
+
+\begin{align}
+\Phi &= \Phi_+ + \Phi_- \\
+&= \frac{-\lambda}{2 \pi \epsilon_0}\ln\left(\frac{r_+}{d}\right) + \frac{(\lambda)}{2 \pi \epsilon_0}\ln\left(\frac{r_-}{d'}\right)  \\
+\rightarrow &  \ \ \text{(Inverted Negatives from definition of potential)} \\
+&= \frac{\lambda}{2 \pi \epsilon_0}\ln\left(\frac{dr_-}{d'r_+}\right) \\
+&= \frac{\lambda}{2 \pi \epsilon_0}\ln\left[\frac{d^2}{R^2}\sqrt{\frac{r^2 + d'^2 - 2 r d' \cos(\theta)}{r^2 + d^2 - 2 r d \cos(\theta)}}\right] \\
+&= \frac{\lambda}{4 \pi \epsilon_0}\ln\left[\left(\frac{d^4}{R^4}\right)\frac{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d} \cos(\theta)}{r^2 + d^2 - 2 r d \cos(\theta)}\right]
+\end{align}
+
+Dropping the coupling constants and the charge density we find the form of the Green's function for the cylinder:
+
+\begin{align}
+G &= \frac{1}{4 \pi \epsilon_0} \ln\left[\left(\frac{d^4}{R^4}\right)\frac{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta)}{r^2 + d^2 - 2 r d \cos(\theta)}\right] \\
+\end{align}
+
+The general form of the solution to the potential in some given region of interest, from Jackson, is
+
+\begin{align}
+\cancel{\frac{1}{4 \pi \epsilon_0}\int_v \rho(\vec{r},\vec{r'})G(\vec{r},\vec{r'})dv} + \frac{1}{4 \pi}\int_s \phi(r',\theta',z') \frac{\partial G}{\partial n'}ds'
+\end{align}
+
+With the Green's function in hand we consider the problem of an arbitrary potential distribution $\phi$ on the surface of the cylinder. In the above solution, the first term cancels since there is no $\rho$ in the region of interest. We are left with an integral term and the need to differentiate the Green's function with respect to $\hat{r}$, since the normal vector points outwards from the inside of the cylinder:
+
+\begin{align}
+4\pi\frac{\partial G}{\partial r} &= \left(\frac{d^2}{R^2}\right)\left[\frac{r^2 + d^2 - 2 r d \cos(\theta)}{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta)}\right]\frac{\partial}{\partial r} \left[\frac{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta)}{r^2 + d^2 - 2 r d \cos(\theta)}\right] \\
+&= \left(\frac{d^2}{R^2}\right)  \left[\frac{\cancel{r^2 + d^2 - 2 r d \cos(\theta)}}{r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta)}\right]  \\ &  \times  \left[\frac{(r^2 + d^2 - 2 r d \cos(\theta))(2r - 2 \frac{R^2}{d}\cos(\theta)) - (r^2 + \frac{R^4}{d^2} - 2 r \frac{R^2}{d}\cos(\theta))(2r - 2d \cos(\theta))}{(r^2 + d^2 - 2 r d \cos(\theta))^{\cancel{2}}}\right]
+\end{align}
+
+Evaluating the resulting expression at $r = R$ gives us
+
+\begin{align}
+&= \left(\frac{d^2}{R^2}\right)   \left[\frac{(R^2 + d^2 - 2 R d \cos(\theta))(2R - 2 \frac{R^2}{d}\cos(\theta)) - (R^2 + \frac{R^4}{d^2} - 2 R \frac{R^2}{d}\cos(\theta))(2R - 2d \cos(\theta))}{(R^2 + d^2 - 2 R d \cos(\theta))(R^2 + \frac{R^2}{d^2} - 2 R \frac{R^2}{d}\cos(\theta))}\right] \\
+%&= \frac{(2R^3 - 2 \frac{R^4}{d}\cos(\theta) + 2Rd^2 - 2R^2d\cos(\theta) - 4 R^2 d\cos(\theta) + 4 R^3 \cos^2(\theta))}{(R^2 + d^2 - 2 R d \cos(\theta))(R^2 + \frac{R^2}{d^2} - 2 R \frac{R^2}{d}\cos(\theta))} \\
+%- \frac{(2R^3 - 2 R^2 d \cos(\theta) + 2\frac{R^5}{d^2} - 2\frac{R^4}
+&= \frac{1}{R}\left[\frac{d^2 - R^2}{d^2 + R^2 - 2Rd\cos(\theta)}\right]
+\end{align}
+
+Plugging this result into the integral solution for $\Phi$ and noting that the integral over the surface \textit{along a cross section} of a cylinder is $R d\theta'$, we have
+
+\begin{align}
+\Phi = \frac{1}{2\pi}\int_s \phi(R, \theta')\frac{R^2 - r^2}{R^2 + r^2 - 2 R r \cos(\theta)}d\theta' 
+\end{align}
+
+
+
+Where we plugged in $d \rightarrow r$ due to the symmetry in the Green's function and the choice of differentiation variable. This is the exact same as the result we hoped to derive with $\theta_0 = 0$, or aligning the $\theta=-$ line along the axis through both line charges. Note that switching the terms in the numerator is allowed us to absorb the negative sign from the definition of the solution into the expression.
+
+\subsection{Part B - Split Cylinder}
+
+We wish to find the potential inside a split cylinder of the type pictured above. By gauge freedom, we may write the potential as the sum of a constant term plus an infinite series that we demand obeys Laplace's equation. For convenience, we set this constant term to be the one we need, namely
+
+\begin{align}
+\Phi = \frac{V_1 + V_2}{2} + \Phi' \\
+\rightarrow \Phi' \ \text{Solves Laplace's Equation} \\
+\end{align}
+
+But we require that $\Phi = V_1$ for $0 < \theta < \pi$ and $\Phi = V_2$ for $\pi < \theta < 2 \pi$. This is equivalent to requiring that $\Phi' = \frac{V_2 - V_1}{2}\text{Sign}(\theta)$ Where the \textit{Sign} function is defined as returning $1$ if $ 0 < \theta < \pi$ and $-1$ if $\pi < \theta < 2 \pi$. To verify that this must be correct, we examine the two cases of interest:
+
+\begin{align}
+0 < \theta < \pi: & V = \frac{V_1 + V_2}{2} + \frac{V_1 - V_2}{2} = V_1 \\
+\pi < \theta < 2\pi: & V = \frac{V_1 + V_2}{2} - \frac{V_1 - V_2}{2} = V_2 
+\end{align}
+
+In general we could expand the Sign function as an infinite mixed sine cosine series $\sum_{n=0}^{\infty} a_n r^n \sin(n \theta) + b_n r^n \cos(n \theta)$, however since the Sign function is purely odd, we know there can't be any cosine terms. Furthermore, if we require that $V(\theta) = V(\pi - \theta)$, we see that we can only have odd terms in the summation itself. This leaves us with
+
+\begin{align}
+\Phi = \frac{V_1 + V_2}{2} + \sum_{n \ odd}^{\infty}a_n r^n \sin(n \theta)
+\end{align} 
+
+To get the $a_n$'s, we take the case $r = b$, multiply both sides by $\sin(m \theta)$ and integrate from $-\pi$ to $\pi$:
+
+\begin{align}
+\frac{V_1 - V_2}{2}\text{Sign}(\theta) &= \sum_{n \ odd}^{\infty}a_n b^n \sin(n \theta) \\
+\frac{V_1 - V_2}{2}\int_{-\pi}^{\pi} \text{Sign}(\theta)\sin(m \theta)d\theta &= \sum_{n \ odd}^{\infty}a_n b^n \sin(n \theta)\sin(m \theta)d\theta \\
+\end{align}
+
+Noting here that $\text{Sign}(\theta) \sin(m \theta) = |\sin(m \theta)|$, intuitive since the product of two odd functions is even, we may double the integrand on the right and take it from $0$ to $\pi$:
+
+\begin{align}
+(V_1 - V_2) \int_0^{\pi}\sin(m \theta)d\theta &= \pi a_n b^n \delta_{mn} \\
+\frac{2(V_1 - V_2)}{n} &= a_n b^n \pi \\
+a_n &= \frac{2(V_1 - V_2)}{n \pi b^n} \\
+\end{align}
+
+So we can write our solution now as
+
+\begin{align}
+\Phi &= \frac{V_1 + V_2}{2} + 2 \frac{V_1 - V_2}{\pi} \sum_{n \ odd}^{\infty} \frac{r^n}{nb^n}\sin(n \theta) \\
+\end{align}
+
+Applying Euler's formula, we note that $\sin(n \theta) = \Im [re^{i n \theta}]$ where $\Im$ denotes the imaginary part of an expression. Therefore $r^n \sin(n \theta) = \Im[r^n e^{i n\theta}]$. With that, we have
+
+\begin{align}
+\Phi = \frac{V_1 + V_2}{2} + 2 \frac{V_1 - V_2}{\pi} \Im \left[\sum_{n \ odd}^{\infty} \frac{1}{n}\left(\frac{r e^{i \theta}}{b}\right)^n \right]
+\end{align}
+
+Using now the identity that kids learn in kindergarten $\sum_{n odd}^{\infty} \frac{z^n}{n} = \frac{1}{2}\ln\frac{1 + z}{1-z}$, we have
+
+\begin{align}
+\Phi &= \frac{V_1 + V_2}{2} +  \frac{V_1 - V_2}{\pi} \Im\ln\left[\frac{1 + \frac{r}{b}e^{i \theta}}{1 - \frac{r}{b}e^{i \theta}}\right] \\
+&= \frac{V_1 + V_2}{2} +  \frac{V_1 - V_2}{\pi} \Im\ln\left[\frac{1 - \frac{r}{b}e^{i \theta}}{1 - \frac{r}{b}e^{i \theta}}\right]\left[\frac{1 - \frac{r}{b}e^{-i \theta}}{1 - \frac{r}{b}e^{-i \theta}}\right] \\
+&= \frac{V_1 + V_2}{2} +  \frac{V_1 - V_2}{\pi} \Im\ln\left[\frac{1 - \left(\frac{r}{b}\right)^2 + \frac{r}{b}(e^{i \theta} - e^{- i \theta})}{1 + \left(\frac{r}{b}\right)^2 - \frac{r}{b}(e^{i \theta} + e^{-i \theta})}\right]\\ 
+&= \frac{V_1 + V_2}{2} +  \frac{V_1 - V_2}{\pi} \Im\ln\left[\frac{1 - \left(\frac{r}{b}\right)^2 + \frac{r}{b}(2i)(\sin(\theta))}{1 + \left(\frac{r}{b}\right)^2 - \frac{r}{b}(2)(\cos(\theta))}\right]\\ 
+&= \frac{V_1 + V_2}{2} +  \frac{V_1 - V_2}{\pi}\Im\ln\left[\frac{1 - \left(\frac{r}{b}\right)^2}{1 + \left(\frac{r}{b}\right)^2 - 2 \frac{r}{b}\cos(\theta)} + \frac{2 i \frac{r}{b}\sin(\theta)}{1 + \left(\frac{r}{b}\right)^2 - 2 \frac{r}{b}\cos(\theta)}\right] 
+\end{align}
+
+In the complex plane, we must have that $ln(re^{i \theta}) = ln(r) + i \theta$, so the imaginary part of the log of a complex number is that complex number's phase. This makes sense when one thinks about the imaginary axis of the complex plane. Noting that the phase of a complex number is the inverse tangent of the imaginary part over the real part, we arrive at
+
+\begin{align}
+\Phi &= \frac{V_1 + V_2}{2} + \frac{V_1 - V_2}{\pi}\tan^{-1}\left[\frac{\left(\frac{r}{b}\right) \sin(\theta)}{1 + \left(\frac{r}{b}\right)^2}\right] \\
+&= \frac{V_1 + V_2}{2} + \frac{V_1 - V_2}{\pi}\tan^{-1}\left[\frac{2 r b \sin(\theta)}{b^2 - r^2}\right]
+\end{align}
+
+Which is the same answer as what we hoped for sans the triginometric function which is different simply due to the fact that we measured $\theta$ from the plane of separation instead of using the cumbersome convention in the problem description.
+
+\section{Problem 4}
+
+We are asked to investigate the Diriclet problem consisting of an infinite plane, and a region of interest defined by $z > 0$ with the surface placed at $z=0$. We will find the Green's function using the elementary image charge method.
+
+\hspace{2mm}
+
+From our experience with this problem we know that a charge $q$ placed a location $z_0$ above the $xy$ plane will be balanced by an image charge of magnitude $-q$ a distance $z_0$ \textit{below} the $xy$ plane. Thus if we define an arbitrary point $x_0, y_0, z_0$ as the field point, the potential due to \textit{both} the real and image charges is
+
+\begin{align}
+\Phi &= \frac{1}{4 \pi \epsilon_0}\left[\frac{q}{\sqrt{(x-x_0)^2 + (y-y_0)^2 + (z - z_0)^2}} - \frac{q}{\sqrt{(x-x_0)^2 + (y-y_0)^2 + (z + z_0)^2}}\right] \\
+\end{align}
+
+Dropping the $q's$ and coupling constant we have the Green's function
+
+\begin{align}
+G = \frac{1}{4 \pi \epsilon_0}\left[\frac{1}{\sqrt{(x-x_0)^2 + (y-y_0)^2 + (z - z_0)^2}} - \frac{1}{\sqrt{(x-x_0)^2 + (y-y_0)^2 + (z + z_0)^2}} \right]
+\end{align}
+
+\subsection{Part B - Circular Region of Potential}
+
+If the potential is specified to be $\phi_0$ on the surface $z=0$ in a small circular area of radius $a$ centered at the origin, we can use the general solution for $\rho = 0$ found in jackson and obtain 
+
+\begin{align}
+\Phi &= \frac{-1}{4 \pi}\int_s \phi(r_0, \theta_0)\frac{\partial G}{\partial n_0}ds_0
+\end{align}
+
+The distances under the radicals may be expressed as the sum of the usual law of cosines type distance plus an extra term in the $z$ direction, this allows us to cast the entire green's function into cylindrical coordinates. We integrate only over the region of interest, outside of which the potential on the surface is zero:
+
+\begin{align}
+\Phi &= \frac{-1}{4 \pi } \int_0^a \int_0^{2 \pi} \frac{d}{dz_0}\frac{1}{\sqrt{r^2 + r_0^2 - 2 r r_0 \cos(\theta) + (z - z_0)^2}} - \frac{1}{\sqrt{r^2 + r'^2 - 2 r r_0 \cos(\theta_0) + (z + z_0)^2}}r_0dr_0d\theta_0 \\
+&= \frac{-\phi_0}{4 \pi } \int_0^a \int_0^{2 \pi} \frac{2z_0 - 2z}{2\left(r^2 + r_0^2 - 2 r r_0 \cos(\theta_0) + (z - z_0)^2\right)^{\frac{3}{2}}} - \frac{2z_0 + 2_z}{2\left(r^2 + r_0^2 - 2 r r_0 \cos(\theta) + (z + z_0)^2\right)^{\frac{3}{2}}}r_0dr_0d\theta_0 \\
+\rightarrow & z_0 = 0 \rightarrow \\
+&= \frac{-\phi_0}{4 \pi } \int_0^a \int_0^{2 \pi} \frac{z_0 - z - z_0 - z}{\left(r^2 + r_0^2 - 2 r r_0 \cos(\theta) + (z)^2\right)^{\frac{3}{2}}} r_0dr_0d\theta_0 \\
+&= \frac{-\phi_0z}{4 \pi } \int_0^a \int_0^{2 \pi} \frac{1}{\left(r^2 + r_0^2 - 2 r r_0 \cos(\theta) + (z)^2\right)^{\frac{3}{2}}} r_0dr_0d\theta_0 \\
+\end{align}
+
+This is the simplest form of the result we seek.
+
+\subsection{Part C - Potential Along the $Z$-Axis}
+
+If $x$ and $y$ are zero, then $r$ must be zero. This simplifies the result from the previous subsection as
+
+\begin{align}
+&= \frac{-\phi_0z}{4 \pi } \int_0^a \int_0^{2 \pi} \frac{1}{\left(r_0^2 + z^2\right)^{\frac{3}{2}}} r_0dr_0d\theta_0 \\
+&= \frac{-\phi_0 z}{4 \pi}\int_0^a \frac{r_0}{(r_0^2 + z^2)^{\frac{3}{2}}}dr_0
+\end{align}
+
+Let $u = r_0^2 + z^2$ and $du = 2r_0dr_0$ so $dr_0 = \frac{du}{2r_0}$.
+
+\begin{align}
+\Phi &= \frac{-\phi_0 z}{4 \pi}\int_{z^2}^{a^2 + z^2}\frac{\cancel{r_0}}{u^{\frac{3}{2}}}\frac{du}{2\cancel{r_0}} \\
+%&= \frac{\phi_0 z}{\epsilon_0} \left(\frac{1}{2}u^{-\frac{1}{2}}\right)\bigg|_{u=z^2}^{u=z^2+a^2} \\
+&= \frac{\phi_0 z}{4 \pi} \left(\frac{1}{\sqrt{u}}\right)\bigg|_{u=z^2}^{u=z^2 + a^2} \\
+&= \frac{\phi_0 z}{4 \pi} \left[\frac{1}{\sqrt{z^2 + a^2}} - \frac{1}{\sqrt{z^2}}\right] \\
+&= \frac{\phi_0 z}{4 \pi} \left[ 1 - \frac{z}{\sqrt{z^2 + a^2}}\right]\\
+\end{align}
+
+As required.
+
+\subsection{Expansion}
+
+Starting from
+\begin{align}
+&= \frac{-\phi_0z}{4 \pi} \int_0^a \int_0^{2 \pi} \frac{r_0dr_0d\theta_0}{\left(r^2 + r_0^2 - 2 r r_0 \cos(\theta) + (z)^2\right)^{\frac{3}{2}}}  \\
+\end{align}
+
+We divide both numerator and denominator by a factor of $(r^2 + z^2)^{\frac{3}{2}}$ and rearrange:
+
+\begin{align}
+\frac{-\phi_0 z}{4 \pi} \int_0^a \int_0^{2\pi}\left(1 + \frac{r_0^2 -2 r r_0 \cos(\theta_0)}{r^2 + z^2}\right)^{\frac{3}{2}}
+\end{align}
+
+Using $(1 + x)^n \sim 1 + nx + \frac{n(n-1)}{2}x^2...$ we carry the expansion to two terms as follows:
+
+\begin{align}
+\frac{-\phi_0 z}{4 \pi}\int_0^a \int_0^{2 \pi}\left[1 - \frac{3}{2(r^2 + z^2)}(r_0^2 - 2rr_0\cos(\theta_0)) + \frac{15}{8(r^2 + z^2)^2}(r_0^2 - 2rr_0\cos(\theta_0))^2\right]r_0 dr_0 d\theta_0 \\
+\end{align}
+
+Integrating term by term we have 
+
+The first term, without the constants, or prefactor, is
+
+\begin{align}
+&= \int_0^a \int_0^{2 \pi}d\theta_0r_0dr_0 = \pi a^2 \\
+\end{align} 
+
+
+
+The second term is
+
+\begin{align}
+&=\frac{1}{(r^2 + z^2)} \int_0^a \int_0^{2 \pi} \left(-\frac{3}{2}\right)(r_0^2 - 2rr_0^2\cos(\theta))d\theta_0dr_0 \\
+&= \frac{1}{(r^2 + z^2)} \left[\int_0^a \int_0^{2 \pi}r_0^3 d\theta_0 dr_0 - \int_0^a \int_0^{2 \pi}2rr_0^2\cos(\theta_0)d\theta_0 dr_0\right] \\
+&= \frac{1}{(r^2 + z^2)} \left[\frac{\pi a^4}{2} - \frac{2 r a^3}{3}(\sin(\theta_0 - 2 \pi) - \sin(\theta_0))\right] \\
+&= -\frac{3}{2}\frac{1}{(r^2 + z^2)}\frac{\pi a^4}{2} \\
+&= -\frac{3\pi a^4}{4(r^2 + z^2)}
+\end{align}
+
+The last integral is
+
+\begin{align}
+&=\frac{15}{8} \frac{1}{(r^2 + z^2)^2} \int_0^a \int_0^{2 \pi}\left[r_0^5 + 4 r^2 r_0^3\cos^2(\theta_0) - 4 r r_0^4\cos(\theta_0)\right]d\theta_0dr_0 \\
+&= \frac{15}{8} \frac{1}{(r^2 + z^2)^2}\bigg[\int_0^a \int_0^{2 \pi}r_0^5 d\theta_0 dr_0 + \int_0^a \int_0^{2 \pi} 4 r^2 r_0^3 \cos^2(\theta_0)d\theta_0dr_0  \\ &  - \int_0^a \int_0^{2 \pi} 4 r r_0^4 \cos(\theta_0)d\theta_0 dr_0\bigg] \\
+&= \frac{15}{8}\frac{1}{(z^2 + r^2)^2}\left[\frac{\pi a^6}{3} + \pi r^2 a^4\right] \\
+&= \frac{5a^2 \pi (3r^2 a^2 + a^4)}{8 (r^2 + z^2)^2}
+\end{align}
+
+Reinserting the prefactors and constants yields
+
+\begin{align}
+\Phi = \frac{-\phi_0  a^2}{4} \frac{z}{(z^2 + r^2)^{\frac{3}{2}}}\left[1 - \frac{3 a^2}{4(r^2 + z^2)} + \frac{5(3 r^2 a^2 + a^4)}{8(r^2 + z^2)^2}\right]
+\end{align}
+
+%Considering the figure, we see that the total vector to the field point from the origin is made up of a law of cosines like component in the plane plus a vector that accounts for the $z$ component. Thus to transform to cylinderical coordinates we must write the Green's function as 
+
+%\begin{align}
+%G = \frac{1}{4 \pi \epsilon_)}\left[\frac{1}{
+%\end{align}  
+
+
+
+
+\section{Problem 5}
+
+We begin with separation of variables assuming a solution of the form $\Phi  = R(r)\Theta(\theta)Z(z)$.The Laplacian in cylindrical coordinates is given by $\frac{1}{r}\frac{\partial}{\partial r}\left[r\frac{\partial}{\partial r}\right] + \frac{1}{r^2}\frac{\partial^2}{\partial \theta^2} + \frac{\partial^2}{\partial z^2}$. Acting upon $\Phi$ with this operator and setting the result equals to zero gives us
+
+\begin{align}
+Z\Theta\frac{1}{r} \frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + \frac{RZ}{r^2}\frac{\partial^2 \Theta}{\partial \theta^2} + R\Theta\frac{\partial^2 Z}{\partial z^2} &= 0 \\
+\frac{1}{rR}\frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + \frac{1}{r^2 \Theta}\frac{\partial^2 \Theta}{\partial \theta^2} + \frac{1}{Z}\frac{\partial^2 Z}{\partial z^2} &= 0 \\
+\end{align} 
+
+The only way that two functions of separate variables may be equal for all values of those variables are if they are both equal to a constant - the \textit{same} constant.
+
+\begin{align}
+\frac{1}{rR}\frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + \frac{1}{r^2 \Theta}\frac{\partial^2 \Theta}{\partial \theta^2} &= -k^2 \\ 
+\frac{1}{Z}\frac{\partial^2 Z}{\partial z^2} &= k^2
+\end{align}
+
+The equation for $Z$ implies that $Z$ is proportional to real exponentials - or linear combinations of $sinh$ and $cosh$.
+
+\begin{align}
+Z \sim A\sinh(kz) + B\cosh(kz)
+\end{align} 
+
+The other equation reads
+
+\begin{align}
+\frac{r}{R} \frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + \frac{1}{\Theta}\frac{\partial^2 \Theta}{\partial \theta^2} &= -k^2r^2 \\
+\frac{r}{R}\frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + k^2 r^2 = -\frac{1}{\Theta}\frac{\partial^2 \Theta}{\partial \theta^2} \\
+\end{align}
+
+A similar argument concerning constant functions allows us to write the two equations:
+
+\begin{align}
+\frac{r}{R}\frac{\partial}{\partial r}\left[r\frac{\partial R}{\partial r}\right] + k^2r^2 &= \mu^2 \\
+\frac{r}{R}\left[\frac{\partial R}{\partial r} + r\frac{\partial^2 R}{\partial r^2}\right] + k^2 r^2 &= \mu^2 \\
+\frac{r}{R}\frac{\partial R}{\partial r} + \frac{r^2}{R}\frac{\partial^2 R}{\partial r^2} + k^2 r^2 &= \mu^2R \\
+r^2 \frac{\partial^2 R}{\partial r^2} + r \frac{\partial R}{\partial r} + k^2 r^2 R = \mu^2R \\
+r^2 \frac{\partial^2 R}{\partial r^2} + r \frac{\partial R}{\partial r} + [k^2 r^2 - \mu^2]R &= 0 \\
+-\frac{1}{\Theta}\frac{\partial^2 \Theta}{\partial \theta^2} &= \mu^2 \\
+\end{align}
+
+The equation in $R$ can be identified as Bessel's equation of order $\mu$ with argument $kr$. The $\Theta$ equation solutions are oscillatory.
+
+\begin{align}
+R &\sim J_{\mu}(kr) + \cancel{Y_\mu(kr)} \\
+\Theta &\sim \cancel{\sin(\mu\theta)}+ \cos(\mu\theta) \\
+\end{align}   
+
+We may exclude Neumann functions as they diverge within the region of interest $r=0$. Furthermore, since $\phi_0$ is a constant on the sides of the cylinder we must have that $\Theta'' = \mu^2\Theta = 0$. Unless $\Theta = 0$, this requires that $\mu = 0$, which in turns restricts us to cosines in $\Theta$ and a cosine term equal to unity. The boundary condition at $z=0$ implies that the cosh term is also zero. With this information we have narrowed the solution down to something like
+
+\begin{align}
+\Phi \sim CJ_0(kr)\sinh(kz)
+\end{align}
+
+We take the top cap at $z=L$ as the one with the constant potential. To use the final boundary condition we need to lower the global potential by $\phi_0$ and impose the condition that $\phi = 0$ at $z=L$, or equivalently, that $\sinh(k(z-L)) = 0$. Additionally, $J_0(ka) = 0$, which restricts $k$ to be $\frac{x_{0n}}{a}$ where $x_{0n}$ is the $n'th$ zero of the zeroth order bessel function. 
+
+\begin{align}
+\Phi &= \sum_{n=0}^{\infty} a_n J_0(\frac{x_{0n}}{a}r)\sinh(x_{0n}\frac{(z-L)}{a}) \\ 
+\text{at $z=0$} \rightarrow \phi_0 &=  \sum_{n=0}^{\infty}a_nJ_0(\frac{x_{0n}}{a}r)\sinh(-x_{0n}\frac{L}{a})\\
+\end{align}
+
+To find the coefficients we need to take a Fourier-Bessel series by multiplying both sides by $rJ_0(\frac{x_{0n'}}{a}$ and integrate from $0$ to $a$:
+
+\begin{align}
+\int_0^a \phi_0 rJ_0\left(\frac{x_{0n'}}{a}r\right)dr &= \sum_{n=0}^{\infty}a_n \sinh(-x_{0n}\frac{L}{a}) \int_0^a r J_0\left(\frac{x_{0n}}{a}r\right) J_0\left(\frac{x_{0n'}}{a}r\right)dr \\
+\int_0^a \phi_0 rJ_0\left(\frac{x_{0n'}}{a}r\right)dr &= a_n\sinh(x_{0n}\frac{L}{a}) \frac{a^2}{2}[J_1(x_{0n})]^2\delta_{nn'} \ \rightarrow \ \sinh \ \text{an odd function.} \\ 
+\end{align}
+
+The orthogonality of bessel functions was used on the right hand side. What we would like to do next is get the left hand side into a form that is suitable for an integral identity. Let $u = \frac{x_{0n}}{a}r$. Then $r = \frac{a}{x_{0n}}u$ and  $du = \frac{x_{0n}}{a}dr$. Furthermore, This allows us to rewrite the current equality as  
+
+\begin{align}
+\phi_0\int_0^a \cancel{\frac{a}{x_{0n}}}uJ_0(u)\cancel{\frac{x_{0n}}{a}}du &= \sinh(x_{0n}\frac{L}{a}) \frac{a^2}{2}[J_1(x_{0n})]^2 \\
+\phi_0\int_0^a uJ_0(u)du &= a_n\sinh(x_{0n}\frac{L}{a}) \frac{a^2}{2}[J_1(x_{0n})]^2 \\
+\rightarrow \  \ \text{Using an Integral identity}& \rightarrow \\
+\phi_0\frac{\cancel{a^2}}{x_{0n}}\cancel{J_1(x_{0n})} &= a_n\sinh(x_{0n}\frac{L}{a}) \frac{\cancel{a^2}}{2}[J_1(x_{0n})]^{\cancel{2}}\\
+a_n &= 2\frac{\phi_0 \ \text{cosech}(x_{0n}\frac{L}{a})}{x_{0n}J_1(x_{0n})}
+\end{align}
+
+The solution is thus as follows
+
+\begin{align}
+\Phi(r,z) = \phi_0 + 2\sum_{n=1}^{\infty}\frac{\phi_0 \ \text{cosech}(x_{0n}\frac{L}{a})}{x_{0n}J_1(x_{0n})}\sinh(x_{0n}\frac{(z-L)}{a})J_0\left(\frac{x_{0n}}{a}r\right)
+\end{align}
+
+\end{document}
