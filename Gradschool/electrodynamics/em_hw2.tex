@@ -1,0 +1,368 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+\usepackage{graphicx}
+\usepackage{cancel}
+\usepackage{float}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\newcommand{\kay}{\frac{1}{4 \pi \epsilon_0}}
+\newcommand{\scrr}{\vec{r} - \vec{r'}}
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Electrodynamics, Homework 2 \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Problem 1}
+
+We are attempting to prove the generalized Gauss Divergence theorem:
+
+\begin{align}
+\int_s f(\hat{n}, \vec{r}) ds &= \int_v f(\nabla, r) dv 
+\end{align}
+
+Making use of the linearity property of the $f$'s stated in the problem description:
+
+\begin{align}
+f(c_1 \vec{a}_1 + c_2 \vec{a_2}, r) = c_1f(\vec{a}_1, \vec{r}) + c_2f(\vec{a}_2, \vec{r})
+\end{align}
+
+Using this property we can expand the original statement as 
+
+\begin{align}
+\int_s f(n_x\hat{x} + n_y\hat{y} + n_z\hat{z}, \vec{r})ds &= \int_v f(\frac{\partial}{\partial x}\hat{x} + \frac{\partial}{\partial y}\hat{y} + \frac{\partial}{\partial z}\hat{z}, \vec{r}) dv\\
+\int_s (n_x\hat{x}\cdot\vec{r} + n_y\hat{y}\cdot\vec{r} + n_z\hat{z}\cdot\vec{r}) ds &= \int_v (\hat{x}\cdot\frac{\partial \vec{r}}{\partial x} + \hat{y}\cdot\frac{\partial \vec{r}}{\partial y} + \hat{z}\cdot\frac{\partial \vec{r}}{\partial z})dv \\
+\int_s \vec{r} \cdot \vec{n} &= \int_v \nabla \cdot \vec{r} dv
+\end{align}
+
+The last line is just a statement of the known divergence theorem, completing the proof. 
+
+
+\section{Problem 2}
+
+Drawing the contour shown in the figure, we have the following by Faraday's law of induction:
+
+\begin{align}
+\int_s \vec{E}\cdot \vec{dl} &= \cancel{-\int_s \frac{\partial B}{\partial t}\vec{ds}} = 0 \\
+\end{align}
+
+Shrinking the vertical components to infinitesimal length so they do not contribute to the integral we see that the $\vec{dl}$'s on the top and bottom surfaces must be opposite. This implies that the tangential components of the electric field must be equal, i.e. $\vec{E}_{||}^1 = \vec{E}_{||}^1$. If we know that the tangentical component of a vector is the entire vector minus the perpandicular component of a vector, i.e. $\vec{V}_{||} = \vec{V} - \vec{V}_{\perp}$, then we can use the following argument:
+
+\begin{align}
+\vec{V}_{||} &= \vec{V} - (\vec{V}\cdot\hat{n})\hat{n} \\
+\rightarrow & \  \vec{E}_{||}^1 = \vec{E}^1 - (\vec{E}^1 \cdot\hat{n})\hat{n} \\
+\rightarrow & \  \vec{E}_{||}^2 = \vec{E}^2 - (\vec{E}^2 \cdot\hat{n})\hat{n} \\
+\end{align}
+
+So that 
+
+\begin{align}
+\hat{n} \times \vec{E}_{||}^1 &= \hat{n} \times \vec{E}_1 - (\vec{E}_1 \cdot \hat{n})\cancel{\hat{n} \times \hat{n}} \\
+\hat{n} \times \vec{E}_{||}^2 &= \hat{n} \times \vec{E}_2 - (\vec{E}_2 \cdot \hat{n})\cancel{\hat{n} \times \hat{n}} \\
+\hat{n} \times (\vec{E}_{||}^1 - \vec{E}_{||}^2) &= \hat{n} \times (\vec{E}^1 - \vec{E}^2)
+\end{align}
+
+Invoking the known boundary condition sets the left hand side to zero. Thus we can write
+
+\begin{align}
+\hat{n} \times \vec{E}^2 - \vec{E}^1 = 0
+\end{align}
+
+\section{Problem 3}
+
+We have shown that the electric potential due to a finite line charge of length $2c$ in elliptical coordinates is given by
+
+\begin{align}
+\Phi = \frac{q}{2c}\ln\left|\frac{\cosh(u) + 1}{\cosh(u) - 1}\right|
+\end{align}
+
+The definitions of the coordinates are 
+
+\begin{align}
+c\cosh(u) &= a \\
+c\sinh(u) &= b
+\end{align}
+
+From which we have $c^2 \cosh^2(u) = a^2$ and $c^2\sinh^2(u) = b^2$ so $c^2(\cosh^2(u) - \sinh^2(u)) = a^2 - b^2$ implying that $c^2 = a^2 - b^2$. Plugging in these definitions gives us the following:
+
+\begin{align}
+\Phi &= \frac{q}{2c}\ln\left|\frac{\frac{a}{c} + 1}{\frac{a}{c} - 1}\right| \\
+&= \frac{q}{2c}\ln\left|\frac{a + c}{a - c}\right| \\
+&= \frac{q}{2c}\ln\left|\frac{(a + c)(a + c)}{(a - c)(a + c)}\right| \\
+&= \frac{q}{2c}\ln\left|\frac{(a+c)^2}{a^2 - c^2}\right| \\
+&= \frac{q}{2c}\ln\left|\frac{(a+c)^2}{b^2}\right| \\
+&= \frac{q}{c}\ln\left|\sqrt{\frac{(a + c)^2}{b^2}}\right| \\
+&= \frac{q}{c}\ln\left|\frac{a + c}{b}\right| \\
+&= \frac{q}{c}\ln\left|\frac{a + \sqrt{a^2 - b^2}}{b}\right|
+\end{align}
+
+So we have that $\frac{1}{c}$ is 
+
+\begin{align}
+\frac{1}{c} = \frac{q}{\sqrt{a^2 - b^2}}\ln\left|\frac{a + \sqrt{a^2 - b^2}}{b}\right|
+\end{align}
+
+
+\section{Problem 4}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[trim={0.5cm 12cm 6cm 5cm},clip,scale=0.5]{circ_geom.eps}
+\end{center}
+\end{figure}
+
+We are asked to show the potential due to a point charge $q$ placed a distance $a$ from the center of a grounded conducting sphere for radius $R < a$ is given by the contribution of the charge $q$ plus the contribution of an image chargr $q' =  -\frac{R q}{a}$ located a distance $\frac{R^2}{a}$ from the origin along the line from $q$ to the center of the sphere. The geometric setup for this problem is depicted in the figure. 
+ 
+\hspace{2mm}
+
+The sphere must be grounded. Restricting ourselves to the $z$-axis we can impose $\Phi=0$ at both $z = R$ and $z= -R$ to develop two equations in two unknowns, $q'$ and $x$. The potential due to the real charge is 
+
+\begin{align}
+R \rightarrow & \Phi_{re} = \kay \frac{q}{a - R} \\ 
+-R \rightarrow & \Phi_{re} = \kay \frac{q}{a + R}  \\
+\end{align}
+
+Whereas the potential due to the unknown image charge $q'$ at the unknown location $x$ is
+
+\begin{align}
+R \rightarrow & \Phi_{im} = \kay \frac{q'}{R - x} \\
+-R \rightarrow & \Phi_{im} = \kay \frac{q'}{R + x} \\
+\end{align}
+
+Then the two equations in question are:
+
+\begin{align}
+\cancel{\kay} \frac{q}{a-R} &=- \cancel{\kay}\frac{q'}{R-x} \\
+\frac{q}{a-R} &= -\frac{q'}{R-x} \\
+\cancel{\kay} \frac{q}{-R-x} &=- \cancel{\kay}\frac{q'}{-R-x} \\
+\frac{q}{a+R} &= -\frac{q'}{R+x}
+\end{align}
+
+Solving these two equations for $x$ and $q'$ gives us
+
+\begin{align}
+x &= \frac{R^2}{a} \\
+q'&= \frac{-qR}{a} 
+\end{align}
+
+
+
+Placing the origin of a polar coordinate system $r, \theta$ at the center of the sphere we define the vector $\vec{r}$ to point to the field point, the vector $\vec{r'}$ to point to the source point, and the vector $\scrr$ to run between the source and field points. We may plug this into the standard formula for electric potential and find the contribution from the real charge:
+
+\begin{align}
+\Phi(\vec{r})_r &= \kay \frac{q}{\vec{r} - \vec{r'}} \\ 
+&= \kay \frac{q}{\sqrt{r^2 + a^2 - 2 r a \cos(\theta)}} \\ 
+\end{align}
+
+Where we invoked the law of cosines to determine the length of the vector between $\vec{r}$ and $\vec{r'}$. By the exact same logic we can write down the potential due to the image charge with the given magnitude and location:
+
+\begin{align}
+\Phi(\vec{r})_i &= \kay \frac{q'}{\sqrt{r^2 + \left(\frac{R^2}{a}\right)^2 - 2 r \left(\frac{R^2}{a}\right)\cos(\theta)}} \\ 
+\rightarrow q' &= -\frac{R q}{a} \\
+&= \kay \frac{-q}{\sqrt{\left(\frac{a^2}{R^2}\right)\left(r^2 + \left(\frac{R^2}{a}\right)^2 - 2 r \left(\frac{R^2}{a}\right)\cos(\theta)\right)}} \\
+\end{align}
+
+Examining now what happens to to the potential at $r=R$ yields, for the image charge:
+
+\begin{align}
+\Phi(\vec{r})_i &= \kay \frac{-q}{\sqrt{\left(\frac{a^2}{R^2}\right)\left(R^2 + \left(\frac{R^2}{a}\right)^2 - 2 R \left(\frac{R^2}{a}\right)\cos(\theta)\right)}} \\
+&= \kay \frac{-q}{\sqrt{a^2 + R^2 - 2 a R \cos(\theta)}}
+\end{align} 
+
+Whereas for the real charge:
+
+\begin{align}
+\Phi(\vec{r})_r = \kay \frac{q}{\sqrt{a^2 + R^2 - 2 a R \cos(\theta)}}
+\end{align}
+
+Thus at the sphere's boundary, the two potentials exactly cancel, completing the proof. The force between the charge and the sphere is the same as the force that would exist between the charge and the image charge, and is given by Coulomb's law:
+
+\begin{align}
+F &= \kay \frac{q \left(-\frac{qR}{a}\right)}{(a - \frac{R^2}{a})^2} \\
+&= \kay \frac{-q^2}{\frac{a}{R}\left(a - \frac{R^2}{a}\right)^2} \\
+\end{align}
+
+\section{Problem 5}
+
+\subsection{Ungrounded Sphere}
+
+This is the image charge problem for a conducting sphere carrying charge $Q$. We wish to find the potential at a point $r,\theta$ outside the sphere.
+
+\hspace{2mm} 
+
+The total charge $Q$ must be made of two components - the portion of the charge that redistributes across the surface to balance the point charge at $\vec{r'}$, this is $q'$, and the '\textit{rest}', $Q - q'$. Since the image charge is all that is needed to equilibrate the system, there is no reason to believe that the latter of the two distributes in any manner other then uniformly about the sphere. Thus the potential outside the sphere is the sum of the two ordinary image potentials, plus an additional term that accounts for the residual charge $Q-q'$ as if it were concentrated at the center of the sphere:
+
+\begin{align}
+\Phi(\vec{r},\vec{r'}) &= \frac{q}{|\scrr|} - \frac{\frac{q a}{r'}}{|\vec{r} - \frac{a^2}{r'^2}\vec{r'}|} + \frac{Q + \frac{q a}{r'}}{r} \\
+&= \frac{q}{\sqrt{r^2 + r'^2 - 2rr'\cos(\gamma)}} - \frac{\frac{qa}{r'}}{\sqrt{r^2 + \frac{a^4}{r'^4}r'^2 - 2 r \left(\frac{a^2}{r'^2}\right)\cos(\gamma)}} + \frac{Q + \frac{qa}{r'}}{r} \\
+&= \frac{q}{\sqrt{r^2 + r'^2 - 2rr'\cos(\gamma)}} - \frac{q}{\left(\frac{r'}{a}\right)\sqrt{r^2 + \frac{a^4}{r'^4}r'^2 - 2 r \left(\frac{a^2}{r'^2}\right)\cos(\gamma)}} + \frac{Q + \frac{qa}{r'}}{r} \\
+&= \frac{q}{\sqrt{r^2 + r'^2 - 2rr'\cos(\gamma)}} - \frac{q}{\sqrt{\frac{r'^2r^2}{a^2} + a^2 - 2 r r'\cos(\gamma)}} + \frac{Q + \frac{qa}{r'}}{r} \\
+\end{align} 
+
+In this case the force on the point charge due to the total charge as distributed around the sphere is best found by taking the gradient of the potential and then setting $r = r'$. 
+
+\begin{align}
+F &= \kay \left[\frac{q\left(Q + \frac{q a}{r'}\right)}{r'^2} - \frac{q\left(\frac{qa}{r'}\right)}{\left(r'- \frac{a^2}{r'^2}r'\right)^2}\right] \\
+&= \kay\frac{q \left(a \left(q-\frac{q r'^4}{\left(a^2-r'^2\right)^2}\right)+Q r'\right)}{r'^3} 
+\end{align}
+
+\subsection{Fixed Potential}
+Per Jackson page 62, this situation is the same as the above, the only modification being that now we represent the additional point charge in the center as $a\phi_0$:
+
+\begin{align}
+&= \frac{q}{\sqrt{r^2 + r'^2 - 2rr'\cos(\gamma)}} - \frac{q}{\sqrt{\frac{r'^2r^2}{a^2} + a^2 - 2 r r'\cos(\gamma)}} + \frac{Va}{r} \\
+\end{align}
+
+
+
+\section{Problem 6}
+An ensemble of two charges at the positions $r_i, \theta_i, \varphi_i$ create a potential $\phi(r, \theta \phi)$ at the point $r, \theta, \phi$. We would like to show that the potential originating from the ensemble of charges $q_i' = \left(\frac{a}{r_i}\right) q_i$, at the positions $\left(\frac{a^2}{r_i}\right), \theta_i, \varphi$ is given by $\phi'(r, \theta, \varphi) = \left(\frac{a}{r}\right)\phi\left(\frac{a^2}{r}, \theta, \phi\right)$
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[trim={0.5cm 10cm 5cm 5cm},clip,scale=0.5]{ensemble_geom.eps}
+\end{center}
+\end{figure}
+
+The original potential is due to the relative positions of the charges along the $\vec{r}_i$ and the field point superimposed:
+
+\begin{align}
+\Phi(\vec{r}) &= \sum_i \frac{q_i}{|\vec{r} - \vec{r}_i|} \\
+&= \sum_i \frac{q_i}{\sqrt{r^2 + r_i^2 - 2 r r_i \cos(\gamma)}}
+\end{align}
+
+Plugging in the new locations and charges gives
+
+\begin{align}
+\Phi &= \sum_i \frac{a}{r_i} \frac{q_i}{\sqrt{r^2 + \left(\frac{a^2}{r_i}\right)^2 - 2 r \left(\frac{a^2}{r_i}\right)\cos(\gamma)}} \\
+&= \sum_i \frac{a}{rr_i}\frac{q_i}{\sqrt{1 + \left(\frac{a^2}{rr_i}\right)^2 - 2 \left(\frac{a^2}{rr_i}\right)\cos(\gamma)}} \\ 
+&= \sum_i \frac{a}{r} \frac{q_i}{\sqrt{r_i^2 + \left(\frac{a^2}{r}\right)^2 - 2 r_i \left(\frac{a^2}{r}\right)\cos(\gamma)}}  \\
+&= \frac{a}{r}\phi(\frac{a^2}{r}, \theta', \varphi')
+\end{align}
+
+Completing the proof.
+
+\section{Problem 7}
+We are asked to use a Green's function to show that the potential outside a conducting sphere of radius $a$ with potential distribution $\phi(a, \theta, \varphi)$ on its surface is given by:
+
+\begin{align}
+\frac{1}{4 \pi}\int_s \frac{\phi(a, \theta', \varphi') a (r^2 - a^2)}{\left(r^2 + a^2 - 2 a r \cos(\gamma)\right)^\frac{3}{2}} d\Omega'
+\end{align}
+
+Green's theorem states that we may compute the potential for a geometry subject to boundary condition for any charge distribution $\rho(\vec{r'})$ using the following:
+
+\begin{align}
+\Phi(\vec{r}) = \int_v \rho(\vec{r'})G(\vec{r},\vec{r'})d^3\vec{r'} + \frac{1}{4 \pi} \int_s \Phi(\vec{r'})\frac{\partial G}{\partial n'} ds'
+\end{align}
+
+For the Dirchilet case. Previously we described the solution to an image charge problem involving a point charge near a conducting sphere of radius $a$ as obeying two conditions:
+
+\begin{align}
+\nabla^2 \Phi(\vec{r}) &= -4 \pi \delta(\scrr) \\
+\Phi(\vec{r}) &= 0, |\vec{r}| = \  a, \ \ \text{$\vec{x}$ on Surface of Sphere}
+\end{align} 
+
+These are the same conditions that define the Green's function for this particular Diriclet problem. Since we know the result for a single point charge, we can thus use the previous equation for potential and itegrate the product of $G$ with $\rho$, thereby giving us the answer to the Diriclet problem for any charge distribution outside the sphere. Using the following we can write down the Green's function based on the result of the image charge problem:
+
+\begin{align}
+G(\vec{r}, \vec{r'}) &= \frac{q}{\scrr} + \frac{q'}{\vec{r} - \vec{r''}} \\ 
+\rightarrow  q' &= \frac{-q a}{r'} \\
+\rightarrow r'' &= \frac{a^2}{r'}\frac{\vec{r'}}{r'} \\
+G(\vec{r}, \vec{r'}) &= \frac{q}{|r - r'|} - \frac{qa}{\left(r'\right)\left(\vec{r} - \frac{a^2}{r'^2}\vec{r'}\right)}\\
+&= \frac{1}{|r - r'|} - \frac{a}{\left(r'\right)\left(\vec{r} - \frac{a^2}{r'^2}\vec{r'}\right)} \\ 
+&= \frac{1}{|r - r'|} - \frac{a}{\left(r'\vec{r} - \frac{a^2}{r'}\vec{r'}\right)}
+\end{align}
+
+On the last line we dropped the $q$'s to give the form of the Green's function which is the response to unit charge in the region ($q=1$). Noting that $|\scrr| = \sqrt{(\scrr) \cdot (\scrr)} = \sqrt{r^2 + r'^2 + 2rr'\cos(\gamma)}$ (Law of Coines) and defining the angle as picture in the figure, we see that  
+
+\begin{align}
+G(\vec{r},\vec{r'}) &= \frac{1}{\sqrt{r^2 + r'^2 - 2rr'\cos{\gamma}}} - \frac{a}{\sqrt{r'^2r^2 + a^4 - 2rr'a^2\cos(\gamma)}} \\
+&= \frac{1}{\sqrt{r^2 + r'^2 - 2rr'\cos{\gamma}}} - \frac{1}{\sqrt{\frac{r'^2 r^2}{a^2} + a^2 - 2 rr'\cos(\gamma)}}
+\end{align}
+
+We need the Green's function normla derivative on the surface to complete the solution posed above. Since our region of interest is outside of the sphere, the normal vector actually points inwards towards the center of the sphere, $-\hat{r}$. Thus $\frac{\partial}{\partial n'} = -\frac{\partial}{\partial r'} = -\frac{\partial}{\partial r}$ by symmetry of the Green's function arguments. 
+
+\begin{align}
+-\frac{\partial G(\vec{r},\vec{r'})}{\partial r} &= -\frac{2r - 2r'\cos(\gamma)}{2\left(r^2 + r'^2 - 2rr'\cos(\gamma)\right)^{\frac{3}{2}}} + \frac{\frac{2rr'^2}{a^2} - 2r'\cos(\gamma)}{2(\frac{r'^2r^2}{a^2} + a^2 - 2 r r' \cos(\gamma))^{\frac{3}{2}}} \\
+\rightarrow  r &= a \\
+&= -\frac{2a - 2r'\cos(\gamma)}{2\left(a^2 + r'^2 - 2ar'\cos(\gamma)\right)^{\frac{3}{2}}} + \frac{\frac{2ar'^2}{a^2} - 2r'\cos(\gamma)}{2(\frac{r'^2\cancel{a^2}}{\cancel{a^2}} + a^2 - 2 a r' \cos(\gamma))^{\frac{3}{2}}} \\
+&= \frac{\frac{r'^2}{a} - a}{(a^2 + r'^2 - 2 a r' \cos(\gamma))^{\frac{3}{2}}} \\
+&= \frac{r'^2 - a^2}{a\left(a^2 + r'^2 - 2 a r' \cos(\gamma)\right)^{\frac{3}{2}}}
+\end{align}
+
+The first term of the integral solution above vanishes due to zero charge density in the exterior region of the sphere, leaving us with the following expression for $\Phi$:
+
+\begin{align}
+\Phi(\vec{r}) = \frac{1}{4 \pi}\int_s \phi(a, \theta', \phi')\frac{a(r'^2 - a^2)}{\left(a^2 + r'^2 - 2 a r' \cos(\gamma)\right)^{\frac{3}{2}}}d\Omega'
+\end{align}
+
+Where we picked up an extra factor of $a^2$ from the $d\Omega'$ term. Note that we could have differentiated with respect to $r'$ and we would have obtained the same answer, except with all the $r'$'s replaced with $r$'s.
+
+\end{document}
