@@ -1,0 +1,132 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Detector AM Response Vectorization \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{ComputeDetAMResponse}
+The output of this function are the components of what will become a complex number, $F_{+}$ and $F_{\times}$. These are long sums of different terms that, based on the current code, look like this:
+
+\begin{align}
+F_{+} &= [R_{0,0}X_0 + R_{0,1}X_1 + R_{0,2}X_2]X_0 - [R_{0,0}Y_0 + R_{0,1}Y_1 + R_{0,2}Y_2]Y_0 \\
+&+ [R_{1,0}X_0 + R_{1,1}X_1 + R_{1,2}X_2]X_1 - [R_{1,0}Y_0 + R_{1,1}Y_1 + R_{1,2}Y_2]Y_1 \\
+&+ [R_{2,0}X_0 + R_{2,1}X_1 + R_{2,2}X_2]X_2 - [R_{2,0}Y_0 + R_{2,1}Y_1 + R_{2,2}Y_2]Y_2
+\end{align}
+
+Collecting all the positive terms of this expression gives
+\begin{align}
+F_{+} &= R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\
+&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\ 
+&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 
+\end{align}
+At which point we see that the same result is computable as an outer product of the vector $\vec{X}$ using
+
+\begin{align}
+F_{+} &= \vec{X}\mathbf{R}\vec{X} - \vec{Y}\mathbf{R}\vec{Y}
+\end{align}
+
+And the complex part of the gravitational wave is thus
+
+\begin{align}
+F_{\times} &= \vec{X}\mathbf{R}\vec{Y} + \vec{Y}\mathbf{R}\vec{X}
+\end{align}
+
+One a sample-to-sample basis, the numbers that vary are the components of the vectors $\vec{X}$ and $\vec{Y}$. Thus we need a function that takes as input a \textit{list} vectors (or \textit{vector}) of vectors and produces a vector with the right components as output. To that end we define the tensor $X^{i}_{j}$ where 
+
+\begin{align}
+X^i &= 
+\begin{bmatrix}
+X^{i}_0 \\
+X^{i}_1 \\
+X^{i}_2
+\end{bmatrix}
+\end{align}
+
+As well as the tensor $R^{i}_{jk}$ where
+
+\begin{align}
+R^{i} &= 
+\begin{bmatrix}
+R^{i}_{00} & R^{i}_{01} & R^{i}_{02} \\ 
+R^{i}_{10} & R^{i}_{11} & R^{i}_{12} \\ 
+R^{i}_{20} & R^{i}_{21} & R^{i}_{22}  
+\end{bmatrix}
+\end{align} 
+
+The tensor $X$ is like a stack of all the different possible $\vec{X}$ coming out of the page. The Tensor $R$ is like $n$ copies of the matrix $\mathbf{R}$ stacked on top of each other. In this way the desired vector is obtainable with the tensor contraction 
+
+\begin{align}
+F^{i}_{+} &= X^{lm}R^{i}_{lj}X^{j}_{m} - Y^{lm}R^{i}_{lj}Y^{j}_{m} \\ 
+F^{i}_{\times} &= X^{lm}R^{i}_{lj}Y^{j}_{m} + Y^{lm}R^{i}_{lj}X^{j}_{m} \\ 
+\end{align}
+
+\end{document}

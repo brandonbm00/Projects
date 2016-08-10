@@ -1,0 +1,223 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{listings}
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Single Detector Log Likelihood \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	PROBLEM 1
+%----------------------------------------------------------------------------------------
+\subsection{Vectorization}
+\renewcommand*{\arraystretch}{0.5}
+Equation 24 from Arxiv $15502.05370v1.pdf$ for the network log likelihood reads 
+
+\begin{equation}
+\begin{align}
+\ln{\mathcal{L}} = &\frac{D_{ref}}{D}Re \sum_{k}\sum_{(l,m)}\left[F_k Y_{lm}\right]^{*}Q_{k,lm} \\ 
+& - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] \\
+ & - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right]
+\end{align}
+\end{equation}
+
+Consider a single detector, thus dropping the sum over $k$. The first term is of the form $\vec{A}\cdot\vec{B} = \sum_{i=0}^{d}A_iB_i$, so if $Q_{k,(l,m)}$ were a simple vector, we could write it as
+
+\begin{equation}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2} F*\vec{Y}\cdot\vec{Q}
+\end{equation}
+
+However the $Q_{k,(l,m)}$ are actually harmonic mode time series and not single values. We desire a vector whose values are the likelihoods at each point in the time series. 
+
+\newpage
+Consider the case where we have only the $(2,-2), (2,0)$ and $(2,2)$ modes. If we write all the mode time series $Q^0, Q^1, Q^2...$ as the columns of a matrix , then the desired result is obtained with
+
+\begin{equation}
+F*
+\begin{bmatrix}
+Q^0_{2,-2} & Q^0_{2,+0} & Q^0_{2,+2} \\
+Q^1_{2,-2} & Q^1_{2,+0} & Q^1_{2,+2} \\ 
+Q^2_{2,-2} & Q^2_{2,+0} & Q^2_{2,+2} \\
+\vdots & \vdots & \vdots
+\end{bmatrix}
+\begin{bmatrix}
+
+\left(Y_{2,-2}\right)\\
+\hspace{0mm} \\
+\left(Y_{2,+0}\right) \\
+\hspace{0mm} \\
+\left(Y_{2,+2}\right) \\
+
+\end{bmatrix}
+=
+\begin{bmatrix}
+Q^0_{2,-2} Y_{2,-2} + Q^0_{2,-2}Y_{2,+0} + Q^0_{2,+2}Y_{2,+2} \\
+Q^1_{2,-2} Y_{2,-2} + Q^1_{2,-2}Y_{2,+0} + Q^1_{2,+2}Y_{2,+2} \\
+Q^2_{2,-2} Y_{2,-2} + Q^2_{2,-2}Y_{2,+0} + Q^2_{2,+2}Y_{2,+2} \\
+\vdots
+\end{bmatrix}
+
+\end{equation} 
+
+With $\vec{Y}$ and $\mathbf{Q}$ defined as the matrix and vector above respectively, we have for the first term
+
+\begin{equation}
+\frac{D_{ref}}{D}Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right]
+\end{equation}
+
+The second term is a sum once over all the possible combinations of $(l,m), (l',m')$ pairs using the $U_{(l,m),(l',m')}$ cross terms. Its result is a scalar quantity made up of terms like
+
+\begin{align}
+&Y_{2,-2}^{*}Y_{2,-2}U_{(2,-2),(2,-2)} + Y_{2,-2}^{*}Y_{2,+0}U_{(2,-2),(2,+0)} + Y_{2,-2}^{*}Y_{2,+2}U_{(2,-2),(2,+2)} \\ 
+ +  \ &Y_{2,+0}^{*}Y_{2,-2}U_{(2,+0),(2,-2)} + Y_{2,+0}^{*}Y_{2,+0}U_{(2,+0),(2,+0)} + Y_{2,+0}^{*}Y_{2,+2}U_{(2,+0),(2,+2)} \\ 
++ \  &Y_{2,+2}^{*}Y_{2,-2}U_{(2,+2),(2,-2)} + Y_{2,+2}^{*}Y_{2,+0}U_{(2,+2),(2,+0)} + Y_{2,+2}^{*}Y_{2,+2}U_{(2,+2),(2,+2)}
+\end{align}
+
+
+If we pack the $U_{(l,m),(l',m')}$ into the matrix $\mathbf{U}$ as defined below then the following set of matrix operations produces the same sum
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} &  U_{(2,-2),(2,+0)} &  U_{(2,-2),(2,+2)} \\
+U_{(2,+0),(2,-2)} &  U_{(2,+0),(2,+0)} &  U_{(2,+0),(2,+2)} \\
+U_{(2,+2),(2,-2)} &  U_{(2,+2),(2,+0)} &  U_{(2,+2),(2,+2)}
+\end{bmatrix}
+\begin{bmatrix}
+Y_{2,-2} \\
+Y_{2,+0} \\
+Y_{2,+2}
+\end{bmatrix}
+\end{align*}
+
+because when you multiply $\mathbf{U}$ into $\vec{Y}$ this simplifies to 
+
+
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} 
+\end{bmatrix}
+\end{align*}
+
+Which becomes the desired scalar. This allows us to write the second term as
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] =  - \left[\frac{D_{ref}}{2D}\right]^{2} |F^2|\vec{Y}^{*}\mathbf{U}\vec{Y}
+\end{align}
+
+We must always set up the spherical harmonic vectors based on the value of $m$ and the cross terms in row-major form based first on $m_2$ and then on $m_1$. If we organize the matrix $\mathbf{V}$ in the same way then the same set of steps will lead us to conclude that  
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2}Re \left[F^2 \vec{Y}\mathbf{V}\vec{Y} \right]
+\end{align}
+
+Combining the results the single detector log likelihood is 
+
+\begin{align}
+\ln{\mathcal{L}} = \frac{D_{ref}}{D}\Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right] - \left[\frac{D_{ref}}{2D}\right]^{2}\left[|F|^2 \vec{Y}^{*}\mathbf{U}\vec{Y} - \Re\left(F^2 \vec{Y}\mathbf{V}\vec{Y}\right) \right]
+\end{align}
+
+\subsection{Implementation}
+
+As it stands the data is organized into dictionaries keyed by tuples corresponding to modes or pairs of modes. I wrote a very basic function that takes one of these dictionaries as argument and produces matrices organized as described in the previous section. I do not think it requires a huge amount of attention since it just needs to run once at startup.
+
+\vspace{10mm}
+
+I have written only the most basic implementation for this that I can think of: 
+
+\vspace{10mm}
+
+\begin{lstlisting}[language=Python]
+
+def sdll_matrix(rholm_vals, crossTermsU, crossTermsV, Ylms, F, dist):
+ #Compute single detector log likelihood with vectorized operations
+ invDistMpc = distRef/dist
+ Fstar = np.conj(F)
+
+ Ylms_conj = np.conj(Ylms)
+ term1 = Fstar*np.dot(rholm_vals, Ylms_conj)
+ term2 = np.dot(Fstar*F*Ylms_conj, np.dot(crossTermsU, Ylms))
+ term3 = np.real(np.dot(F*F*Ylms, np.dot(crossTermsV, Ylms)))
+ return invDistMpc*np.real(term1) - 0.25*invDistMpc**2 * np.real((term2 + term3))
+
+\end{lstlisting}
+
+
+\end{document}

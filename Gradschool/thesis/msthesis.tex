@@ -1,0 +1,112 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+
+\usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
+
+\usepackage{sectsty} % Allows customizing section commands
+
+\usepackage{braket}
+
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{\thepage} % Page numbering for right footer
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs - comment this line for an assignment with lots of text
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+\normalfont \normalsize 
+\textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Masters Thesis \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+}
+
+\author{Brandon B. Miller} % Your name
+
+\date{\normalsize\today} % Today's date or a custom date
+
+\begin{document}
+
+\maketitle % Print the title
+
+\section{Background and Motivation}
+
+Gravitational waves are predicted as a mathematical consequence of the linearized Einstein Field Equations. The Einstein Field Equations themselves are a set of ten unique, coupled, nonlinear partial differential equations.  
+
+\subsection{Pieces of the Einstein Equation}
+\subsubsection{Reimann Tensor}
+The Reimann Tensor is a mathematical object that encapsulates the geometric \textit{curvature} of spacetime. The concept of a curved spacetime is fundamentally no different from the concept of a curved space, and from examining the behavior of vectors in such a space we can address both the purpose and properties of the Reimann tensor without departing from the intuitive picture of spheres and arrows.
+
+The Reimann tensor is traditionally derived by examining the local behavior of geodesics subject to a metric tensor that describes curved space. Here we motivate the concept with a visual explanation of parallel transport. Consider a vector pointing in some arbitrary direction $\sigma$ somewhere on the sphere, as depicted in figure \textbf{FIGURE HERE}. If we maintain the orientation of the vector relative to the surface of the sphere as we traverse the path, we note that the vector behaves differently depending on the order in which we choose to traverse the directions $\mu$ and $\nu$. This difference is representable by a vector that points between the two tips - one that is dependent on the initial direction $\sigma$ and both the transport directions $\mu$ and $\nu$. Let this vector be denoted $\vec{d}$. Then the Reimann tensor, $R_{\rho \sigma \mu \nu}$, is simply $d_{\rho}$, the $\rho$'th component of this difference vector. From this geometric picture some of the classical symmetries that are often introduced abreast the definition of the Reimann tensor are immediately intuitive, such as the skew symmetry depicted in figure \textbf{FIGURE HERE}.
+Since it is somewhat unfair (worse - \textit{incorrect}) to characterize the entire geometry of the space with looping paths over large areas, the formal definition of the Reimann tensor is in fact the infinitesimal version of the concept above. Indeed, the concept of a single direction one may traverse is only valid in a small region of curved space, so the real Reimann tensor must describe the difference between two vectors as parallel transported around an infinitesimally small version of the original loop. It follows then how there must be a (possibly different) Reimann tensor at each point on the manifold in question. More remarkable however is the simplicity of the formal definition within this picture:
+
+\begin{align}
+R^{\rho}_{\sigma \mu \nu}\partial_{\rho} = \left(\nabla_{\mu}\nabla{\nu} - \nabla_{\nu}\nabla_{\mu}\right)\partial_{\sigma}
+\end{align} 
+
+It should be noted that the above formula is true only modulo a term containing $\nabla_{[\mu, \nu]}$ except in the special case of coordinate vector fields, where it is zero. Although it does little to redeem it as a first explanation of the concept, this also illuminates why the Reimann tensor is sometimes described as encoding the non-commutativity of covariant derivatives on a manifold. Somewhat more subtle is the explicit role of the Reimann tensor in describing geodesic deviation. Crucial to a straightforward linearization of the Reimann tensor itself is the expression in terms of the Christoffel Symbols \textbf{AS DEFINED IN APPENDIX}
+
+\begin{align}
+R^{\rho}_{\sigma \mu \nu} = \partial_{\mu}\Gamma^{\rho}_{\nu \sigma} - \partial_{\nu}\Gamma^{\rho}_{\mu \sigma} + \Gamma^{\rho}_{\mu \lambda}\Gamma^{\lambda}_{\nu \sigma} - \Gamma^{\rho}_{\nu \lambda}\Gamma^{\lambda}_{\mu \sigma}
+\end{align}
+
+
+
+If $x^{\rho}(\tau)$ are the components of a geodesic parameterized by $\tau$, then $\dot{x^{\rho}}(\tau) \equiv T^{\rho}$ are the components of a vector tangent to the geodesic. Suppose there is a family such nearby geodesics indexed by some other parameter, $s$, and that we can define \textit{deviation vector} $S^{\rho}(\tau) = \partial_{s}x^{rho}(s,\tau)$ which characterizes the separation between nearby geodesics. It can be shown that the second derivative of this vector with respect to $\tau$ is related to the Reimann tensor through the differential equation
+ 
+
+\begin{align}
+\ddot{S^{\rho}} = R^{\rho}_{\sigma \mu \nu} T^{\sigma} T^{\mu} S^{\nu}
+\end{align} 
+
+
+
+
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
