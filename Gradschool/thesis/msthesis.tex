@@ -31,6 +31,7 @@
 \usepackage{sectsty} % Allows customizing section commands
 
 \usepackage{braket}
+\usepackage{cancel}
 
 \allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
 
@@ -61,18 +62,18 @@
 \normalfont \normalsize 
 \textsc{Northwestern University} \\ [25pt] % Your us get downniversity, school and/or department name(s)
 \horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
-\huge Masters Thesis \\ % The assignment title
+\huge GPU Accelerated Parameter Estimation of Gravitational Waves from Binary Black Hole Mergers \\ % The assignment title
 \horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
 }
 
-\author{Brandon B. Miller} % Your name
+\author{Brandon B. Miller, Masters Thesis} % Your name
 
 \date{\normalsize\today} % Today's date or a custom date
 
 \begin{document}
 
 \maketitle % Print the title
-
+\newpage
 \section{Background and Motivation}
 
 Gravitational waves are predicted as a mathematical consequence of the linearized Einstein Field Equations. The Einstein Field Equations themselves are a set of ten unique, coupled, nonlinear partial differential equations.  
@@ -94,6 +95,13 @@ It should be noted that the above formula is true only modulo a term containing 
 R^{\rho}_{\sigma \mu \nu} = \partial_{\mu}\Gamma^{\rho}_{\nu \sigma} - \partial_{\nu}\Gamma^{\rho}_{\mu \sigma} + \Gamma^{\rho}_{\mu \lambda}\Gamma^{\lambda}_{\nu \sigma} - \Gamma^{\rho}_{\nu \lambda}\Gamma^{\lambda}_{\mu \sigma}
 \end{align}
 
+The christoffel symbols contain some information about the curvature of space as a function of the coordinates, and thus in the framework of linearized gravity products of Christoffel symbols are second order:   
+
+\begin{align}
+R^{\rho}_{\sigma \mu \nu} = \partial_{\mu}\Gamma^{\rho}_{\nu \sigma} - \partial_{\nu}\Gamma^{\rho}_{\mu \sigma} 
+\end{align}
+
+
 
 
 If $x^{\rho}(\tau)$ are the components of a geodesic parameterized by $\tau$, then $\dot{x^{\rho}}(\tau) \equiv T^{\rho}$ are the components of a vector tangent to the geodesic. Suppose there is a family such nearby geodesics indexed by some other parameter, $s$, and that we can define \textit{deviation vector} $S^{\rho}(\tau) = \partial_{s}x^{rho}(s,\tau)$ which characterizes the separation between nearby geodesics. It can be shown that the second derivative of this vector with respect to $\tau$ is related to the Reimann tensor through the differential equation
@@ -103,9 +111,99 @@ If $x^{\rho}(\tau)$ are the components of a geodesic parameterized by $\tau$, th
 \ddot{S^{\rho}} = R^{\rho}_{\sigma \mu \nu} T^{\sigma} T^{\mu} S^{\nu}
 \end{align} 
 
+\section{Linearized Gravity}
 
+In linearized gravity we assume the spacetime is described by a flat spacetime $g_{\mu \nu}$ plus a small perturbation
 
+\begin{align}
+g_{\mu \nu} = \eta_{\mu \nu} + h_{\mu \nu}
+\end{align}
 
+Since the other pieces of the Einstein field equations are directly derived from the metric, they must be individually linearized to form a description of spacetime around weak sources. The standard treatment of linearized gravity assumes that to first order we may raise and lower indices using the Minkowski metric. If we tried to use the full form of equation \textbf{EQUATION}, we would have
+
+\begin{align}
+g^{\mu}_{\nu} &= g^{\mu \alpha}g_{\alpha \nu} \\
+&= (\eta^{\mu \alpha} + h^{\mu \alpha}) (\eta_{\alpha \nu} + h_{\alpha \nu}) \\
+&= \eta^{\mu \alpha}\eta_{\alpha \nu} + \eta^{\mu \alpha}h_{\alpha \nu} + h^{\mu \alpha}\eta_{\alpha \nu} + h^{\mu \alpha}h_{\alpha \nu}
+\end{align} 
+
+The second two terms being second order in $h$, ther peturbation, are neglected in linearized gravity. We assume from here on that indices can be freely raised and lowered to first order using only the Minkowski metric $\eta_{\mu \nu}$.
+
+\begin{align}
+h^\mu_\nu = \eta^{\alpha \mu} h_{\alpha \nu} \ \  \text{and} \ \ h^{\mu \nu} = \eta^{\alpha \mu}\eta^{\beta \nu}h_{\alpha \beta}
+\end{align}
+
+The next natural line of logic to pursue is to write down the Christoffel symbols for such a spacetime
+
+\begin{align}
+\Gamma^{\mu}_{\alpha \beta} &= \frac{1}{2}g^{\nu \mu}\left[\partial_{\beta}g_{\alpha \nu} + \partial_{\alpha}g_{\beta \nu} - \partial_{\nu}g_{\alpha \beta}\right] \\
+&= \frac{1}{2}\left(\eta^{\mu \nu} + h^{\mu \nu}\right)\left[\partial_{\beta}g_{\alpha \nu} + \partial_{\alpha}g_{\beta \nu} - \partial_{\nu}g_{\alpha \beta}\right]
+\end{align}
+
+Inserting the expanded form of the metric into the term within the brackets gives us six terms times two at the front, for twelve total. Thankfully, three correspond to the standard flat-space Christoffel symbols which can be made zero through a choice of coordinates (in fact, orthonormal Cartesian coordinates), three involve derivatives of $\eta_{\mu \nu}$ which are zero, and three are second order in $h_{\mu \nu}$, which we assume are zero. This leaves us with three:
+
+\begin{align}
+\Gamma^{\mu}_{\alpha \beta} &= \frac{1}{2}\eta^{\mu \nu}\left[\partial_{\beta}h_{\alpha \nu} + \partial_{\alpha} h_{\beta \nu} - \partial_{\nu}h_{\alpha \beta}\right] \\
+&= \frac{1}{2} \left[\partial_{\beta} h^{\mu}_{\alpha} + \partial_{\alpha}h_{\beta}^{\mu} - \partial^{\mu}h_{\alpha \beta}\right] 
+\end{align} 
+
+Where in the last term $\partial^{\mu} = \eta^{\mu \nu}\partial_{\nu}$ was used to raise the index on the actual partial derivative operator itself. It should be noted at this point that since we neglect terms that are second order in the Christoffel symbols themselves, in linearized gravity, the covariant derivative of a metric perturbation is equivalent to the normal partial derivate. The same assumption allows for simplification of the Reimann and Ricci tensors:
+
+\begin{align}
+R^{\rho}_{\mu \sigma \nu} &= \partial_{\sigma}\Gamma^{\rho}_{\mu \nu} - \partial_{\nu}\Gamma^{\rho}_{\mu \sigma} \\
+R_{\mu \nu} = R^{\rho}_{\mu \rho \nu} &= \partial_{\rho}\Gamma^{\rho}_{\nu \mu} - \partial_{\mu}\Gamma^{\rho}_{\mu \rho}
+\end{align}
+
+Plugging in equation \textbf{EQUATION} we have
+
+\begin{align}
+R_{\mu \nu} & = \frac{1}{2}\partial_{\alpha}\left[\partial_{\nu}h^{\alpha}_{\mu} + \partial_{\mu}h^{\alpha}_{\nu} - \partial^{\alpha}h_{\mu \nu}\right] - \frac{1}{2}\partial_{\nu}\left[\partial_{\alpha}h^{\alpha}_{\mu} + \partial_{\mu}h^{\alpha}_{\alpha} - \partial^{\alpha}h_{\mu \alpha}\right] \\
+&= \frac{1}{2}\left[ \cancel{\partial_{\alpha}\partial_{\nu}h^{\alpha}_{\mu}} + \partial_{\alpha}\partial_{\mu}h^{\alpha}_{\nu} - \partial_{\alpha}\partial^{\alpha}h_{\mu \nu} - \cancel{\partial_{\nu}\partial_{\alpha}h^{\alpha}_{\mu}} - \partial_{\nu}\partial_{\mu}h^{\alpha}_{\alpha} + \partial_{\nu}\partial^{\alpha}h_{\mu \alpha} \right] \\
+&= \frac{1}{2}\left[\partial_{\alpha}\partial_{\mu}h^{\alpha}_{\nu} + \partial_{\nu}\partial^{\alpha}h_{\mu \alpha} - \partial_{\alpha}\partial^{\alpha}h_{\mu \nu} - \partial_{\nu}\partial_{\mu}h^{\alpha}_{\alpha}\right]
+\end{align}
+
+The quantity $h^{\alpha}_{\alpha}$ is the trace of the pertubation metric and represents, in a sense, an overall measure of the \textit{strength} or \textit{amplitude} of the perturbation, this is often called just $h$. The term $\partial^{\alpha}\partial_{\alpha}$ is an inner product that when formed through the Minkowski metric becomes the wave operator, $\Box = -\partial_{t}^{2} + \nabla^2$. The Ricci tensor is obtained by contracting the Reimann tensor over the two free indices:
+
+\begin{align}
+R \equiv \eta^{\mu \nu}R_{\mu \nu} &= \frac{1}{2}\left[\partial_{\alpha}\partial^{\mu}h_{\mu}^{\alpha} + \partial_{\mu} \partial^{\alpha}h^{\mu}_{\alpha} - \Box h - \Box h\right]
+\end{align}
+
+Since $\alpha$ and $\mu$ are summed indices, the first two terms are the same. Dropping the $\frac{1}{2}$, the Ricci scalar curvature is 
+
+\begin{align}
+R = \partial_{\alpha}\partial_{\mu}h^{\mu \alpha} - \Box h
+\end{align}
+
+Many authors choose to simplify the expression for the Ricci Tensor by defining the quantity
+
+\begin{align}
+V_{\nu} = \partial_{\alpha}h^{\alpha}_{\nu} - \frac{1}{2}\partial_{\nu}h
+\end{align}
+
+With which the first two terms of the linearized Ricci tensor can be reorganized as
+
+\begin{align}
+\partial_{\mu}\partial_{\alpha}h_{\nu}^{\alpha} - \partial_{\mu}\partial_{\nu}h &= \partial_{\mu}\left[\partial_{\alpha}h_{\nu}^{\alpha} - \partial_{\nu}h\right] \\
+&= \partial_{\mu}V_{\nu} - \frac{1}{2}\partial_{\mu}\partial_{\nu}h
+\end{align}
+
+Which upon substitution into the \textbf{EQUATION} for $R_{\mu \nu}$ yields
+
+\begin{align}
+R_{\mu \nu} &= \frac{1}{2}\left[\partial_{\mu}V_{\nu} - \frac{1}{2}\partial_{\mu}\partial_{\nu}h + \partial^{\alpha}\partial_{\nu}h_{\mu \alpha} - \Box h_{\mu \nu}\right]
+\end{align}
+
+The two unsimplified terms form the quantity $\partial_{\nu}\left[\partial^{\alpha}h_{\mu \alpha} - \frac{1}{2}\partial_{\mu}h\right]$ which we recognize as $\partial_{\nu}V_{\mu}$, leaving us with
+
+\begin{align}
+R_{\mu \nu} = \frac{1}{2}\left[\partial_{\mu}V_{\nu} + \partial_{\nu}V_{\mu} - \Box h_{\mu \nu}\right] 
+\end{align}
+
+Setting the right hand side of this equation gives us the linearized, vacuum Einstein Equation $R_{\mu \nu} = 0$:
+
+\begin{align}
+\frac{1}{2}\left[\partial_{\mu}V_{\nu} + \partial_{\nu}V_{\mu} - \Box h_{\mu \nu}\right] = 0 
+\end{align}
 
 %----------------------------------------------------------------------------------------
 
