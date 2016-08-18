@@ -205,6 +205,184 @@ Setting the right hand side of this equation gives us the linearized, vacuum Ein
 \frac{1}{2}\left[\partial_{\mu}V_{\nu} + \partial_{\nu}V_{\mu} - \Box h_{\mu \nu}\right] = 0 
 \end{align}
 
+\section{Implementation}
+The main weight of the computational work described above falls under an expensive Monte Carlo integration of the evidence as part of the Bayesian posterior. Zooming in it quickly becomes apparent that the main challenge to be overcome is efficient evaluation of the function to be integrated, in this case the factored likelihood. Prior to this work, the factored likelihood is was computed with a series of looping structures that individually compiled all the terms of the equation in an independent and serial manner. The process took substantial advantage of many high level operations available within Python to match up the correct terms across various harmonic mode time series, spherical harmonics, and antenna patterns. Thanks to clever optimization and gratuitous use of fast numerical Python libraries such as NumPy, the code was able to compute approximately $10^3$ likelihood evaluations on the order of seconds, the limiting factor being the serial nature of loops and the inherent lethargy of high level languages such as Python. Although NumPy commonly passes target data to compiled routines written in faster languages such as C, some portions of the computation (in particular the marginalization over time) benefit little from this capability and form a bottleneck for efficient evaluation of the likelihood. Furthermore the original implementation heavily relied upon older structures within the existing LIGO Algorithms Library (LAL), a set of C routines bound to Python through Swig, to perform many intermediate calculations, such as computing spherical harmonics. The goal of the first phase of this work was thorough vectorization of the process used to build the terms of the likelihood utilizing the BLAS subroutines available through NumPy as often as possible, as well as reducing dependency on LAL. To that end, the components of the factored likelihod were reworked. 
+
+\subsection{Complex Antenna Factor}
+The complex antenna factor is a complex number that modulates the gravitational wave signal as a function of incoming direction. This is necessary due to the non isotropic sensitivity of the LIGO interferometers themselves. $F_{+}$ and $F_{\times}$. 
+
+\begin{align}
+F_{+} &= [R_{0,0}X_0 + R_{0,1}X_1 + R_{0,2}X_2]X_0 - [R_{0,0}Y_0 + R_{0,1}Y_1 + R_{0,2}Y_2]Y_0 \\
+&+ [R_{1,0}X_0 + R_{1,1}X_1 + R_{1,2}X_2]X_1 - [R_{1,0}Y_0 + R_{1,1}Y_1 + R_{1,2}Y_2]Y_1 \\
+&+ [R_{2,0}X_0 + R_{2,1}X_1 + R_{2,2}X_2]X_2 - [R_{2,0}Y_0 + R_{2,1}Y_1 + R_{2,2}Y_2]Y_2
+\end{align}
+
+Collecting all the positive terms of this expression gives
+\begin{align}
+F_{+} &= R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\
+&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\ 
+&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 
+\end{align}
+At which point we see that the same result is computable as an outer product of the vector $\vec{X}$ using
+
+\begin{align}
+F_{+} &= \vec{X}\mathbf{R}\vec{X} - \vec{Y}\mathbf{R}\vec{Y}
+\end{align}
+
+And the complex part of the gravitational wave is thus
+
+\begin{align}
+F_{\times} &= \vec{X}\mathbf{R}\vec{Y} + \vec{Y}\mathbf{R}\vec{X}
+\end{align}
+
+One a sample-to-sample basis, the numbers that vary are the components of the vectors $\vec{X}$ and $\vec{Y}$. Thus we need a function that takes as input a \textit{list} vectors (or \textit{vector}) of vectors and produces a vector with the right components as output. To that end we define the tensor $X^{i}_{j}$ where
+
+\begin{align}
+X^i &= 
+\begin{bmatrix}
+X^{i}_0 \\
+X^{i}_1 \\
+X^{i}_2
+\end{bmatrix}
+\end{align}
+
+As well as the tensor $R^{i}_{jk}$ where
+
+\begin{align}
+R^{i} &= 
+\begin{bmatrix}
+R^{i}_{00} & R^{i}_{01} & R^{i}_{02} \\ 
+R^{i}_{10} & R^{i}_{11} & R^{i}_{12} \\ 
+R^{i}_{20} & R^{i}_{21} & R^{i}_{22}  
+\end{bmatrix}
+\end{align}
+
+The tensor $X$ is like a stack of all the different possible $\vec{X}$ coming out of the page. The Tensor $R$ is like $n$ copies of the matrix $\mathbf{R}$ stacked on top of each other. In this way the desired vector is obtainable with the tensor contraction
+
+\begin{align}
+F^{i}_{+} &= X^{lm}R^{i}_{lj}X^{j}_{m} - Y^{lm}R^{i}_{lj}Y^{j}_{m} \\ 
+F^{i}_{\times} &= X^{lm}R^{i}_{lj}Y^{j}_{m} + Y^{lm}R^{i}_{lj}X^{j}_{m} \\ 
+\end{align}
+
+\subsection{Vectorized Single Detector Log Likelihood}
+
+With the spherical harmonics and antenna factor in hand the following set of operations yield the factored likelihood for a single detector, the network likelihood being a simple sum over all of the detectors.
+
+Equation 24 from Arxiv $15502.05370v1.pdf$ for the network log likelihood reads 
+
+\begin{align}
+\ln{\mathcal{L}} = &\frac{D_{ref}}{D}Re \sum_{k}\sum_{(l,m)}\left[F_k Y_{lm}\right]^{*}Q_{k,lm} \\ 
+& - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] \\
+ & - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right]
+\end{align}
+
+Consider a single detector, thus dropping the sum over $k$. The first term is of the form $\vec{A}\cdot\vec{B} = \sum_{i=0}^{d}A_iB_i$, so if $Q_{k,(l,m)}$ were a simple vector, we could write it as
+
+\begin{equation}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2} F*\vec{Y}\cdot\vec{Q}
+\end{equation}
+
+However the $Q_{k,(l,m)}$ are actually harmonic mode time series and not single values. We desire a vector whose values are the likelihoods at each point in the time series. 
+
+Consider the case where we have only the $(2,-2), (2,0)$ and $(2,2)$ modes. If we write all the mode time series $Q^0, Q^1, Q^2...$ as the columns of a matrix , then the desired result is obtained with
+
+\begin{align}
+F*
+\begin{bmatrix}
+Q^0_{2,-2} & Q^0_{2,+0} & Q^0_{2,+2} \\
+Q^1_{2,-2} & Q^1_{2,+0} & Q^1_{2,+2} \\ 
+Q^2_{2,-2} & Q^2_{2,+0} & Q^2_{2,+2} \\
+\vdots & \vdots & \vdots
+\end{bmatrix}
+\begin{bmatrix}
+\left(Y_{2,-2}\right)\\
+\hspace{0mm} \\
+\left(Y_{2,+0}\right) \\
+\hspace{0mm} \\
+\left(Y_{2,+2}\right) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+Q^0_{2,-2} Y_{2,-2} + Q^0_{2,-2}Y_{2,+0} + Q^0_{2,+2}Y_{2,+2} \\
+Q^1_{2,-2} Y_{2,-2} + Q^1_{2,-2}Y_{2,+0} + Q^1_{2,+2}Y_{2,+2} \\
+Q^2_{2,-2} Y_{2,-2} + Q^2_{2,-2}Y_{2,+0} + Q^2_{2,+2}Y_{2,+2} \\
+\vdots
+\end{bmatrix}
+\end{align}
+
+With $\vec{Y}$ and $\mathbf{Q}$ defined as the matrix and vector above respectively, we have for the first term
+
+\begin{equation}
+\frac{D_{ref}}{D}Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right]
+\end{equation}
+
+The second term is a sum once over all the possible combinations of $(l,m), (l',m')$ pairs using the $U_{(l,m),(l',m')}$ cross terms. Its result is a scalar quantity made up of terms like
+
+\begin{align}
+&Y_{2,-2}^{*}Y_{2,-2}U_{(2,-2),(2,-2)} + Y_{2,-2}^{*}Y_{2,+0}U_{(2,-2),(2,+0)} + Y_{2,-2}^{*}Y_{2,+2}U_{(2,-2),(2,+2)} \\ 
+ +  \ &Y_{2,+0}^{*}Y_{2,-2}U_{(2,+0),(2,-2)} + Y_{2,+0}^{*}Y_{2,+0}U_{(2,+0),(2,+0)} + Y_{2,+0}^{*}Y_{2,+2}U_{(2,+0),(2,+2)} \\ 
++ \  &Y_{2,+2}^{*}Y_{2,-2}U_{(2,+2),(2,-2)} + Y_{2,+2}^{*}Y_{2,+0}U_{(2,+2),(2,+0)} + Y_{2,+2}^{*}Y_{2,+2}U_{(2,+2),(2,+2)}
+\end{align}
+
+
+If we pack the $U_{(l,m),(l',m')}$ into the matrix $\mathbf{U}$ as defined below then the following set of matrix operations produces the same sum
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} &  U_{(2,-2),(2,+0)} &  U_{(2,-2),(2,+2)} \\
+U_{(2,+0),(2,-2)} &  U_{(2,+0),(2,+0)} &  U_{(2,+0),(2,+2)} \\
+U_{(2,+2),(2,-2)} &  U_{(2,+2),(2,+0)} &  U_{(2,+2),(2,+2)}
+\end{bmatrix}
+\begin{bmatrix}
+Y_{2,-2} \\
+Y_{2,+0} \\
+Y_{2,+2}
+\end{bmatrix}
+\end{align*}
+
+because when you multiply $\mathbf{U}$ into $\vec{Y}$ this simplifies to 
+
+
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} 
+\end{bmatrix}
+\end{align*}
+
+Which becomes the desired scalar. This allows us to write the second term as
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] =  - \left[\frac{D_{ref}}{2D}\right]^{2} |F^2|\vec{Y}^{*}\mathbf{U}\vec{Y}
+\end{align}
+
+We must always set up the spherical harmonic vectors based on the value of $m$ and the cross terms in row-major form based first on $m_2$ and then on $m_1$. If we organize the matrix $\mathbf{V}$ in the same way then the same set of steps will lead us to conclude that  
+
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2}Re \left[F^2 \vec{Y}\mathbf{V}\vec{Y} \right]
+\end{align}
+
+Combining the results the single detector log likelihood is 
+
+\begin{align}
+\ln{\mathcal{L}} = \frac{D_{ref}}{D}\Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right] - \left[\frac{D_{ref}}{2D}\right]^{2}\left[|F|^2 \vec{Y}^{*}\mathbf{U}\vec{Y} - \Re\left(F^2 \vec{Y}\mathbf{V}\vec{Y}\right) \right]
+\end{align}
+
+\subsection{GPU Implementation}
+Vectorization of the code produces a performance improvement due to SIMD instruction sets available on many modern microprocessor architectures. This allows for some on-chip parallelism that the compiler may use to unroll loops within the machine code and increase efficiency. Beyond this however the process of recasting the computation into clear matrix and tensor operations illuminates a higher level of parallelism possible on the hardware level. A substantial amount of both academc and industrial research and development has centered around efficient parallel implementations of the equivalent operations, with impressive results. 
+
+
+
+
 %----------------------------------------------------------------------------------------
 
 \end{document}
