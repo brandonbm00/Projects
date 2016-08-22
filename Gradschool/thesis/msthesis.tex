@@ -32,6 +32,10 @@
 
 \usepackage{braket}
 \usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage[mathscr]{euscript}
+
 
 \allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
 
@@ -82,7 +86,13 @@ Gravitational waves are predicted as a mathematical consequence of the linearize
 \subsubsection{Reimann Tensor}
 The Reimann Tensor is a mathematical object that encapsulates the geometric \textit{curvature} of spacetime. The concept of a curved spacetime is fundamentally no different from the concept of a curved space, and from examining the behavior of vectors in such a space we can address both the purpose and properties of the Reimann tensor without departing from the intuitive picture of spheres and arrows.
 
-The Reimann tensor is traditionally derived by examining the local behavior of geodesics subject to a metric tensor that describes curved space. Here we motivate the concept with a visual explanation of parallel transport. Consider a vector pointing in some arbitrary direction $\sigma$ somewhere on the sphere, as depicted in figure \textbf{FIGURE HERE}. If we maintain the orientation of the vector relative to the surface of the sphere as we traverse the path, we note that the vector behaves differently depending on the order in which we choose to traverse the directions $\mu$ and $\nu$. This difference is representable by a vector that points between the two tips - one that is dependent on the initial direction $\sigma$ and both the transport directions $\mu$ and $\nu$. Let this vector be denoted $\vec{d}$. Then the Reimann tensor, $R_{\rho \sigma \mu \nu}$, is simply $d_{\rho}$, the $\rho$'th component of this difference vector. From this geometric picture some of the classical symmetries that are often introduced abreast the definition of the Reimann tensor are immediately intuitive, such as the skew symmetry depicted in figure \textbf{FIGURE HERE}.
+\begin{figure}[h!]
+\includegraphics[trim={2cm, 2cm, 2cm, 2cm}, clip]{spheredone.eps}
+\caption{A visual depiction of the Reimann Curvature tensor. Parallel transporting a vector in the $\sigma$ direction both ways around the loop shown yields two different vectors. The orange vector $\vec{d}$ points between the tips. The magnitude of the components of this vector are $R_{\rho \sigma \mu \nu}$.}
+\label{fig:sphere}
+\end{figure}
+
+The Reimann tensor is traditionally derived by examining the local behavior of geodesics subject to a metric tensor that describes curved space. Here we motivate the concept with a visual explanation of parallel transport. Consider a vector pointing in some arbitrary direction $\sigma$ somewhere on the sphere, as depicted in figure \ref{fig:sphere}. If we maintain the orientation of the vector relative to the surface of the sphere as we traverse the path, we note that the vector behaves differently depending on the order in which we choose to traverse the directions $\mu$ and $\nu$. This difference is representable by a vector that points between the two tips - one that is dependent on the initial direction $\sigma$ and both the transport directions $\mu$ and $\nu$. Let this vector be denoted $\vec{d}$. Then the Reimann tensor, $R_{\rho \sigma \mu \nu}$, is simply $d_{\rho}$, the $\rho$'th component of this difference vector. From this geometric picture some of the classical symmetries that are often introduced abreast the definition of the Reimann tensor are immediately intuitive, such as the skew symmetry depicted in figure \textbf{FIGURE HERE}.
 Since it is somewhat unfair (worse - \textit{incorrect}) to characterize the entire geometry of the space with looping paths over large areas, the formal definition of the Reimann tensor is in fact the infinitesimal version of the concept above. Indeed, the concept of a single direction one may traverse is only valid in a small region of curved space, so the real Reimann tensor must describe the difference between two vectors as parallel transported around an infinitesimally small version of the original loop. It follows then how there must be a (possibly different) Reimann tensor at each point on the manifold in question. More remarkable however is the simplicity of the formal definition within this picture:
 
 \begin{align}
@@ -253,41 +263,108 @@ Thus coordinate transformations that obey $\Box \xi = 0$ will allow us to impose
 This is a four dimensional wave equation for the remaining components of $h_{\mu \nu}$. Moreover, we have shown that under coordinate transformations that do not change the underlying physics, there exists an explicit relationship between components of the metric given by equation \textbf{EQUATION}. In the same way that symmetry shows that six of the metric components to be functions of the others, The index $\nu$ indicates that in four dimensions there are four additional explicit relationships between metric components that correspond to a loss of four additional degrees of freedom. This leaves us with six.  
 
 \section{Bayesian Statistics}
-We select a Bayesian posterior probability as our main analysis technique as its ability to quantify and propagate uncertainties in parameter estimates is well documented by \textbf{CITATION} and \textbf{PROBABLY OTHER CITATIONS}. Bayes' Theorem follows from the symmetric definition of conditional probability depicted visually in figure \textbf{FIGURE}. Let the joint probability evaluated at any point $(x,y)$ in the plane be denoted $P(x,y)$. We may take a cross section through the joint probability distribution along any direction we choose, let us call such a cross section parallel to the $x$ axis the conditional probability of $x$ given $y$, and denote it $P(x|y)$. A perpandicular cross section would simply be $P(y|x)$. We see that we can compute $P(x,y)$ in two equivalent ways: scaling $P(x|y)$ by $P(y)$ or by scaling $P(y|x)$ by $P(x)$. Thus we have that 
+We select a Bayesian posterior probability as our main analysis technique as its ability to quantify and propagate uncertainties in parameter estimates is well documented by \textbf{CITATION} and \textbf{PROBABLY OTHER CITATIONS}. Bayes' Theorem follows from the symmetric definition of conditional probability depicted visually in figure \ref{fig:distrib}. Let the joint probability evaluated at any point $(x,y)$ in the plane be denoted $P(x,y)$. We may take a cross section through the joint probability distribution along any direction we choose, let us call such a cross section parallel to the $x$ axis the conditional probability of $x$ given $y$, and denote it $P(x|y)$. A perpandicular cross section would simply be $P(y|x)$. We see that we can compute $P(x,y)$ in two equivalent ways: scaling $P(x|y)$ by $P(y)$ or by scaling $P(y|x)$ by $P(x)$. Thus we have that 
 
-\begin{align}
+
+\begin{figure}[h!]
+\center
+\includegraphics[trim={1cm, 1cm, 1cm, 1cm}, clip]{biviariate_norm_done.eps}
+\caption{A joint probability distribution $P(x,y)$. The contours parallel with the $x$ direction represent different $P(y|x)$.}
+\label{fig:sphere}
+\end{figure}
+
+\begin{align} \label{eq:bayes}
 P(x|y)P(y) &= P(y|x)P(x) \\
 P(x|y) &= \frac{P(y|x)P(x)}{P(y)}
 \end{align}
 
 Which is Bayes' theorem. The denominator of the expression on the right hand side is often rewritten as a sum over all possible situations in which $y$ is an outcome. Reading $\neg x$ as "not x", we have
 
-\begin{align}
+\begin{align}\label{eq:continuous}
 P(y) &= P(y|x)P(x) + P(y|\neg x)P(\neg x) \\
-&= \sum_{k=1}^K P(x|y_k)P(y_k) 
+&= \sum_{k=1}^K P(y|x_k)P(x_k) 
 \end{align}
 
 
- Assuming a signal is present, the measured strain in a gravitational wave interferometer $d(t)$ can be decomposed into time dependent strain and noise components
+\clearpage 
+This allows us to rewrite the posterior probability as
 
 \begin{align}
-d(t) = h(t) + n(t)
-\end{align}  
-
-then the posterior probability of a gravitational wave signal with parameters $\mu$ is given by 
-
-\begin{align}
-P[\vec{\mu}|d(t)] = \frac{P[d(t)|\vec{\mu}]P(\vec{\mu})}{P[d(t)]}
+P(x|y) = \frac{P(y|x) P(x)}{\sum_{k=1}^K P(y|x_k)P(x_k)}
 \end{align}
 
-Extending equation \textbf{EQUATION} to the case of a continuous state space we have for the denominator
+Multiplying the right hand side of this equation by the quantity $\frac{1}{P(x)P(y|\neg x)}$ one has 
 
-\begin{align}
-P[d(t)] &= \int_{\Omega}P[d(t)|\vec{\mu}]P(\vec{\mu})d\vec{\mu}
+\begin{align} \label{eq:lratio}
+P(x|y) &= \frac{\Lambda(x|y)}{\Lambda(x|y) + \frac{P(\neg x)}{P(x)}}
 \end{align}
 
-Where $\Omega$ indicates integration over the entire probabilistic state space.
+Where we have used the \textit{likelihood ratio} $\Lambda(x|y) \equiv \frac{P(y|x)}{P(y|\neg x)}$ to simplify the expression. The likelihood ratio has a simple interpretation, it is simply the ratio of the probability of event $y$ occuring in the case event $x$ occurs and the probability of event $y$ occuring given that event $x$ \textit{does not} occur. In fact, this form of Bayes theorem indicates that the posterior probability for $x$ given $y$ is directly proportional to the likelihood ratio. This is particularly important in the Bayesian treatment of gravitational waves where the central question for study is the probability of observing the data in question given that there may or may not be a signal present.  
 
+\subsection{Signal Processing}
+Noise in the LIGO detectors is modeled as \textit{Gaussian Noise}, which describes a length $N$ set of time series samples $\{x_j\}$ with the following probability of observation:
+
+\begin{align}
+P(\{x_j\}) = \left[\frac{1}{\sqrt{2 \pi} \sigma}\right]^N e^{-\frac{1}{2 \sigma^2} \sum_{j = 0}^{N - 1}x_j^2}
+\end{align}
+
+If we allow the $\{x_j\}$ to be weighted by the noise sensitivity in frequency space (also known as the \textit{power spectral density}) $S(f) = \sum_{k=0}^K n^*(f_k)n(f_k) \equiv \braket{n(f)|n(f)}$ then we may write the probability density for any Gaussian noise process as 
+
+\begin{align}
+P_x(\{x(t)\}) \propto e^{-\frac{1}{2}\braket{x(t)|x(t)}}
+\end{align}
+
+For gravitational wave signal processing we are interested in evaluating the equivalent of the likelihood ratio  in equation \ref{eq:lratio} for the null and signal present hypotheses, $\mathcal{H}_0$ and $\mathcal{H}_1$ respectively. This is
+
+\begin{align}
+\Lambda(\mathcal{H}_1|d) &= \frac{P(d|\mathcal{H}_1)}{P(d|\mathcal{H}_0)}
+\end{align}
+
+In the above equation $\mathcal{H}_0$ is in direct correspondence with $\neg x$ and $\mathcal{H}_1$ is in direct correspondence with $x$. If there is no signal present in the data, then the data and noise are equal, meaning 
+
+\begin{align}
+d(t) &= n(t) \\
+P(d(t)|\mathcal{H}_0) &\propto e^{-\frac{1}{2}\braket{d(t)|d(t)}}
+\end{align} 
+
+Whereas if there is a signal present in the data, then the noise is the \textit{residual} signal after the gravitational wave potion of the signal $h(t)$ is subtracted from the total signal $d(t)$: 
+
+\begin{align}
+d(t) &= n(t) + h(t) \\
+p(d(t)|\mathcal{H}_1) &\propto e^{-\frac{1}{2}\braket{d(t) - h(t)|d(t) - h(t)}}
+\end{align}
+
+So the likelihood ratio for gravitational wave signal processing is exactly equal to 
+
+\begin{align}
+\Lambda(\mathcal{H}_1|d(t)) &= \frac{e^{-\frac{1}{2}\braket{h(t)-d(t)|h(t)-d(t)}}}{e^{-\frac{1}{2}\braket{d(t)|d(t)}}}
+\end{align}
+
+By equation \ref{eq:bayes}  the posterior probability of a gravitational wave signal with parameters $\mu$ is given by 
+
+\begin{align}\label{eq:parampos}
+P[\vec{\mu}, \mathcal{H}_1|d(t)] = \frac{P[d(t)|\vec{\mu}, \mathcal{H}_1]P(\vec{\mu})}{P[d(t), \mathcal{H}_1]}
+\end{align}
+
+Extending equation \ref{eq:continuous} to the case of a continuous state space we have for the denominator
+
+\begin{align}
+P[d(t), \mathcal{H}_1] &= \int_{\Omega}P[d(t)|\vec{\mu}, \mathcal{H}_1]P(\vec{\mu})d\vec{\mu}
+\end{align}
+
+Where $\Omega$ indicates integration over the entire probabilistic state space. Dividing both the top and bottom of the right hand side of equation \ref{eq:parampos} by $P(d(t)|\vec{\mu}, \mathcal{H}_1)$ gives us 
+
+\begin{align}\label{eq:bayeslikely}
+P(\vec{\mu}, \mathcal{H}_1|d(t)) = \frac{\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)P(\vec{\mu})}{\int_{\Omega}\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)P(\vec{\mu})d\vec{\mu}}
+\end{align}
+
+Note that the integral in the denominator may be factored into components that are functions of independent groups of parameters. For the purposes of gravitational wave data analysis it is factored into intrinsic and extrinsic parameters, the former (masses, spins) being responsible for the actual orbital dynamics of the system, and the latter (distance, inclination, right ascension, declination) depending only on the nature of the observer relative to the source. We label these sets of paramters $\vec{\lambda}$ and $\vec{\theta}$ respectively. The denominator of equation \ref{eq:bayeslikely} is thus factorizable as 
+
+\begin{align}
+\int_{\Omega}\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)d\vec{\mu} &= \int_{\Omega}\Lambda(d(t)|\vec{\lambda}, \mathcal{H}_1)P(\vec{\lambda})d\vec{\lambda}\int_{\Omega}\Lambda(d(t)|\vec{\theta}, \mathcal{H}_1)P(\vec{\theta})d\vec{\theta} 
+\end{align} 
+
+Note that while evaluating the likelihood for a single set of parameters in the numerator of the above equation may not be any serious challenge, computing the integral in the denominator is. Many schemes \textbf{CITE BEN} have been developed to tackle this particular problem and generally involve simulating the posterior through MCMC sampling. These techniques are highly developed and at the time of writing can provide converged results in \textbf{SOME TIMESCALE}, however they are limited in their parallelism due fundamental serialization of the algorithm. Cutting edge implementations involving parallel tempering and some forms of ensemble MCMC have shown promising results, however none can take advantage of the many thousands of cores availble across the LIGO data grid. A new and more embarassingly parallel scheme is needed.  
 
 \subsection{Harmonic Mode Decomposition}
 
@@ -499,9 +576,80 @@ Programming in CUDA involves launching groups of threads called \textit{grids} t
 PyCuda is a flexible library for GPU scripting that includes a broad spectrum of GPU based array operations built to mimic the usage of NumPy arrays within a program. It allows for relatively easy access to the Nvidia CUDA API directly from within Python, and many of its operations are directly compatible with NumPy arrays with careful casting to the correct data types. Certainly one of the most challenging aspects of incorporating GPU code into a higher level language such as Python is the interface layer. As it stands much of the widely used LAL software consists of C code bound to Python through complex Swig interfaces, and while this is a perfectly valid way to access faster libraries, it can often be deceptively difficult to work with as many of the resulting Python objects contain read-only data structures masquerading as dynamic Python objects. This sometimes yields unpredictable behavior and it was decided this should be avoided as a way to interface with CUDA C. PyCuda is a very elegant solution to this problem as it seamlessly bridges this gap using the native GPUArray class, and a set of functions that create GPUArray copies of NumPy arrays that are built initially on the node CPU hosts. 
 With a smaller group of developers, the built-in GPUArray class contained within PyCuda does not yet support \textit{all} of the rich spectrum of high level functions available within the NDArray NumPy class. Perhaps more importantly however, PyCuda allows for custom CUDA kernel functions to be written as pure CUDA C directly within special containers called source modules, that are contained within the main body of the Python code. PyCuda actually calls the real Nvidia compiler at runtime and links the resulting temporary executable to the main program. One may call these functions with NumPy arrays as arguments, as if they were normal Python functions. This is perhaps the most important feature of PyCuda as it allows the developer to tune the customization of the code to whatever level is desired. Those intermediate operations that may be handled with the built in methods of the GPUArray are performed as such. More complex operations that are not supported can be custom built with source modules. If desired, the entire program may consist of CUDA C with no more then basic startup routines written in actual Python meant to instantiate the original data and pass it down to the GPU. This particular work used mostly custom kernels, for the simple reason that applying the same matrix operation to a contiguous block of memory containing multiple slightly different copies constitutes tensor operations similar in nature to the results of section \textbf{SECTION}, for which there is no general support for in PyCuda.  
 
+\subsection{General Design Considerations}
+Computing the time marginalized likelihood for a single sample involves processing the likelihood for each point in a signal time series, multiplied again by the number of associated harmonic modes. As the number of samples selected by the integrator as an adaptation chunk increases, the global memory required for the program to execute becomes dominated by these time series. Consequently the code is built upon managing and manipulating a large contiguous block of memory whose rows contain the harmonic mode time series for each sample, this lends itself naturally to using a two dimensional grid of one dimensional blocks as the launch configuration for most kernel functions. The one dimensional blocks lie conceptually along the rows and may line up if the number of time series samples exceeds the maximum threds per block. The grid extends downwards in the $y$-direction and will generally assign a row of blocks to each sample, or in some cases blanket the memory entirely in threads.
+It is the nature of CUDA programs that thread blocks operate most efficiently when the total number of threads per block is a power of two. Aside from the microprocessor architecture optimizing for these cases, memory reads by groups of thirty two threads (known as a \textit{Warp}) are coalesced by the compiler and recieve the value to be read as a broadcast. This massively boosts throughput if used correctly and it is thus advantageous in most cases to cast the problem dimensions into some workable multiple of the maximum threads per block on the hardware. For most Nvidia cards this is 1024. It is substantially easier to pad the time series with zeros out to the next greatest multiple of this number then to design specialized cleanup blocks whose sole purpose is to process the remainder. In the worse case this corresponds to holding \textbf{NUMBER} extra zeros in memory, which can be a painful amount of unecessary overhead in some scenarios. These factors come together to make memory management the main bottleneck for the entire algorithm, and a main area of focus for further development of this method.      
+
+\subsection{Spherical Harmonics}
+
+The spin-weighted spherical harmonics are precomputed at startup. There is no analytic formula that returns the spin-weighted spherical harmonic for arbitrary quantum numbers $l, m$ and $s$. The most efficient way of retrieving them closely follows the method used by the current, serial LAL functions, which implement a lookup table that contains the explicit formulas. This is often sufficient as most waveform templates require only the $l=2$ modes, and thus only the corresponding spherical harmonics. Indeed, the LSC has yet to require support for $s \neq 2$, so the corresponding CUDA function does not attempt to extend this capability. 
+
+\begin{wrapfig}
+\hspace{-1cm}
+\includegraphics[trim={0cm, 2cm, 2cm, 2cm}, clip]{spherical_harmonics.eps}
+\caption{Computation of Spherical Harmonics, $l=2$.}
+\label{fig:spharms}
+\end{wrapfig}
+
+Instead, it takes as argument an ordered list of $m$ values and executes the following set of steps to return a row-major ordered block of results whose rows correspond to values of $m$: Launch a one dimensional grid of one dimensional blocks, with one thread per sample. Compute the answer for this value of $m$ and place the result in global memory. Increment the local thread index by the number of samples and repeat. As long as it loops through the $m$ values in order, the results will be placed correctly, as per figure \ref{fig:spharms}. As the extrinsic parameter values used in computation are accessed relatively few times, this function does not use shared memory. Regardless as a standalone function it is able to compute several billion results per second, so little further optimization is necessary.
 
 
+\clearpage
 
-%----------------------------------------------------------------------------------------
+
+\subsection{Complex Antenna Factor}
+The antenna factor requires somewhat less fancy footwork then the spherical harmonics, as there is only one per sample and not an arbirary multiple depending on the number of selected modes (which are not necessarily all the values between $-l$ and $l$. The position vectors corresponding to the extrinsic parameters are contracted with the detector response tensor in a thread-wise fashion: one thread for each sample. We avoid using BLAS based routines to perform the contraction due to the small size of the matrices involved, startup routines for BLAS might take longer then a simple loop over nine elements of the detector tensor. We again use a one dimensional grid of one dimensional blocks, however since the position vectors contain commonly accessed elements, we choose to store these independently in device shared memory as well as the detector tensor itself in even higher speed device constant memory. This makes the antenna factor computation one of the most efficient steps of the process.
+
+\subsection{Main Routine}
+
+Due to the variation in extrinsic parameters over the samples, it is necessary for each to manipulate a separate group of copies of the harmonic mode time series. The number of samples may be large, so the main block of memory intended to hold these time series is handed down to the GPU initialized to zeros and a GPU function is used to expanded the time series into a vertial stack of copies, per figure \ref{fig:expandrho}. To streamline the marginalization process this block of memory is padded with zeros out to the nearest multiple of $T_{max}$, which is generally either 512 or 1024 depending on the GPU architecture.  
+
+\begin{wrapfig}
+\vspace{10mm}
+\includegraphics[trim={0cm, 13cm, 0cm, 3.0cm}, clip, scale=0.65]{expand_rhots.eps}
+\label{fig:expandrho}
+\caption{Expansion of time series. One thread per relevant item in resulting memory block. Zeros are padded out to the nearest multiple of $T_{max}$.
+\end{wrapfig}
+
+\clearpage
+
+The result of this expansion of the time series into GPU memory is the desired vertical stack of time series copies. 
+
+The next step is to transform these time series into term one of equation \textbf{EQUATION}. This involves combining the antenna factor (for which there is one complex number per sample) with the spin-weighted spherical harmonics (for which there are $N_m$ complex numbers per sample) into a single quantity and inserting them into the correct positions within the time series block. It is more efficient to complete the combination of the antenna factor and spherical harmonics prior to multiplying them into the time series, and this action is easily completed in an elementwise fasion using the built in machinery of PyCuda. It is steps like these for which PyCuda is an essential tool for performing what would otherwise be complex GPU operations with a single line of code.
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\hspace{-5cm}
+\vspace{-1cm}
+  \begin{center}
+    \includegraphics[trim={4cm, 13cm, 2cm, 3cm}, clip, width=0.75\textwidth]{FYrho.eps}
+  \end{center}
+  \caption{Insertion of the antenna factor-spherical harmonic pairs. }
+\end{wrapfigure}
+
+This step coupled with the previous is all that is necessary to build the first term of the likelihood for all of the samples on the GPU, the rest of the work is simply a series of summing operations. These must be handled somewhat carefully due to the possibility of race conditions and queued memory accesses, both of which can hinder or dangerously skew the results of a computation. 
+The main issue stems from the fact that there is no guarantee of the order of execution of threadblocks within a program. This means that any program that depends upon memory reads and writes occuring in a specific order is prone to producting incorrect results. For this reason it is important to design the summation process in a way that does not exhibit this behavior: each thread should only read and write to memory locations unique to it. Note that each of the functions described thus far follows this paradigm.
+Queued memory are serialized by the CUDA compiler. This means that memory reads to the same location by multiple threads take place one by one. While not as dangerous as a race condition, it is a nontrivial performance consideration. Note that again the process thus far has been designed to avoid these situations. This is particularly important for justifying the nature of the next series of steps.   
+
+\clearpage
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\vspace{-0.78cm}
+\begin{center}
+\includegraphics[trim={1.67cm, 10cm, 0, 3cm}, clip, scale=0.5]{sumrhots.eps}
+\caption{Downwards summation of the harmonic modes to form term one of the factored likelihood for a group of samples.}
+\end{center}
+\end{wrapfigure}
+
+The time series are summed downwards within memory by single threads. One row of threads is launched per sample, this leaves $N_m$ values for each thread to collect in a summation that resides in the bottom row. The memory locations accessed and written to by the individual threads in the grid are unique to that thread, avoiding races and queued memory accesses. The result are rows that are the same as those that would have been formed taking the product $\mathbf{Q}(F\vec{Y})$, this is the first term of the factored likelihood. It remains only to build the second term and subtract it from the rows of this matrix to complete the computation.  
+
+\subsection{Marginalization Over Time}
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\begin{center}
+\includegraphics[scale=0.7]{onedmarg.eps}
+\end{center}
+\end{wrapfigure}
+
+%---------------------------------------------------------------------------------------
 
 \end{document}
