@@ -1,33 +1,10 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Short Sectioned Assignment
-% LaTeX Template
-% Version 1.0 (5/5/12)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% Original author:
-% Frits Wenneker (http://www.howtotex.com)
-%
-% License:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
-
 \documentclass[paper=a4, fontsize=11pt]{scrartcl} % A4 paper and 11pt font size
-
 \usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
 \usepackage[adobe-utopia]{mathdesign}
 %\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
 \usepackage[english]{babel} % English language/hyphenation
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
-
 \usepackage{lipsum} % Used for inserting dummy 'Lorem ipsum' text into the template
-
 \usepackage{sectsty} % Allows customizing section commands
 
 \usepackage{braket}
@@ -256,11 +233,36 @@ In particular, we can show that there exists a coordinate transformation such th
 
 Thus coordinate transformations that obey $\Box \xi = 0$ will allow us to impose the Lorentz gauge. Within this gauge, the linearized, vacuum Einstein equation becomes simply
 
-\begin{align}
+\begin{align}\label{eq:flteinst}
 \Box h_{\mu \nu} = 0
 \end{align}
 
 This is a four dimensional wave equation for the remaining components of $h_{\mu \nu}$. Moreover, we have shown that under coordinate transformations that do not change the underlying physics, there exists an explicit relationship between components of the metric given by equation \textbf{EQUATION}. In the same way that symmetry shows that six of the metric components to be functions of the others, The index $\nu$ indicates that in four dimensions there are four additional explicit relationships between metric components that correspond to a loss of four additional degrees of freedom. This leaves us with six.  
+
+
+
+
+In flat space, equation \ref{eq:flteinst} for some arbitrary function $f(x)$ in place of the $h_{\mu \nu}$ would read
+
+\begin{align}
+\Box f(x) = \eta_{\alpha \beta} \frac{\partial^2 f}{\partial x^{\alpha} \partial x^{\beta}} &= 0\\
+-\frac{\partial^2 f}{\partial t^2} + \nabla^2f &= 0
+\end{align} 
+
+This is the general form of the time dependent wave equation whose solutions take the form
+
+\begin{align}
+f(x) = a e^{i \mathbf{k} \cdot \mathbf{x}}
+\end{align}
+
+Where $\mathbf{x}$ is the standard positon four-vector and $\mathbf{k}$ is the four-wave-vector. Expanding the inner product in the exponential again using the Minkowski metric as $-k^t t + \vec{k}\cdot \vec{x}$ and plugging the result into equation \ref{eq:flteinst} we have 
+
+\begin{align}
+\text{PUT EQ HERE}
+\end{align}
+
+
+
 
 \section{Bayesian Statistics}
 We select a Bayesian posterior probability as our main analysis technique as its ability to quantify and propagate uncertainties in parameter estimates is well documented by \textbf{CITATION} and \textbf{PROBABLY OTHER CITATIONS}. Bayes' Theorem follows from the symmetric definition of conditional probability depicted visually in figure \ref{fig:distrib}. Let the joint probability evaluated at any point $(x,y)$ in the plane be denoted $P(x,y)$. We may take a cross section through the joint probability distribution along any direction we choose, let us call such a cross section parallel to the $x$ axis the conditional probability of $x$ given $y$, and denote it $P(x|y)$. A perpandicular cross section would simply be $P(y|x)$. We see that we can compute $P(x,y)$ in two equivalent ways: scaling $P(x|y)$ by $P(y)$ or by scaling $P(y|x)$ by $P(x)$. Thus we have that 
@@ -387,8 +389,13 @@ Now, since for complex vector spaces $\braket{a|b} = \braket{b|a}*$, we have tha
 \begin{align}
 \ln\mathcal{L} &= \frac{1}{2}\sum_{k}\left[2\braket{h_k|d} + \braket{h_k|h_k}\right] \\
 &= \frac{1}{2} \sum_{k}\Re\left[\braket{2\frac{D_r}{D}F_k(\vec{\theta})\sum_{(l,m)}h_{k,(l,m)}(\lambda)Y_{(l,m)}(\vec{\theta})|d}\right] \\
-&+ \left[\frac{D_r}{D}\right]^2F_k^2(\vec{\theta})\sum_{(l,m),(l',m')}h_{(l,m)}(\vec{\lambda})h_{(l',m')}(\vec{\lambda})Y_{(l,m)}(\vec{\theta})Y_{(l',m')}(\vec{\theta})
+&+ \left[\frac{D_r}{D}\right]^2F_k^2(\vec{\theta})\sum_{(l,m),(l',m')}h^*_{(l,m)}(\vec{\lambda})h_{(l',m')}(\vec{\lambda})Y^*_{(l,m)}(\vec{\theta})Y_{(l',m')}(\vec{\theta})
 \end{align}  
+
+Now, for any complex number $z = a + ib$, we have that $z*z + \Re(z^2) = 2z*z$, so $z*z = \frac{1}{2}(z*z + \Re z^2)$. Then the double sum over $l,m$ pairs becomes
+
+
+
 
 The defining feature of this form of the likelihood is the separation between intrinsic and extrinsic parameters. The intrinsic parameters of the binary exist only within the $h_{k,(l,m)}$, whereas the parameters that depend on the observer are contained entirely within the antenna factor and spherical harmonics. Work by \textbf{CITE CHRIS AND RICHARD} has shown that this can be exploited to accelerate computation of the likelihood by precomputing the orbital dynamics of the binary and marginalizing out all of the extrinsic parameters with a Monte Carlo integration. 
 
@@ -396,33 +403,48 @@ The defining feature of this form of the likelihood is the separation between in
 The main weight of the computational work described above falls under an expensive Monte Carlo integration of the evidence as part of the Bayesian posterior. Zooming in it quickly becomes apparent that the main challenge to be overcome is efficient evaluation of the function to be integrated, in this case the factored likelihood. Prior to this work, the factored likelihood is was computed with a series of looping structures that individually compiled all the terms of the equation in an independent and serial manner. The process took substantial advantage of many high level operations available within Python to match up the correct terms across various harmonic mode time series, spherical harmonics, and antenna patterns. Thanks to clever optimization and gratuitous use of fast numerical Python libraries such as NumPy, the code was able to compute approximately $10^3$ likelihood evaluations on the order of seconds, the limiting factor being the serial nature of loops and the inherent lethargy of high level languages such as Python. Although NumPy commonly passes target data to compiled routines written in faster languages such as C, some portions of the computation (in particular the marginalization over time) benefit little from this capability and form a bottleneck for efficient evaluation of the likelihood. Furthermore the original implementation heavily relied upon older structures within the existing LIGO Algorithms Library (LAL), a set of C routines bound to Python through Swig, to perform many intermediate calculations, such as computing spherical harmonics. The goal of the first phase of this work was thorough vectorization of the process used to build the terms of the likelihood utilizing the BLAS subroutines available through NumPy as often as possible, as well as reducing dependency on LAL. To that end, the components of the factored likelihod were reworked. 
 
 \subsection{Complex Antenna Factor}
-The complex antenna factor is a complex number that modulates the gravitational wave signal as a function of incoming direction. This is necessary due to the non isotropic sensitivity of the LIGO interferometers themselves. $F_{+}$ and $F_{\times}$. 
+Gravitational wave interferometers by nature possess nonisotropic sensitivity patterns that are a function of the specific geometry and orientation of the detector. As a result any incoming signal is modulated not only by directional effects \textbf{RA, DEC} relative to the celestial coordinate grid, but also temporal effects that are dependent on the orientation of the earth at the signal arrival time. Following closely the treatment from \textbf{CITATION} we note that as described in section \textbf{SECTION}, there are six degrees of freedom carried by gravitational waves. Four of these may be eliminated by a change of basis leaving us with only two spatial tensor polarizations $\epsilon^k_{ij}$ which can be expressed as 
 
 \begin{align}
-F_{+} &= [R_{0,0}X_0 + R_{0,1}X_1 + R_{0,2}X_2]X_0 - [R_{0,0}Y_0 + R_{0,1}Y_1 + R_{0,2}Y_2]Y_0 \\
-&+ [R_{1,0}X_0 + R_{1,1}X_1 + R_{1,2}X_2]X_1 - [R_{1,0}Y_0 + R_{1,1}Y_1 + R_{1,2}Y_2]Y_1 \\
-&+ [R_{2,0}X_0 + R_{2,1}X_1 + R_{2,2}X_2]X_2 - [R_{2,0}Y_0 + R_{2,1}Y_1 + R_{2,2}Y_2]Y_2
+\epsilon^+_{ij} = 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+, \ \ e^{\times}_{ij} =
+\begin{bmatrix}
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
 \end{align}
 
-Collecting all the positive terms of this expression gives
-\begin{align}
-F_{+} &= R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\
-&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 \\ 
-&+ R_{0,0}X_0X_0 + R_{0,1}X_0X_1 + R_{0,2}X_0X_2 
-\end{align}
-At which point we see that the same result is computable as an outer product of the vector $\vec{X}$ using
-
-\begin{align}
-F_{+} &= \vec{X}\mathbf{R}\vec{X} - \vec{Y}\mathbf{R}\vec{Y}
-\end{align}
-
-And the complex part of the gravitational wave is thus
+These matrices are geometrically consistent with the orthogonal warping of ring like structures of test particles that are commonly used to visualize the effect of a passing gravitational wave: $\epsilon^+_{i,j}$ tends to grow vectors in the direction of the unit basis vectors whereas $\epsilon^{\times}_{ij}$ tends to shear them at an angle $\frac{\pi}{4}$ offset from the same basis. Moreover, there is an additional effect from the polarization angle $\psi$ of the incoming wave relative to the detector basis. Manifestation of a gravitational wave as measurable, real valued detector strain $h(t)$ is given by a the contraction of an object known as the detector tensor with these polarization tensors. 
 
 \begin{align}
-F_{\times} &= \vec{X}\mathbf{R}\vec{Y} + \vec{Y}\mathbf{R}\vec{X}
+\mathbf{R^{ij}} = \frac{1}{2}(v^i v^j - u^i u^j)
 \end{align}
 
-One a sample-to-sample basis, the numbers that vary are the components of the vectors $\vec{X}$ and $\vec{Y}$. Thus we need a function that takes as input a \textit{list} vectors (or \textit{vector}) of vectors and produces a vector with the right components as output. To that end we define the tensor $X^{i}_{j}$ where
+With the various polarization tensors to form the linear combination 
+
+\begin{align}
+h(t) = h_{+}(t)R^{ij}_e^+_{ij} + h_{\times}(t)R^{ij}e^{\times}_{ij}
+\end{align}
+
+The products $R^{ij}_e^+_{ij}$ and $R^{ij}e^{\times}_{ij}$ are known as the \textit{antenna factors}, $F_{+}$ and $F_{\times}$. As with the gravitational wave strain itself, we represent these as a single complex number $F_{+} - i F_{\times}$, in keeping with the formalism of section \textbf{SECTION}. It can be shown that in the wave basis, the scalar in question can be expressed as  
+
+\begin{align}
+F_+ - i F_{\times} &= \vec{X}^T\mathbf{R}\vec{X} - \vec{Y}^T\mathbf{R}\vec{Y} - i(\vec{X}^T\mathbf{R}\vec{Y} + \vec{Y}^T\mathbf{R}\vec{X})
+\end{align} 
+
+Where $\vec{X}$ and $\vec{Y}$ are the wave-frame axes. These can be redefined in terms of the working parameters as 
+
+\begin{align}
+\text{PUT DEFINITIONS HERE}
+\end{align}
+ 
+Our objective is to produce this quantity for a group of samples, all at once, as a coherent vectorized operation. One a sample-to-sample basis, the numbers that vary are the components of the vectors $\vec{X}$ and $\vec{Y}$. Thus we need a function that takes as input a \textit{list} vectors (or \textit{vector}) of vectors and produces a vector with the right components as output. To that end we define the tensor $X^{i}_{j}$ where
 
 \begin{align}
 X^i &= 
@@ -594,8 +616,6 @@ The spin-weighted spherical harmonics are precomputed at startup. There is no an
 Instead, it takes as argument an ordered list of $m$ values and executes the following set of steps to return a row-major ordered block of results whose rows correspond to values of $m$: Launch a one dimensional grid of one dimensional blocks, with one thread per sample. Compute the answer for this value of $m$ and place the result in global memory. Increment the local thread index by the number of samples and repeat. As long as it loops through the $m$ values in order, the results will be placed correctly, as per figure \ref{fig:spharms}. As the extrinsic parameter values used in computation are accessed relatively few times, this function does not use shared memory. Regardless as a standalone function it is able to compute several billion results per second, so little further optimization is necessary.
 
 
-\clearpage
-
 
 \subsection{Complex Antenna Factor}
 The antenna factor requires somewhat less fancy footwork then the spherical harmonics, as there is only one per sample and not an arbirary multiple depending on the number of selected modes (which are not necessarily all the values between $-l$ and $l$. The position vectors corresponding to the extrinsic parameters are contracted with the detector response tensor in a thread-wise fashion: one thread for each sample. We avoid using BLAS based routines to perform the contraction due to the small size of the matrices involved, startup routines for BLAS might take longer then a simple loop over nine elements of the detector tensor. We again use a one dimensional grid of one dimensional blocks, however since the position vectors contain commonly accessed elements, we choose to store these independently in device shared memory as well as the detector tensor itself in even higher speed device constant memory. This makes the antenna factor computation one of the most efficient steps of the process.
@@ -611,7 +631,6 @@ Due to the variation in extrinsic parameters over the samples, it is necessary f
 \caption{Expansion of time series. One thread per relevant item in resulting memory block. Zeros are padded out to the nearest multiple of $T_{max}$.
 \end{wrapfig}
 
-\clearpage
 
 The result of this expansion of the time series into GPU memory is the desired vertical stack of time series copies. 
 
@@ -643,12 +662,48 @@ Queued memory are serialized by the CUDA compiler. This means that memory reads 
 The time series are summed downwards within memory by single threads. One row of threads is launched per sample, this leaves $N_m$ values for each thread to collect in a summation that resides in the bottom row. The memory locations accessed and written to by the individual threads in the grid are unique to that thread, avoiding races and queued memory accesses. The result are rows that are the same as those that would have been formed taking the product $\mathbf{Q}(F\vec{Y})$, this is the first term of the factored likelihood. It remains only to build the second term and subtract it from the rows of this matrix to complete the computation.  
 
 \subsection{Marginalization Over Time}
+Having integrated over the extrinsic parameters numerically, it remains to marginalize over the entire time series to produce a single scalar representing the likelihood associated with a sample. While a simplistic operation in theory special attention was taken to optimize the summation process. This is due to the "width" of the data to be processed. The time series themselves can be thousands of entries long depending on the signal sample rate. Accelerating the preparation of the time series, as demonstrated in the previous steps, can be performed with brute force by flooding the calculation with threads, parallel reduction on a GPU requires finesse. In fact, it was found that this particular step was the main bottleneck in the serial code, thus it was expected that here the greatest returns would be achieved. The objective is to keep as many threads busy as possible to maintain throughput, however as we will demonstrate, the best that can be achieved without excessively complicated schemes is to start with $\frac{N_t}{2}$ threads and recursively cut the working group in half, a total of $\log_2(N_t)$ times, as per figure \ref{fig:recursive}. 
+
 
 \begin{wrapfigure}{l}{0.6\textwidth}
+\label{fig:recursive}
+\caption{Sequential addressing for parallel reduction.}
 \begin{center}
-\includegraphics[scale=0.7]{onedmarg.eps}
+\includegraphics[trim={0, 13cm, 0, 0}, clip, scale=0.5]{onedmarg.eps}
 \end{center}
 \end{wrapfigure}
+
+\begin{wrapfigure}{h}{0.6\textwidth}
+\label{fig:folding}
+\caption{"Folding" of the time series block for time marginalization}
+\begin{center}
+\includegraphics[trim={0, 13cm, 0, 0}, clip, scale=0.5]{marg_fold.eps}
+\end{center}
+\end{wrapfig}
+
+
+\section{Results and Prospects for Low Latency Electromagnetic Followup}
+\begin{figure}[H!]
+\hspace{-5.0cm}
+\includegraphics[scale=0.57]{speedup.eps}
+\end{figure}
+
+The dawn of gravitational wave astronomy in the 2015-2016 era has touched off a revolution in our ability to observe and classify astronomical phenomena. As with any entirely novel method of gleaning information from distant sources, development of methods to process and decipher such data has been explosive. Pure gravitational wave astrophysics has exciting prospects for the future, but the possibility of advancing other classical forms of astrophysics through their interplay with these newer methods is equally compelling. Significant research \textbf{CITATION} in th epast several years has been designed specifically to connect electromagnetic astronomy to gravitational wave observations, in particular the study of low-latency electromagnetic follow-up to gravitatioanl wave triggers. A central point of focus in these studies is the opportunity to give electromagnetic observers early warning on possible short duration transient events such as gamma ray bursts or longer duration klonovae. Such early warning could provide valuable insights as to the central engine of such gamma ray bursts and confirm recent models of these processes. However, electromagnetic observational resources are limited and expensive to operate and such it is imperative that any communication to such resources in the context of EM followup of GW triggers must be rapid and accurate to avoid wasting time and money. To that end it is desireable to develop existing parameter estimation codes to such a point that they can produces fast and correct results to reliably indicate potential sources of interest while minimizing false positives. The main goal of this work is to push this envelope and reduce the end-to-end runtime of parallel PE codes (specifically RapidPE) for the express purpose of low latency electromagnetic follow-up.
+
+\subsection{Gamma Ray Bursts}
+Gamma ray bursts (GRBs) are short duration transient events thought to occur during or shortly after the merger of compact binary systems, specifically those which include a single black hole and one neutron star. The presence of strong radiative emission from the poles of black holes has been confirmed by \textbf{CITATION}, and while not yet directly observed, the interaction between such polar jets of radiation and the resulting post-merger NS remnant is a primary candidate for the generation of GRBs. The process is depicted in figure \textbf{FIGURE} in which an infalling NS is torn apart by the BH counterpart, leaving a remnant disk of energetic matter in orbit around the black hole. The radiation eminated from the poles of the BH impacts this disk and generates gamma rays, this is known as an internal shock. As the resulting cloud of matter ploughs into the surrounding interstellar medium, it slows, leaving a lower density region in its wake. Subsequent waves of matter may propagate through this region at a higher velocity then the initial blast wave, catching up and ramming into the back of the initial wave, producing further shocks.
+It is not yet explicitly confirmed that this is the exact process by which GRBs are generated. It is generally accepted that to confirm this hypothesis we would need to observe direct coincidence between a GW trigger localized to some region of the sky and a GRB from the same direction. These phenomena have been demonstrated in numerical simulations by \textbf{CITATION} and are highly dependent on initial system parameters. In particular the currently unknown commplete NS equation of state is known to play a pivotal role in braketing the mass and mass ratio ranges associated with GRB progenitors \textbf{CITATION}. We now attempt to demonstrate the efficacy of the GPU based version of RapidPE for estimating these parammeters quickly and accurately. We use rate predictions from \textbf{CITATION} to restrict the mass range to be studied to fall between \textbf{SOME RANGE}. These bounds corespond to a chirp mass range of \textbf{WHAT RANGE}. From this we can determine the expected time that the signal will spend in the Advanced LIGO band. In figure \textbf{FIGURE}, we have visualized this range in \textbf{SOME PLANE}. Using the results of our code we find that anadditional \textbf{SOME PERCENTAGE} of expected NSBH sytems expected to be picked up by Advanced LIGO are now candidates for joint GW-EM astronomy.
+
+\begin{figure}[H!]
+\hspace{-0.5cm}
+\includegraphics[scale=0.35]{gamray.png}
+\end{figure}
+
+\subsection{Kilonovae}
+Compact binary mergers of neutron stars are thought to produce transient electromagnetic counterparts known as \textit{Kilonovae}. These smaller class of novae are dimmer and lower energy then regular novae or supernovae, and are hypothesized to occur due to the radiative emission of remnant matter displaced by the merger dynamics. It has been shown that a substantial fraction of elements heavier then Iron-56 are formed through r-process nucleosynthesis in the hearts of large stars, during which nuclei are subjected to high neutron flux as well as high electron density filling quantum states up to the Fermi energy. When this occurs $\beta^-$ decay of neutrons into protons is blocked \textit{CITATION} resulting in accumulation of large amounts of neutrons within the nuclei themselves. These nuclei later decay into heavy elements. These conditions are present during the merger of neutron stars or the tidal disruption of a neutron star by a black hole. Models of kilonovae have been successful in reproducing faint EM transients using r-process emission as a primary mechanism for radiation. Coincident measurements of such transients with localized gravitational waves is expected to be a smoking gun for confirming this model of kilonova genesis, thus it is important to assess the capability of modern parameter estimation to process signals from candidate systems and produce meaningful information useful for kilonova followup. 
+Since merger ejecta from NSBH mergers is not subject to relativistic beaming, kilonovae emission is expected to be relatively isotropic. Assuming a random and uniform distribution of black hole spin directions there is thus an increased probability of detecting kilonovae of \textbf{SOLID ANGLE OVER 4 PI} relative to axially emissive GRBs. This translates to a better chance of finding a kilonova as a merger signature. Moreover, direct observation of kilonovae combined with numerical simulations can provide degeneracy-breaking information about the original progenitor through careful measurements of redshift compared to simulated spectra.   
+The timescales characteristic of kilonova signatures are derived from numerical simulations, and most suggest a peak in the emission intensity roughly a day after merger. That said, the same simulations predict a steep rise in luminosity in the period just before the peak. For this reason crucial information about the astrophysics of kilonovae may be rapidly lost, and it is important to collect it as rapidly as possible. Figure \textbf{SOME FIGURE} depicts the timescales associated with kilonovae from \textbf{CITATION} as well as current PE methods prospects of convergence prior to certain features of the kilonova light curve.
+
 
 %---------------------------------------------------------------------------------------
 
