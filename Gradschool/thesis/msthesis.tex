@@ -682,6 +682,26 @@ Having integrated over the extrinsic parameters numerically, it remains to margi
 \end{wrapfig}
 
 
+\subsection{Memory Considerations}
+Here we provide an overview of the memory resources required by the contributing structures involved in the likelihood calculation. This is a bookkeeping step necessary to select the correct sample array sizes given available hardware and tune the implementation to achieve optimal performance. 
+The samples themselves are double precision arrays of length $N_s$. For $P$ params this equates to $8PN_s$ bytes of memory. The first computation in the routine is the generation of spherical harmonics, given a maximum value of $l$. Since there are $2l+1$ possible values of $m$ for each $l$, there are 
+
+\begin{align}
+\sum_{l=0}^{L_{max}} (2l + 1) 
+\end{align}  
+
+Total values of $m$ under a certain $L_{max}$. The partial sums are $S_L = (L_{max} + 1)^2$, so there are up to $16N_s(L_{max}+1)^2$ bytes of memory associated the spherical harmonics for a given value of $L_{max}$, requiring an extra factor of two to store complex numbers in double precision. Finally, we access to the complex conjugate of the spherical harmonics, this adds another factor of two bringing the total contribution to $32N_s(L_{max}+1)^2$ bytes.  
+The antenna factor is also a complex number, but there is only a single value for each sample, adding only $16N_s$ bytes to the total memory usage, with an additional $16N_s$ for the conjugate. This is amounts to an additional $32N_s$ bytes. 
+By far the greatest memory concern is the large time series block inside which the main calculation occurs. This block requires a row for each sample, multiplied by the number of modes for a total of $N_m N_s$ rows. Each of these rows holds $N_t$ elements that could, in the worst case, need to be padded by up to $T_{max} - 1$ zeros to enable proper time marginalization. Each element of this block is a double precision complex number. This equates to $16N_m N_s (N_t + T_{max} - 1)$ bytes of memory. An unfortunate shortcoming of PyCuda is that some simple operations can not be performed in place - one such operation is taking the real part of an array. This is due to the recasting of data types on the GPU itself. This means that for a brief portion of the calculation, an additional $50\%$ memory is needed raising the requirement to $24N_m N_s (N_t + T_{max} - 1)$ at peak for the main block.
+The $U$ and $V$ crossterms are complex numbers that require $16N_s$ bytes each, for a total of $32N_s$. The second term of the likelihood, which is a combination of these, is a real number of the same length, adding $8N_s$ bytes to the total.
+The sum of these contributions is the total number of bytes $B$ and is given by 
+
+\begin{align}
+N_s(8P + 32(L_{max} + 1)^2 +  24N_m(N_t + T_{max} - 1) + 72)
+\end{align}
+
+Below we have tabulated $B$ for some values of $N_s$ to be used as reference when running the code.
+
 \section{Results and Prospects for Low Latency Electromagnetic Followup}
 \begin{figure}[H!]
 \hspace{-5.0cm}
@@ -703,6 +723,11 @@ It is not yet explicitly confirmed that this is the exact process by which GRBs 
 Compact binary mergers of neutron stars are thought to produce transient electromagnetic counterparts known as \textit{Kilonovae}. These smaller class of novae are dimmer and lower energy then regular novae or supernovae, and are hypothesized to occur due to the radiative emission of remnant matter displaced by the merger dynamics. It has been shown that a substantial fraction of elements heavier then Iron-56 are formed through r-process nucleosynthesis in the hearts of large stars, during which nuclei are subjected to high neutron flux as well as high electron density filling quantum states up to the Fermi energy. When this occurs $\beta^-$ decay of neutrons into protons is blocked \textit{CITATION} resulting in accumulation of large amounts of neutrons within the nuclei themselves. These nuclei later decay into heavy elements. These conditions are present during the merger of neutron stars or the tidal disruption of a neutron star by a black hole. Models of kilonovae have been successful in reproducing faint EM transients using r-process emission as a primary mechanism for radiation. Coincident measurements of such transients with localized gravitational waves is expected to be a smoking gun for confirming this model of kilonova genesis, thus it is important to assess the capability of modern parameter estimation to process signals from candidate systems and produce meaningful information useful for kilonova followup. 
 Since merger ejecta from NSBH mergers is not subject to relativistic beaming, kilonovae emission is expected to be relatively isotropic. Assuming a random and uniform distribution of black hole spin directions there is thus an increased probability of detecting kilonovae of \textbf{SOLID ANGLE OVER 4 PI} relative to axially emissive GRBs. This translates to a better chance of finding a kilonova as a merger signature. Moreover, direct observation of kilonovae combined with numerical simulations can provide degeneracy-breaking information about the original progenitor through careful measurements of redshift compared to simulated spectra.   
 The timescales characteristic of kilonova signatures are derived from numerical simulations, and most suggest a peak in the emission intensity roughly a day after merger. That said, the same simulations predict a steep rise in luminosity in the period just before the peak. For this reason crucial information about the astrophysics of kilonovae may be rapidly lost, and it is important to collect it as rapidly as possible. Figure \textbf{SOME FIGURE} depicts the timescales associated with kilonovae from \textbf{CITATION} as well as current PE methods prospects of convergence prior to certain features of the kilonova light curve.
+
+\begin{figure}[H!]
+\hspace{-6cm}
+\includegraphics[scale=0.5]{EMFollow.eps}
+\end{figure}
 
 
 %---------------------------------------------------------------------------------------
