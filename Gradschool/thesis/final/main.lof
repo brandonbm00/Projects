@@ -1,0 +1,15 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1-1}{\ignorespaces A visual depiction of the Reimann Curvature tensor. Parallel transporting a vector in the $\sigma $ direction both ways around the loop shown yields two different vectors. The orange vector $\mathaccentV {vec}17E{d}$ points between the tips. The magnitude of the components of this vector are $R_{\rho \sigma \mu \nu }$.}}{14}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2-1}{\ignorespaces A joint probability distribution $P(x,y)$. The contours parallel with the $x$ direction represent different $P(y|x)$.}}{24}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3-1}{\ignorespaces Insertion of the antenna factor-spherical harmonic pairs. }}{45}
+\contentsline {figure}{\numberline {3-2}{\ignorespaces Downwards summation of the harmonic modes to form term one of the factored likelihood for a group of samples.}}{46}
+\contentsline {figure}{\numberline {3-3}{\ignorespaces Sequential addressing for parallel reduction.}}{47}
+\contentsline {figure}{\numberline {3-4}{\ignorespaces "Folding" of the time series block for time marginalization}}{47}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B-1}{\ignorespaces Armadillo slaying lawyer.}}{59}
+\contentsline {figure}{\numberline {B-2}{\ignorespaces Armadillo eradicating national debt.}}{60}
+\addvspace {10\p@ }

@@ -1,0 +1,455 @@
+@preamble{ "\newcommand{\noopsort}[1]{} "
+	# "\newcommand{\printfirst}[2]{#1} "
+	# "\newcommand{\singleletter}[1]{#1} "
+	# "\newcommand{\switchargs}[2]{#2#1} " }
+
+@ARTICLE{article-minimal,
+   author = {L[eslie] A. Aamport},
+   title = {The Gnats and Gnus Document Preparation System},
+   journal = {\mbox{G-Animal's} Journal},
+   year = 1986,
+}
+
+@ARTICLE{article-full,
+   author = {L[eslie] A. Aamport},
+   title = {The Gnats and Gnus Document Preparation System},
+   journal = {\mbox{G-Animal's} Journal},
+   year = 1986,
+   volume = 41,
+   number = 7,
+   pages = "73+",
+   month = jul,
+   note = "This is a full ARTICLE entry",
+}
+
+The KEY field is here to override the KEY field in the journal being
+cross referenced (so is the NOTE field, in addition to its imparting
+information).
+
+@ARTICLE{article-crossref,
+   crossref = {WHOLE-JOURNAL},
+   key = "",
+   author = {L[eslie] A. Aamport},
+   title = {The Gnats and Gnus Document Preparation System},
+   pages = "73+",
+   note = "This is a cross-referencing ARTICLE entry",
+}
+
+@ARTICLE{whole-journal,
+   key = "GAJ",
+   journal = {\mbox{G-Animal's} Journal},
+   year = 1986,
+   volume = 41,
+   number = 7,
+   month = jul,
+   note = {The entire issue is devoted to gnats and gnus
+		(this entry is a cross-referenced ARTICLE (journal))},
+}
+
+@INBOOK{inbook-minimal,
+   author = "Donald E. Knuth",
+   title = "Fundamental Algorithms",
+   publisher = "Addison-Wesley",
+   year = "{\noopsort{1973b}}1973",
+   chapter = "1.2",
+}
+
+@INBOOK{inbook-full,
+   author = "Donald E. Knuth",
+   title = "Fundamental Algorithms",
+   volume = 1,
+   series = "The Art of Computer Programming",
+   publisher = "Addison-Wesley",
+   address = "Reading, Massachusetts",
+   edition = "Second",
+   month = "10~" # jan,
+   year = "{\noopsort{1973b}}1973",
+   type = "Section",
+   chapter = "1.2",
+   pages = "10--119",
+   note = "This is a full INBOOK entry",
+}
+
+@INBOOK{inbook-crossref,
+   crossref = "whole-set",
+   title = "Fundamental Algorithms",
+   volume = 1,
+   series = "The Art of Computer Programming",
+   edition = "Second",
+   year = "{\noopsort{1973b}}1973",
+   type = "Section",
+   chapter = "1.2",
+   note = "This is a cross-referencing INBOOK entry",
+}
+
+@BOOK{book-minimal,
+   author = "Donald E. Knuth",
+   title = "Seminumerical Algorithms",
+   publisher = "Addison-Wesley",
+   year = "{\noopsort{1973c}}1981",
+}
+
+@BOOK{book-full,
+   author = "Donald E. Knuth",
+   title = "Seminumerical Algorithms",
+   volume = 2,
+   series = "The Art of Computer Programming",
+   publisher = "Addison-Wesley",
+   address = "Reading, Massachusetts",
+   edition = "Second",
+   month = "10~" # jan,
+   year = "{\noopsort{1973c}}1981",
+   note = "This is a full BOOK entry",
+}
+
+@BOOK{book-crossref,
+   crossref = "whole-set",
+   title = "Seminumerical Algorithms",
+   volume = 2,
+   series = "The Art of Computer Programming",
+   edition = "Second",
+   year = "{\noopsort{1973c}}1981",
+   note = "This is a cross-referencing BOOK entry",
+}
+
+@BOOK{whole-set,
+   author = "Donald E. Knuth",
+   publisher = "Addison-Wesley",
+   title = "The Art of Computer Programming",
+   series = "Four volumes",
+   year = "{\noopsort{1973a}}{\switchargs{--90}{1968}}",
+   note = "Seven volumes planned (this is a cross-referenced set of BOOKs)",
+}
+
+@BOOKLET{booklet-minimal,
+   key = "Kn{\printfirst{v}{1987}}",
+   title = "The Programming of Computer Art",
+}
+
+@BOOKLET{booklet-full,
+   author = "Jill C. Knvth",
+   title = "The Programming of Computer Art",
+   howpublished = "Vernier Art Center",
+   address = "Stanford, California",
+   month = feb,
+   year = 1988,
+   note = "This is a full BOOKLET entry",
+}
+
+@INCOLLECTION{incollection-minimal,
+   author = "Daniel D. Lincoll",
+   title = "Semigroups of Recurrences",
+   booktitle = "High Speed Computer and Algorithm Organization",
+   publisher = "Academic Press",
+   year = 1977,
+}
+
+@INCOLLECTION{incollection-full,
+   author = "Daniel D. Lincoll",
+   title = "Semigroups of Recurrences",
+   editor = "David J. Lipcoll and D. H. Lawrie and A. H. Sameh",
+   booktitle = "High Speed Computer and Algorithm Organization",
+   number = 23,
+   series = "Fast Computers",
+   chapter = 3,
+   type = "Part",
+   pages = "179--183",
+   publisher = "Academic Press",
+   address = "New York",
+   edition = "Third",
+   month = sep,
+   year = 1977,
+   note = "This is a full INCOLLECTION entry",
+}
+
+@INCOLLECTION{incollection-crossref,
+   crossref = "whole-collection",
+   author = "Daniel D. Lincoll",
+   title = "Semigroups of Recurrences",
+   pages = "179--183",
+   note = "This is a cross-referencing INCOLLECTION entry",
+}
+
+@BOOK{whole-collection,
+   editor = "David J. Lipcoll and D. H. Lawrie and A. H. Sameh",
+   title = "High Speed Computer and Algorithm Organization",
+   booktitle = "High Speed Computer and Algorithm Organization",
+   number = 23,
+   series = "Fast Computers",
+   publisher = "Academic Press",
+   address = "New York",
+   edition = "Third",
+   month = sep,
+   year = 1977,
+   note = "This is a cross-referenced BOOK (collection) entry",
+}
+
+@MANUAL{manual-minimal,
+   key = "Manmaker",
+   title = "The Definitive Computer Manual",
+}
+
+@MANUAL{manual-full,
+   author = "Larry Manmaker",
+   title = "The Definitive Computer Manual",
+   organization = "Chips-R-Us",
+   address = "Silicon Valley",
+   edition = "Silver",
+   month = apr # "-" # may,
+   year = 1986,
+   note = "This is a full MANUAL entry",
+}
+
+@MASTERSTHESIS{mastersthesis-minimal,
+   author = "{\'{E}}douard Masterly",
+   title = "Mastering Thesis Writing",
+   school = "Stanford University",
+   year = 1988,
+}
+
+@MASTERSTHESIS{mastersthesis-full,
+   author = "{\'{E}}douard Masterly",
+   title = "Mastering Thesis Writing",
+   school = "Stanford University",
+   type = "Master's project",
+   address = "English Department",
+   month = jun # "-" # aug,
+   year = 1988,
+   note = "This is a full MASTERSTHESIS entry",
+}
+
+@MISC{misc-minimal,
+   key = "Missilany",
+   note = "This is a minimal MISC entry",
+}
+
+@MISC{misc-full,
+   author = "Joe-Bob Missilany",
+   title = "Handing out random pamphlets in airports",
+   howpublished = "Handed out at O'Hare",
+   month = oct,
+   year = 1984,
+   note = "This is a full MISC entry",
+}
+
+@STRING{STOC-key = "OX{\singleletter{stoc}}"}
+
+@STRING{ACM = "The OX Association for Computing Machinery"}
+
+@STRING{STOC = " Symposium on the Theory of Computing"}
+
+@INPROCEEDINGS{inproceedings-minimal,
+   author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
+   title = "On Notions of Information Transfer in {VLSI} Circuits",
+   booktitle = "Proc. Fifteenth Annual ACM" # STOC,
+   year = 1983,
+}
+
+@INPROCEEDINGS{inproceedings-full,
+   author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
+   title = "On Notions of Information Transfer in {VLSI} Circuits",
+   editor = "Wizard V. Oz and Mihalis Yannakakis",
+   booktitle = "Proc. Fifteenth Annual ACM" # STOC,
+   number = 17,
+   series = "All ACM Conferences",
+   pages = "133--139",
+   month = mar,
+   year = 1983,
+   address = "Boston",
+   organization = ACM,
+   publisher = "Academic Press",
+   note = "This is a full INPROCEDINGS entry",
+}
+
+@INPROCEEDINGS{inproceedings-crossref,
+   crossref = "whole-proceedings",
+   author = "Alfred V. Oaho and Jeffrey D. Ullman and Mihalis Yannakakis",
+   title = "On Notions of Information Transfer in {VLSI} Circuits",
+   organization = "",
+   pages = "133--139",
+   note = "This is a cross-referencing INPROCEEDINGS entry",
+}
+
+@PROCEEDINGS{proceedings-minimal,
+   key = STOC-key,
+   title = "Proc. Fifteenth Annual" # STOC,
+   year = 1983,
+}
+
+@PROCEEDINGS{proceedings-full,
+   editor = "Wizard V. Oz and Mihalis Yannakakis",
+   title = "Proc. Fifteenth Annual" # STOC,
+   number = 17,
+   series = "All ACM Conferences",
+   month = mar,
+   year = 1983,
+   address = "Boston",
+   organization = ACM,
+   publisher = "Academic Press",
+   note = "This is a full PROCEEDINGS entry",
+}
+
+@PROCEEDINGS{whole-proceedings,
+   key = STOC-key,
+   organization = ACM,
+   title = "Proc. Fifteenth Annual" # STOC,
+   address = "Boston",
+   year = 1983,
+   booktitle = "Proc. Fifteenth Annual ACM" # STOC,
+   note = "This is a cross-referenced PROCEEDINGS",
+}
+
+@PHDTHESIS{phdthesis-minimal,
+   author = "F. Phidias Phony-Baloney",
+   title = "Fighting Fire with Fire: Festooning {F}rench Phrases",
+   school = "Fanstord University",
+   year = 1988,
+}
+
+@PHDTHESIS{phdthesis-full,
+   author = "F. Phidias Phony-Baloney",
+   title = "Fighting Fire with Fire: Festooning {F}rench Phrases",
+   school = "Fanstord University",
+   type = "{PhD} Dissertation",
+   address = "Department of French",
+   month = jun # "-" # aug,
+   year = 1988,
+   note = "This is a full PHDTHESIS entry",
+}
+
+@TECHREPORT{techreport-minimal,
+   author = "Tom Terrific",
+   title = "An {$O(n \log n / \! \log\log n)$} Sorting Algorithm",
+   institution = "Fanstord University",
+   year = 1988,
+}
+
+@TECHREPORT{techreport-full,
+   author = "Tom T{\'{e}}rrific",
+   title = "An {$O(n \log n / \! \log\log n)$} Sorting Algorithm",
+   institution = "Fanstord University",
+   type = "Wishful Research Result",
+   number = "7",
+   address = "Computer Science Department, Fanstord, California",
+   month = oct,
+   year = 1988,
+   note = "This is a full TECHREPORT entry",
+}
+
+@UNPUBLISHED{unpublished-minimal,
+   author = "Ulrich {\"{U}}nderwood and Ned {\~N}et and Paul {\={P}}ot",
+   title = "Lower Bounds for Wishful Research Results",
+   note = "Talk at Fanstord University (this is a minimal UNPUBLISHED entry)",
+}
+
+@UNPUBLISHED{unpublished-full,
+   author = "Ulrich {\"{U}}nderwood and Ned {\~N}et and Paul {\={P}}ot",
+   title = "Lower Bounds for Wishful Research Results",
+   month = nov # ", " # dec,
+   year = 1988,
+   note = "Talk at Fanstord University (this is a full UNPUBLISHED entry)",
+}
+
+@MISC{random-note-crossref,
+   key = {Volume-2},
+   note = "Volume~2 is listed under Knuth \cite{book-full}"
+}
+
+@ARTICLE{1409.7215,
+key = {lalinference}, 
+Author = {John Veitch and Vivien Raymond and Benjamin Farr and Will M. Farr and Philip Graff and Salvatore Vitale and Ben Aylott and Kent Blackburn and Nelson Christensen and Michael Coughlin and Walter Del Pozzo and Farhan Feroz and Jonathan Gair and Carl-Johan Haster and Vicky Kalogera and Tyson Littenberg and Ilya Mandel and Richard O'Shaughnessy and Matthew Pitkin and Carl Rodriguez and Christian Röver and Trevor Sidery and Rory Smith and Marc Van Der Sluys and Alberto Vecchio and Will Vousden and Leslie Wade},
+Title = {Robust parameter estimation for compact binaries with ground-based gravitational-wave observations using the LALInference software library},
+Year = {2014},
+Eprint = {arXiv:1409.7215},
+Howpublished = {Phys. Rev. D 91, 042003 (2015)},
+Doi = {10.1103/PhysRevD.91.042003},
+}
+
+@article{1502.04370,
+key = {rapidpe},
+Author = {C. Pankow and P. Brady and E. Ochsner and R. O'Shaughnessy},
+Title = {A novel scheme for rapid parallel parameter estimation of gravitational waves from compact binary coalescences},
+Year = {2015},
+Eprint = {arXiv:1502.04370},
+Doi = {10.1103/PhysRevD.92.023002},
+}
+
+@article{0903.0528,
+Author = {Atsushi Nishizawa and Atsushi Taruya and Kazuhiro Hayama and Seiji Kawamura and Masa-aki Sakagami},
+Title = {Probing non-tensorial polarizations of stochastic gravitational-wave backgrounds with ground-based laser interferometers},
+Year = {2009},
+Eprint = {arXiv:0903.0528},
+Howpublished = {Phys.Rev.D79:082002,2009},
+Doi = {10.1103/PhysRevD.79.082002},
+}
+
+@article{1411.3726,
+key = {kilonova},
+Author = {Daniel Kasen and Rodrigo Fernandez and Brian Metzger},
+Title = {Kilonova Light Curves from the Disk Wind Outflows of Compact Object Mergers},
+Year = {2014},
+Eprint = {arXiv:1411.3726},
+Doi = {10.1093/mnras/stv721},
+}
+
+@article{1306.3960,
+Author = {E. Berger and W. Fong and R. Chornock},
+Title = {An r-Process Kilonova Associated with the Short-Hard GRB 130603B},
+Year = {2013},
+Eprint = {arXiv:1306.3960},
+Doi = {10.1088/2041-8205/774/2/L23},
+}
+
+@article{PhysRevD.63.042003,
+  title = {Excess power statistic for detection of burst sources of gravitational radiation},
+  author = {Anderson, Warren G. and Brady, Patrick R. and Creighton, Jolien D. E. and Flanagan, \'Eanna \'E.},
+  journal = {Phys. Rev. D},
+  volume = {63},
+  issue = {4},
+  pages = {042003},
+  numpages = {20},
+  year = {2001},
+  month = {Jan},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevD.63.042003},
+  url = {http://link.aps.org/doi/10.1103/PhysRevD.63.042003}
+}
+
+@article{1506.06032,
+Author = {Brandon Miller and Richard O'Shaughnessy and Tyson B. Littenberg and Ben Farr},
+Title = {Rapid gravitational wave parameter estimation with a single spin: Systematic uncertainties in parameter estimation with the SpinTaylorF2 approximation},
+Year = {2015},
+Eprint = {arXiv:1506.06032},
+Howpublished = {Phys. Rev. D 92, 044056 (2015)},
+Doi = {10.1103/PhysRevD.92.044056},
+}
+
+@article{0805.1689,
+key = {mcmc},
+Author = {Marc van der Sluys and Vivien Raymond and Ilya Mandel and Christian Roever and Nelson Christensen and Vicky Kalogera and Renate Meyer and Alberto Vecchio},
+Title = {Parameter estimation of spinning binary inspirals using Markov-chain Monte Carlo},
+Year = {2008},
+Eprint = {arXiv:0805.1689},
+Howpublished = {Class.Quant.Grav.25:184011,2008},
+Doi = {10.1088/0264-9381/25/18/184011},
+}
+
+@article{1404.5623,
+key = {first2years},
+Author = {Leo P. Singer and Larry R. Price and Ben Farr and Alex L. Urban and Chris Pankow and Salvatore Vitale and John Veitch and Will M. Farr and Chad Hanna and Kipp Cannon and Tom Downes and Philip Graff and Carl-Johan Haster and Ilya Mandel and Trevor Sidery and Alberto Vecchio},
+Title = {The First Two Years of Electromagnetic Follow-Up with Advanced LIGO and Virgo},
+Year = {2014},
+Eprint = {arXiv:1404.5623},
+Howpublished = {2014 ApJ 795 105},
+Doi = {10.1088/0004-637X/795/2/105},
+}
+
+@article{astro-ph/0603045,
+key = {polarjet},
+Author = {Jonathan C. McKinney},
+Title = {General Relativistic Magnetohydrodynamic Simulations of Jet Formation and Large-Scale Propagation from Black Hole Accretion Systems},
+Year = {2006},
+Eprint = {arXiv:astro-ph/0603045},
+Howpublished = {Mon.Not.Roy.Astron.Soc.368:1561-1582,2006},
+Doi = {10.1111/j.1365-2966.2006.10256.x},
+}
