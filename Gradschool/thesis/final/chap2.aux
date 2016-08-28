@@ -1,26 +1,32 @@
 \relax 
-\citation{Volume-2}
-\@writefile{toc}{\contentsline {chapter}{\numberline {2}Bayesian Statistics}{23}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Implementation}{29}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {2.1}Bayesian Statistics}{23}}
-\newlabel{eq:bayes}{{2.1}{23}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2-1}{\ignorespaces A joint probability distribution $P(x,y)$. The contours parallel with the $x$ direction represent different $P(y|x)$.}}{24}}
-\newlabel{fig:sphere}{{2-1}{24}}
-\newlabel{eq:continuous}{{2.3}{24}}
-\newlabel{eq:lratio}{{2.6}{25}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Signal Processing}{25}}
-\citation{rapidpe}
-\citation{rapidpe}
-\citation{lalinference}
-\citation{mcmc}
-\newlabel{eq:parampos}{{2.15}{27}}
-\newlabel{eq:bayeslikely}{{2.17}{27}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Harmonic Mode Decomposition}{28}}
-\citation{rapidpe}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Implementation}{29}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Complex Antenna Factor}{30}}
+\citation{antennafacdefn}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Vectorized Detector Arrival Time}{32}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.3}Vectorized Single Detector Log Likelihood}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.4}GPU Implementation}{36}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.5}Hardware Limitations and Logical Programming}{36}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.6}PyCuda}{38}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.7}General Design Considerations}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.8}Spherical Harmonics}{40}}
+\newlabel{fig:spharms}{{2.1.8}{41}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.9}Complex Antenna Factor}{42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.10}Main Routine}{42}}
+\newlabel{fig:expandrho}{{2.1.10}{43}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2-1}{\ignorespaces Insertion of the antenna factor-spherical harmonic pairs. }}{44}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2-2}{\ignorespaces Downwards summation of the harmonic modes to form term one of the factored likelihood for a group of samples.}}{45}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.11}Marginalization Over Time}{45}}
+\newlabel{fig:recursive}{{2.1.11}{46}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2-3}{\ignorespaces Sequential addressing for parallel reduction.}}{46}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.12}Memory Considerations}{46}}
+\newlabel{fig:folding}{{2.1.11}{46}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2-4}{\ignorespaces "Folding" of the time series block for time marginalization}}{46}}
 \@setckpt{chap2}{
-\setcounter{page}{31}
-\setcounter{equation}{26}
+\setcounter{page}{49}
+\setcounter{equation}{27}
 \setcounter{enumi}{0}
 \setcounter{enumii}{0}
 \setcounter{enumiii}{0}
@@ -30,11 +36,11 @@
 \setcounter{part}{0}
 \setcounter{chapter}{2}
 \setcounter{section}{1}
-\setcounter{subsection}{2}
+\setcounter{subsection}{12}
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{1}
+\setcounter{figure}{4}
 \setcounter{table}{0}
 \setcounter{savepage}{3}
 \setcounter{parentequation}{0}

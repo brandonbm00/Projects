@@ -4,145 +4,347 @@
 %% You can process specific files by typing their names in at the 
 %% \files=
 %% prompt when you run the file main.tex through LaTeX.
-\chapter{Bayesian Statistics}
+\chapter{Implementation}
 
 
-\section{Bayesian Statistics}
-We select a Bayesian posterior probability as our main analysis technique as its ability to quantify and propagate uncertainties in parameter estimates is well documented \cite{Volume-2} as a tool of choice for gravitational wave signal processing. Bayes' Theorem follows from the symmetric definition of conditional probability depicted visually in figure \ref{fig:distrib}. Let the joint probability evaluated at any point $(x,y)$ in the plane be denoted $P(x,y)$. We may take a cross section through the joint probability distribution along any direction we choose, let us call such a cross section parallel to the $x$ axis the conditional probability of $x$ given $y$, and denote it $P(x|y)$. A perpandicular cross section would simply be $P(y|x)$. We see that we can compute $P(x,y)$ in two equivalent ways: scaling $P(x|y)$ by $P(y)$ or by scaling $P(y|x)$ by $P(x)$. Thus we have that 
 
+\section{Implementation}
+The main weight of the computational work described above falls under an expensive Monte Carlo integration of the evidence as part of the Bayesian posterior. Zooming in it quickly becomes apparent that the main challenge to be overcome is efficient evaluation of the function to be integrated, in this case the factored likelihood. Prior to this work, the factored likelihood is was computed with a series of looping structures that individually compiled all the terms of the equation in an independent and serial manner. The process took substantial advantage of many high level operations available within Python to match up the correct terms across various harmonic mode time series, spherical harmonics, and antenna patterns. Thanks to clever optimization and gratuitous use of fast numerical Python libraries such as NumPy, the code was able to compute approximately $10^3$ likelihood evaluations on the order of seconds, the limiting factor being the serial nature of loops and the inherent lethargy of high level languages such as Python. Although NumPy commonly passes target data to compiled routines written in faster languages such as C, some portions of the computation (in particular the marginalization over time) benefit little from this capability and form a bottleneck for efficient evaluation of the likelihood. Furthermore the original implementation heavily relied upon older structures within the existing LIGO Algorithms Library (LAL), a set of C routines bound to Python through Swig, to perform many intermediate calculations, such as computing spherical harmonics. The goal of the first phase of this work was thorough vectorization of the process used to build the terms of the likelihood utilizing the BLAS subroutines available through NumPy as often as possible, as well as reducing dependency on LAL. To that end, the components of the factored likelihod were reworked. 
 
-\begin{figure}[h!]
-\center
-\includegraphics[trim={1cm, 1cm, 1cm, 1cm}, clip]{biviariate_norm_done.eps}
-\caption{A joint probability distribution $P(x,y)$. The contours parallel with the $x$ direction represent different $P(y|x)$.}
-\label{fig:sphere}
-\end{figure}
-
-\begin{align} \label{eq:bayes}
-P(x|y)P(y) &= P(y|x)P(x) \\
-P(x|y) &= \frac{P(y|x)P(x)}{P(y)}
-\end{align}
-
-Which is Bayes' theorem. The denominator of the expression on the right hand side is often rewritten as a sum over all possible situations in which $y$ is an outcome. Reading $\neg x$ as "not x", we have
-
-\begin{align}\label{eq:continuous}
-P(y) &= P(y|x)P(x) + P(y|\neg x)P(\neg x) \\
-&= \sum_{k=1}^K P(y|x_k)P(x_k) 
-\end{align}
-
-
-\clearpage 
-This allows us to rewrite the posterior probability as
+\subsection{Complex Antenna Factor}
+Gravitational wave interferometers by nature possess nonisotropic sensitivity patterns that are a function of the specific geometry and orientation of the detector. As a result any incoming signal is modulated not only by directional effects \textbf{RA, DEC} relative to the celestial coordinate grid, but also temporal effects that are dependent on the orientation of the earth at the signal arrival time. Following closely the treatment from \textbf{CITATION} we note that as described in section \textbf{SECTION}, there are six degrees of freedom carried by gravitational waves. Four of these may be eliminated by a change of basis leaving us with only two spatial tensor polarizations $\epsilon^k_{ij}$ which can be expressed as 
 
 \begin{align}
-P(x|y) = \frac{P(y|x) P(x)}{\sum_{k=1}^K P(y|x_k)P(x_k)}
+\epsilon^+_{ij} = 
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & -1 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+, \ \ e^{\times}_{ij} =
+\begin{bmatrix}
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
 \end{align}
 
-Multiplying the right hand side of this equation by the quantity $\frac{1}{P(x)P(y|\neg x)}$ one has 
-
-\begin{align} \label{eq:lratio}
-P(x|y) &= \frac{\Lambda(x|y)}{\Lambda(x|y) + \frac{P(\neg x)}{P(x)}}
-\end{align}
-
-Where we have used the \textit{likelihood ratio} $\Lambda(x|y) \equiv \frac{P(y|x)}{P(y|\neg x)}$ to simplify the expression. The likelihood ratio has a simple interpretation, it is simply the ratio of the probability of event $y$ occuring in the case event $x$ occurs and the probability of event $y$ occuring given that event $x$ \textit{does not} occur. In fact, this form of Bayes theorem indicates that the posterior probability for $x$ given $y$ is directly proportional to the likelihood ratio. This is particularly important in the Bayesian treatment of gravitational waves where the central question for study is the probability of observing the data in question given that there may or may not be a signal present.  
-
-\subsection{Signal Processing}
-Noise in the LIGO detectors is modeled as \textit{Gaussian Noise}, which describes a length $N$ set of time series samples $\{x_j\}$ with the following probability of observation:
+These matrices are geometrically consistent with the orthogonal warping of ring like structures of test particles that are commonly used to visualize the effect of a passing gravitational wave: $\epsilon^+_{i,j}$ tends to grow vectors in the direction of the unit basis vectors whereas $\epsilon^{\times}_{ij}$ tends to shear them at an angle $\frac{\pi}{4}$ offset from the same basis. Moreover, there is an additional effect from the polarization angle $\psi$ of the incoming wave relative to the detector basis. Manifestation of a gravitational wave as measurable, real valued detector strain $h(t)$ is given by a the contraction of an object known as the detector tensor with these polarization tensors. 
 
 \begin{align}
-P(\{x_j\}) = \left[\frac{1}{\sqrt{2 \pi} \sigma}\right]^N e^{-\frac{1}{2 \sigma^2} \sum_{j = 0}^{N - 1}x_j^2}
+\mathbf{R^{ij}} = \frac{1}{2}(v^i v^j - u^i u^j)
 \end{align}
 
-If we allow the $\{x_j\}$ to be weighted by the noise sensitivity in frequency space (also known as the \textit{power spectral density}) $S(f) = \sum_{k=0}^K n^*(f_k)n(f_k) \equiv \braket{n(f)|n(f)}$ then we may write the probability density for any Gaussian noise process as 
+With the various polarization tensors to form the linear combination 
 
 \begin{align}
-P_x(\{x(t)\}) \propto e^{-\frac{1}{2}\braket{x(t)|x(t)}}
+h(t) = h_{+}(t)R^{ij}_e^+_{ij} + h_{\times}(t)R^{ij}e^{\times}_{ij}
 \end{align}
 
-For gravitational wave signal processing we are interested in evaluating the equivalent of the likelihood ratio  in equation \ref{eq:lratio} for the null and signal present hypotheses, $\mathcal{H}_0$ and $\mathcal{H}_1$ respectively. Following the treatment outlined in literature \cite{rapidpe} This is
+The products $R^{ij}_e^+_{ij}$ and $R^{ij}e^{\times}_{ij}$ are known as the \textit{antenna factors}, $F_{+}$ and $F_{\times}$. As with the gravitational wave strain itself, we represent these as a single complex number $F_{+} - i F_{\times}$, in keeping with the formalism of section \textbf{SECTION}. It can be shown that in the wave basis, the scalar in question can be expressed as  
 
 \begin{align}
-\Lambda(\mathcal{H}_1|d) &= \frac{P(d|\mathcal{H}_1)}{P(d|\mathcal{H}_0)}
-\end{align}
-
-In the above equation $\mathcal{H}_0$ is in direct correspondence with $\neg x$ and $\mathcal{H}_1$ is in direct correspondence with $x$. If there is no signal present in the data, then the data and noise are equal, meaning 
-
-\begin{align}
-d(t) &= n(t) \\
-P(d(t)|\mathcal{H}_0) &\propto e^{-\frac{1}{2}\braket{d(t)|d(t)}}
+F_+ - i F_{\times} &= \vec{X}^T\mathbf{R}\vec{X} - \vec{Y}^T\mathbf{R}\vec{Y} - i(\vec{X}^T\mathbf{R}\vec{Y} + \vec{Y}^T\mathbf{R}\vec{X})
 \end{align} 
 
-Whereas if there is a signal present in the data, then the noise is the \textit{residual} signal after the gravitational wave potion of the signal $h(t)$ is subtracted from the total signal $d(t)$: 
+Where $\vec{X}$ and $\vec{Y}$ are the wave-frame axes. These can be redefined \cite{antennafacdefn} in terms of the working parameters as 
 
 \begin{align}
-d(t) &= n(t) + h(t) \\
-p(d(t)|\mathcal{H}_1) &\propto e^{-\frac{1}{2}\braket{d(t) - h(t)|d(t) - h(t)}}
+\vec{X} &=
+\begin{bmatrix}
+-\cos(\psi)\sin(h) - \sin(\psi)\cos(h)\sin(\delta) \\
+-\cos(\psi)\cos(h) + \sin(\psi)\sin(h)\sin(\delta) \\
+\sin(\psi)\cos(\delta)
+\end{bmatrix}
+, \ \ \vec{Y} = 
+\begin{bmatrix}
+\sin(\psi)\sin(h) - \cos(\psi)\cos(h)\sin(\delta) \\
+\sin(\psi)\cos(h) + \cos(\psi)\sin(h)\sin(\delta) \\
+\cos(\psi)\cos(\delta)
+\end{bmatrix}
 \end{align}
-
-So the likelihood ratio for gravitational wave signal processing is exactly equal to 
+ 
+In the working Python implementation of RapidPE the computation of this quantity is serialized with respect to the samples. Our objective is to produce this quantity for a group of samples, all at once, as a coherent vectorized operation. One a sample-to-sample basis, the numbers that vary are the components of the vectors $\vec{X}$ and $\vec{Y}$. Thus we need a function that takes as input a \textit{list} vectors (or \textit{vector}) of vectors and produces a vector with the right components as output. To that end we define the tensor $X^{i}_{j}$ where
 
 \begin{align}
-\Lambda(\mathcal{H}_1|d(t)) &= \frac{e^{-\frac{1}{2}\braket{h(t)-d(t)|h(t)-d(t)}}}{e^{-\frac{1}{2}\braket{d(t)|d(t)}}}
+X^i &= 
+\begin{bmatrix}
+X^{i}_0 \\
+X^{i}_1 \\
+X^{i}_2
+\end{bmatrix}
 \end{align}
 
-By equation \ref{eq:bayes}  the posterior probability of a gravitational wave signal with parameters $\mu$ is given by 
-
-\begin{align}\label{eq:parampos}
-P[\vec{\mu}, \mathcal{H}_1|d(t)] = \frac{P[d(t)|\vec{\mu}, \mathcal{H}_1]P(\vec{\mu})}{P[d(t), \mathcal{H}_1]}
-\end{align}
-
-Extending equation \ref{eq:continuous} to the case of a continuous state space we have for the denominator
+As well as the tensor $R^{i}_{jk}$ where
 
 \begin{align}
-P[d(t), \mathcal{H}_1] &= \int_{\Omega}P[d(t)|\vec{\mu}, \mathcal{H}_1]P(\vec{\mu})d\vec{\mu}
+R^{i} &= 
+\begin{bmatrix}
+R^{i}_{00} & R^{i}_{01} & R^{i}_{02} \\ 
+R^{i}_{10} & R^{i}_{11} & R^{i}_{12} \\ 
+R^{i}_{20} & R^{i}_{21} & R^{i}_{22}  
+\end{bmatrix}
 \end{align}
 
-Where $\Omega$ indicates integration over the entire probabilistic state space. Dividing both the top and bottom of the right hand side of equation \ref{eq:parampos} by $P(d(t)|\vec{\mu}, \mathcal{H}_1)$ gives us 
-
-\begin{align}\label{eq:bayeslikely}
-P(\vec{\mu}, \mathcal{H}_1|d(t)) = \frac{\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)P(\vec{\mu})}{\int_{\Omega}\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)P(\vec{\mu})d\vec{\mu}}
-\end{align}
-
-Note that the integral in the denominator may be factored into components that are functions of independent groups of parameters. For the purposes of gravitational wave data analysis it is factored into intrinsic and extrinsic parameters, the former (masses, spins) being responsible for the actual orbital dynamics of the system, and the latter (distance, inclination, right ascension, declination) depending only on the nature of the observer relative to the source. We label these sets of paramters $\vec{\lambda}$ and $\vec{\theta}$ respectively. The denominator of equation \ref{eq:bayeslikely} is thus factorizable as 
+The tensor $X$ is like a stack of all the different possible $\vec{X}$ coming out of the page. The Tensor $R$ is like $n$ copies of the matrix $\mathbf{R}$ stacked on top of each other. In this way the desired vector is obtainable with the tensor contraction
 
 \begin{align}
-\int_{\Omega}\Lambda(d(t)|\vec{\mu}, \mathcal{H}_1)d\vec{\mu} &= \int_{\Omega}\Lambda(d(t)|\vec{\lambda}, \mathcal{H}_1)P(\vec{\lambda})d\vec{\lambda}\int_{\Omega}\Lambda(d(t)|\vec{\theta}, \mathcal{H}_1)P(\vec{\theta})d\vec{\theta} 
+F^{i}_{+} &= X^{lm}R^{i}_{lj}X^{j}_{m} - Y^{lm}R^{i}_{lj}Y^{j}_{m} \\ 
+F^{i}_{\times} &= X^{lm}R^{i}_{lj}Y^{j}_{m} + Y^{lm}R^{i}_{lj}X^{j}_{m} \\ 
+\end{align}
+
+
+\subsection{Vectorized Detector Arrival Time}
+
+The use of the geocentric signal arrival time in the above computation of the complex antenna factors $F_+$ and $F_\times$ is equivalent to making the approximation that the detectors are all physically located at the geocenter (albeit maintaining their varying orientations). Here we present a vectorized method for computing the more realistic temporal offsets resulting from the physical placement of the detectors on the surface of the earth. Let $\mathbf{A} \circ \mathbf{B}$ denote the Hadamard product of tensors, defined such that 
+
+\begin{align}
+C_{ij} = A_{ij}B_{ij} \equiv (\mathbf{A} \circ \mathbf{B})_{ij}
 \end{align} 
 
-Note that while evaluating the likelihood for a single set of parameters in the numerator of the above equation may not be any serious challenge, computing the integral in the denominator is. Many schemes \cite{rapidpe} \cite{lalinference} \cite{mcmc} have been developed to tackle this particular problem and generally involve simulating the posterior through MCMC sampling. These techniques are highly developed and at the time of writing can provide converged results on the order of days, however they are limited in their parallelism due fundamental serialization of the algorithm. Cutting edge implementations involving parallel tempering and some forms of ensemble MCMC have shown promising results, however none can take advantage of the many thousands of cores availble across the LIGO data grid. Methods that can scale out to the computational resources provided by the LIGO data grid are needed to reduce runtimes to minutes or less.   
-
-\subsection{Harmonic Mode Decomposition}
-
-For a single detector $k$ We can write our gravitational wave signal $h_k(t) = h_{+,k}(t) - ih_{\times, k}(t)$ as a sum over products of harmonic mode strain values $h_{l,m}(\vec{\lambda})$ and corresponding spin-weighted spherical harmonics, scaled by the reference distance and antenna factor:
+Given a vector $\vec{t_{geo}}$ the components of which are all exactly the Greenwich mean sidereal arrival time at geocenter, let $\vec{h} = \vec{t_{geo}} - \vec{\alpha}$ be a vector containing the conventionally defined hour angles for the samples in question, as well as vectors $\vec{\alpha}$ and $\vec{\delta}$ denoting the sample right ascensions and declinations respectively. The normal vector oriented in the sample source direction is then given by   
 
 \begin{align}
-h_k(t) = \frac{D_r}{D}F_k(\theta)\sum_{(l,m)}h_{k, (l,m)}(t, \vec{\lambda})Y_{(l,m)}(\vec{\theta})
+\vec{V_{s}} = 
+\begin{bmatrix}
+\cos(\vec{\delta}) \circ \cos(\vec{h}) \\
+-\cos(\vec{\delta}) \circ \sin(\vec{h}) \\
+\sin(\vec{\delta})
+\end{bmatrix}
 \end{align}
 
-Where $D_r$ is the luminosity reference distance to the binary. This is defined similarly to the manner in which apparent magnitude is defined versus absolute magnitude in astonomy. We substitute this expression for the signal into the expression for the likelihood ratio we find, taking the logarithm, that
+The above vector is relative to the standard celestial coordinate system for which the north pole is aligned along the $z$-axis and the $x$ axis points towards the Vernal equinox. In the same coordinate system, the vector pointing towards the detector in question $\vec{V_d}$ is available in a standard lookup table within the LAL software library. The sample arrival times $\vec{t_a}$ are then
 
 \begin{align}
-\mathcal{L} &= \prod_k e^{-\frac{1}{2}\braket{d - h_k|d-h_k} + \braket{d|d}} \\
-\ln\mathcal{L} &= -\frac{1}{2}\sum_{k}\left[\braket{d - h_k|d-h_k} + \braket{d|d}\right] \\
-&= \frac{1}{2}\sum_{k}\left[-\cancel{\braket{d|d}}+\braket{d|h_k}+\braket{h_k|d}+\braket{h_k|h_k} + \cancel{\braket{d|d}}\right] \\
+\vec{t_a} = \vec{t_{geo}} - \frac{1}{c}\vec{V_s} \cdot \vec{V_d}
 \end{align}
 
-Now, since for complex vector spaces $\braket{a|b} = \braket{b|a}*$, we have that $\braket{d|h_k} + \braket{h_k|d} = 2\Re\braket{h_k|d}$. Then, 
+\subsection{Vectorized Single Detector Log Likelihood}
+
+With the spherical harmonics and antenna factor in hand the following set of operations yield the factored likelihood for a single detector, the network likelihood being a simple sum over all of the detectors.
+
+Equation 24 from Arxiv $15502.05370v1.pdf$ for the network log likelihood reads 
 
 \begin{align}
-\ln\mathcal{L} &= \frac{1}{2}\sum_{k}\left[2\braket{h_k|d} + \braket{h_k|h_k}\right] \\
-&= \frac{1}{2} \sum_{k}\Re\left[\braket{2\frac{D_r}{D}F_k(\vec{\theta})\sum_{(l,m)}h_{k,(l,m)}(\lambda)Y_{(l,m)}(\vec{\theta})|d}\right] \\
-&+ \left[\frac{D_r}{D}\right]^2F_k^2(\vec{\theta})\sum_{(l,m),(l',m')}h^*_{(l,m)}(\vec{\lambda})h_{(l',m')}(\vec{\lambda})Y^*_{(l,m)}(\vec{\theta})Y_{(l',m')}(\vec{\theta})
+\ln{\mathcal{L}} = &\frac{D_{ref}}{D}Re \sum_{k}\sum_{(l,m)}\left[F_k Y_{lm}\right]^{*}Q_{k,lm} \\ 
+& - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] \\
+ & - \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right]
+\end{align}
+
+Consider a single detector, thus dropping the sum over $k$. The first term is of the form $\vec{A}\cdot\vec{B} = \sum_{i=0}^{d}A_iB_i$, so if $Q_{k,(l,m)}$ were a simple vector, we could write it as
+
+\begin{equation}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2} F*\vec{Y}\cdot\vec{Q}
+\end{equation}
+
+However the $Q_{k,(l,m)}$ are actually harmonic mode time series and not single values. We desire a vector whose values are the likelihoods at each point in the time series. 
+
+Consider the case where we have only the $(2,-2), (2,0)$ and $(2,2)$ modes. If we write all the mode time series $Q^0, Q^1, Q^2...$ as the columns of a matrix , then the desired result is obtained with
+
+\begin{align}
+F*
+\begin{bmatrix}
+Q^0_{2,-2} & Q^0_{2,+0} & Q^0_{2,+2} \\
+Q^1_{2,-2} & Q^1_{2,+0} & Q^1_{2,+2} \\ 
+Q^2_{2,-2} & Q^2_{2,+0} & Q^2_{2,+2} \\
+\vdots & \vdots & \vdots
+\end{bmatrix}
+\begin{bmatrix}
+\left(Y_{2,-2}\right)\\
+\hspace{0mm} \\
+\left(Y_{2,+0}\right) \\
+\hspace{0mm} \\
+\left(Y_{2,+2}\right) \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+Q^0_{2,-2} Y_{2,-2} + Q^0_{2,-2}Y_{2,+0} + Q^0_{2,+2}Y_{2,+2} \\
+Q^1_{2,-2} Y_{2,-2} + Q^1_{2,-2}Y_{2,+0} + Q^1_{2,+2}Y_{2,+2} \\
+Q^2_{2,-2} Y_{2,-2} + Q^2_{2,-2}Y_{2,+0} + Q^2_{2,+2}Y_{2,+2} \\
+\vdots
+\end{bmatrix}
+\end{align}
+
+With $\vec{Y}$ and $\mathbf{Q}$ defined as the matrix and vector above respectively, we have for the first term
+
+\begin{equation}
+\frac{D_{ref}}{D}Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right]
+\end{equation}
+
+The second term is a sum once over all the possible combinations of $(l,m), (l',m')$ pairs using the $U_{(l,m),(l',m')}$ cross terms. Its result is a scalar quantity made up of terms like
+
+\begin{align}
+&Y_{2,-2}^{*}Y_{2,-2}U_{(2,-2),(2,-2)} + Y_{2,-2}^{*}Y_{2,+0}U_{(2,-2),(2,+0)} + Y_{2,-2}^{*}Y_{2,+2}U_{(2,-2),(2,+2)} \\ 
+ +  \ &Y_{2,+0}^{*}Y_{2,-2}U_{(2,+0),(2,-2)} + Y_{2,+0}^{*}Y_{2,+0}U_{(2,+0),(2,+0)} + Y_{2,+0}^{*}Y_{2,+2}U_{(2,+0),(2,+2)} \\ 
++ \  &Y_{2,+2}^{*}Y_{2,-2}U_{(2,+2),(2,-2)} + Y_{2,+2}^{*}Y_{2,+0}U_{(2,+2),(2,+0)} + Y_{2,+2}^{*}Y_{2,+2}U_{(2,+2),(2,+2)}
+\end{align}
+
+
+If we pack the $U_{(l,m),(l',m')}$ into the matrix $\mathbf{U}$ as defined below then the following set of matrix operations produces the same sum
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} &  U_{(2,-2),(2,+0)} &  U_{(2,-2),(2,+2)} \\
+U_{(2,+0),(2,-2)} &  U_{(2,+0),(2,+0)} &  U_{(2,+0),(2,+2)} \\
+U_{(2,+2),(2,-2)} &  U_{(2,+2),(2,+0)} &  U_{(2,+2),(2,+2)}
+\end{bmatrix}
+\begin{bmatrix}
+Y_{2,-2} \\
+Y_{2,+0} \\
+Y_{2,+2}
+\end{bmatrix}
+\end{align*}
+
+because when you multiply $\mathbf{U}$ into $\vec{Y}$ this simplifies to 
+
+
+
+\begin{align*}
+\begin{bmatrix}
+Y_{2,-2}^{*} &Y_{2,+0}^{*}  &Y_{2,+2}^{*}   
+\end{bmatrix}
+\begin{bmatrix}
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} \\ 
+U_{(2,-2),(2,-2)} Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} + U_{(2,-2),(2,-2)}Y_{2,-2} 
+\end{bmatrix}
+\end{align*}
+
+Which becomes the desired scalar. This allows us to write the second term as
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}\left[|F_k|^2 Y_{l,m}^{*}Y_{l',m'}U_{k,(l,m),(l'm')}\right] =  - \left[\frac{D_{ref}}{2D}\right]^{2} |F^2|\vec{Y}^{*}\mathbf{U}\vec{Y}
+\end{align}
+
+We must always set up the spherical harmonic vectors based on the value of $m$ and the cross terms in row-major form based first on $m_2$ and then on $m_1$. If we organize the matrix $\mathbf{V}$ in the same way then the same set of steps will lead us to conclude that  
+
+
+\begin{align}
+- \left[\frac{D_{ref}}{2D}\right]^{2}\sum_{k}\sum_{(l,m),(l',m')}Re\left[  F_{k}^{2}Y_{l,m}Y_{l'm'}V_{k,(l,m),(l'm')}\right] = - \left[\frac{D_{ref}}{2D}\right]^{2}Re \left[F^2 \vec{Y}\mathbf{V}\vec{Y} \right]
+\end{align}
+
+Combining the results the single detector log likelihood is 
+
+\begin{align}
+\ln{\mathcal{L}} = \frac{D_{ref}}{D}\Re\left[\mathbf{Q}\left(F\vec{Y}\right)^{*}\right] - \left[\frac{D_{ref}}{2D}\right]^{2}\left[|F|^2 \vec{Y}^{*}\mathbf{U}\vec{Y} - \Re\left(F^2 \vec{Y}\mathbf{V}\vec{Y}\right) \right]
+\end{align}
+
+\subsection{GPU Implementation}
+Vectorization of the code produces a performance improvement due to SIMD instruction sets available on many modern microprocessor architectures. This allows for some on-chip parallelism that the compiler may use to unroll loops within the machine code and increase efficiency. Beyond this however the process of recasting the computation into clear matrix and tensor operations illuminates a higher level of parallelism possible on the hardware level. A substantial amount of both academc and industrial research and development has centered around efficient parallel implementations of the equivalent operations, with impressive results. Reaching the limit of the sample throughput with conventional serial python libraries, our investigation turned to GPU based acceleration as the only means forward. The following is the result of this investigation.
+
+\subsection{Hardware Limitations and Logical Programming}
+GPUs work significantly differently from CPUs and must be paired with one to operate, they serve only as accelerators for complex operations and not as standalone units. Data must be passed back and forth from host memory on the node to RAM placed directly on the card itself through expensive transfers via the PCI bus. This is known as device global memory. While the onboard RAM on bleeding edge cards exceeds 12GB, memory transfers are the dominant cost of many GPU programs and must be minimized. Once the data exists on the device, it is accessed and manipulated by anywhere between nine and fifteen logical cores called Streaming Multiprocessors. These cores operate concurrently and contain a smaller granularity of parallel processing units that \textit{may} operate concurrently depending on the individual resources required by the requested operations.
+Programming in CUDA involves launching groups of threads called \textit{grids} that are further subdivided into \textit{blocks}. The blocks themselves are indexed by local variables that are rapidly accessible by all the contained threads, and the threads themselves all have access to indices placed within registers that exist for the lifetime of the thread in question. Both the blocks and and grids can be up to three dimensional and thus each block and thread may have access to up to three registers containing block indices and three containing thread indices. In addition thread blocks have access to an extremely high speed shared memory space where ideally most of the computations are performed, however it is limited in size to \textbf{SIZE} and is not designed to hold the entire target dataset. One major design goal for CUDA programs is implementing a process which copies portions of memory from the global space to the shared, processes it, and copies it back, while using the thread and block indices to blanket the dataset with threads and control which threads access what data. The current CUDA API allows for the logical launch of \textbf{HOW MANY} blocks with a maximum of 1024 threads per block, for a total of \textit{HOW MANY} possible "concurrent" threads. It is important to note that these threads are not \textit{physically} concurrent. Indeed, if each of the logical threads containing six integers in registers were to exist simultaneously, the GPU would be storing \textbf{HOW MANY} registers at once! Similarly perposterous amounts of shared memory would have to exist. In actuality, the shared memory and registers are located on the logical cores themselves, and blocks thread blocks line up to be processed. How many are processed at once is heavily dependent on the resources requested by the blocks themselves. Defining too many local variables in a kernel function can lead to \textit{register pressure} and decreased \textit{occupancy} of the multiprocessors on the GPU, a similar effect can come from requesting too much shared memory. Furthermore, the blocks are not guaranteed to execute in any particular order. While the compiler is responsible for sorting out how many blocks can be processed at a time as well as the order, the programmer is responsible for performance tuning with regard to optimizing block occupancy. This is often a late stage design consideration, but also leads to some of the greatest returns after algorithmic optimization has been completed.    
+
+
+\subsection{PyCuda} 
+PyCuda is a flexible library for GPU scripting that includes a broad spectrum of GPU based array operations built to mimic the usage of NumPy arrays within a program. It allows for relatively easy access to the Nvidia CUDA API directly from within Python, and many of its operations are directly compatible with NumPy arrays with careful casting to the correct data types. Certainly one of the most challenging aspects of incorporating GPU code into a higher level language such as Python is the interface layer. As it stands much of the widely used LAL software consists of C code bound to Python through complex Swig interfaces, and while this is a perfectly valid way to access faster libraries, it can often be deceptively difficult to work with as many of the resulting Python objects contain read-only data structures masquerading as dynamic Python objects. This sometimes yields unpredictable behavior and it was decided this should be avoided as a way to interface with CUDA C. PyCuda is a very elegant solution to this problem as it seamlessly bridges this gap using the native GPUArray class, and a set of functions that create GPUArray copies of NumPy arrays that are built initially on the node CPU hosts. 
+With a smaller group of developers, the built-in GPUArray class contained within PyCuda does not yet support \textit{all} of the rich spectrum of high level functions available within the NDArray NumPy class. Perhaps more importantly however, PyCuda allows for custom CUDA kernel functions to be written as pure CUDA C directly within special containers called source modules, that are contained within the main body of the Python code. PyCuda actually calls the real Nvidia compiler at runtime and links the resulting temporary executable to the main program. One may call these functions with NumPy arrays as arguments, as if they were normal Python functions. This is perhaps the most important feature of PyCuda as it allows the developer to tune the customization of the code to whatever level is desired. Those intermediate operations that may be handled with the built in methods of the GPUArray are performed as such. More complex operations that are not supported can be custom built with source modules. If desired, the entire program may consist of CUDA C with no more then basic startup routines written in actual Python meant to instantiate the original data and pass it down to the GPU. This particular work used mostly custom kernels, for the simple reason that applying the same matrix operation to a contiguous block of memory containing multiple slightly different copies constitutes tensor operations similar in nature to the results of section \textbf{SECTION}, for which there is no general support for in PyCuda.  
+
+\subsection{General Design Considerations}
+Computing the time marginalized likelihood for a single sample involves processing the likelihood for each point in a signal time series, multiplied again by the number of associated harmonic modes. As the number of samples selected by the integrator as an adaptation chunk increases, the global memory required for the program to execute becomes dominated by these time series. Consequently the code is built upon managing and manipulating a large contiguous block of memory whose rows contain the harmonic mode time series for each sample, this lends itself naturally to using a two dimensional grid of one dimensional blocks as the launch configuration for most kernel functions. The one dimensional blocks lie conceptually along the rows and may line up if the number of time series samples exceeds the maximum threds per block. The grid extends downwards in the $y$-direction and will generally assign a row of blocks to each sample, or in some cases blanket the memory entirely in threads.
+It is the nature of CUDA programs that thread blocks operate most efficiently when the total number of threads per block is a power of two. Aside from the microprocessor architecture optimizing for these cases, memory reads by groups of thirty two threads (known as a \textit{Warp}) are coalesced by the compiler and recieve the value to be read as a broadcast. This massively boosts throughput if used correctly and it is thus advantageous in most cases to cast the problem dimensions into some workable multiple of the maximum threads per block on the hardware. For most Nvidia cards this is 1024. It is substantially easier to pad the time series with zeros out to the next greatest multiple of this number then to design specialized cleanup blocks whose sole purpose is to process the remainder. In the worse case this corresponds to holding \textbf{NUMBER} extra zeros in memory, which can be a painful amount of unecessary overhead in some scenarios. These factors come together to make memory management the main bottleneck for the entire algorithm, and a main area of focus for further development of this method.      
+
+\subsection{Spherical Harmonics}
+
+The spin-weighted spherical harmonics are precomputed at startup. There is no analytic formula that returns the spin-weighted spherical harmonic for arbitrary quantum numbers $l, m$ and $s$. The most efficient way of retrieving them closely follows the method used by the current, serial LAL functions, which implement a lookup table that contains the explicit formulas. This is often sufficient as most waveform templates require only the $l=2$ modes, and thus only the corresponding spherical harmonics. Indeed, the LSC has yet to require support for $s \neq 2$, so the corresponding CUDA function does not attempt to extend this capability. 
+
+\begin{wrapfig}
+\hspace{-1cm}
+\includegraphics[trim={0cm, 2cm, 2cm, 2cm}, clip]{spherical_harmonics.eps}
+\caption{Computation of Spherical Harmonics, $l=2$.}
+\label{fig:spharms}
+\end{wrapfig}
+
+Instead, it takes as argument an ordered list of $m$ values and executes the following set of steps to return a row-major ordered block of results whose rows correspond to values of $m$: Launch a one dimensional grid of one dimensional blocks, with one thread per sample. Compute the answer for this value of $m$ and place the result in global memory. Increment the local thread index by the number of samples and repeat. As long as it loops through the $m$ values in order, the results will be placed correctly, as per figure \ref{fig:spharms}. As the extrinsic parameter values used in computation are accessed relatively few times, this function does not use shared memory. Regardless as a standalone function it is able to compute several billion results per second, so little further optimization is necessary.
+
+
+
+\subsection{Complex Antenna Factor}
+The antenna factor requires somewhat less fancy footwork then the spherical harmonics, as there is only one per sample and not an arbirary multiple depending on the number of selected modes (which are not necessarily all the values between $-l$ and $l$. The position vectors corresponding to the extrinsic parameters are contracted with the detector response tensor in a thread-wise fashion: one thread for each sample. We avoid using BLAS based routines to perform the contraction due to the small size of the matrices involved, startup routines for BLAS might take longer then a simple loop over nine elements of the detector tensor. We again use a one dimensional grid of one dimensional blocks, however since the position vectors contain commonly accessed elements, we choose to store these independently in device shared memory as well as the detector tensor itself in even higher speed device constant memory. This makes the antenna factor computation one of the most efficient steps of the process.
+
+\subsection{Main Routine}
+
+Due to the variation in extrinsic parameters over the samples, it is necessary for each to manipulate a separate group of copies of the harmonic mode time series. The number of samples may be large, so the main block of memory intended to hold these time series is handed down to the GPU initialized to zeros and a GPU function is used to expanded the time series into a vertial stack of copies, per figure \ref{fig:expandrho}. To streamline the marginalization process this block of memory is padded with zeros out to the nearest multiple of $T_{max}$, which is generally either 512 or 1024 depending on the GPU architecture.  
+
+\begin{wrapfig}
+\vspace{10mm}
+\includegraphics[trim={0cm, 13cm, 0cm, 3.0cm}, clip, scale=0.65]{expand_rhots.eps}
+\label{fig:expandrho}
+\caption{Expansion of time series. One thread per relevant item in resulting memory block. Zeros are padded out to the nearest multiple of $T_{max}$.
+\end{wrapfig}
+
+
+The result of this expansion of the time series into GPU memory is the desired vertical stack of time series copies. 
+
+The next step is to transform these time series into term one of equation \textbf{EQUATION}. This involves combining the antenna factor (for which there is one complex number per sample) with the spin-weighted spherical harmonics (for which there are $N_m$ complex numbers per sample) into a single quantity and inserting them into the correct positions within the time series block. It is more efficient to complete the combination of the antenna factor and spherical harmonics prior to multiplying them into the time series, and this action is easily completed in an elementwise fasion using the built in machinery of PyCuda. It is steps like these for which PyCuda is an essential tool for performing what would otherwise be complex GPU operations with a single line of code.
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\hspace{-5cm}
+\vspace{-1cm}
+  \begin{center}
+    \includegraphics[trim={4cm, 13cm, 2cm, 3cm}, clip, width=0.75\textwidth]{FYrho.eps}
+  \end{center}
+  \caption{Insertion of the antenna factor-spherical harmonic pairs. }
+\end{wrapfigure}
+
+This step coupled with the previous is all that is necessary to build the first term of the likelihood for all of the samples on the GPU, the rest of the work is simply a series of summing operations. These must be handled somewhat carefully due to the possibility of race conditions and queued memory accesses, both of which can hinder or dangerously skew the results of a computation. 
+The main issue stems from the fact that there is no guarantee of the order of execution of threadblocks within a program. This means that any program that depends upon memory reads and writes occuring in a specific order is prone to producting incorrect results. For this reason it is important to design the summation process in a way that does not exhibit this behavior: each thread should only read and write to memory locations unique to it. Note that each of the functions described thus far follows this paradigm.
+Queued memory are serialized by the CUDA compiler. This means that memory reads to the same location by multiple threads take place one by one. While not as dangerous as a race condition, it is a nontrivial performance consideration. Note that again the process thus far has been designed to avoid these situations. This is particularly important for justifying the nature of the next series of steps.   
+
+\clearpage
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\vspace{-0.78cm}
+\begin{center}
+\includegraphics[trim={1.67cm, 10cm, 0, 3cm}, clip, scale=0.5]{sumrhots.eps}
+\caption{Downwards summation of the harmonic modes to form term one of the factored likelihood for a group of samples.}
+\end{center}
+\end{wrapfigure}
+
+The time series are summed downwards within memory by single threads. One row of threads is launched per sample, this leaves $N_m$ values for each thread to collect in a summation that resides in the bottom row. The memory locations accessed and written to by the individual threads in the grid are unique to that thread, avoiding races and queued memory accesses. The result are rows that are the same as those that would have been formed taking the product $\mathbf{Q}(F\vec{Y})$, this is the first term of the factored likelihood. It remains only to build the second term and subtract it from the rows of this matrix to complete the computation.  
+
+\subsection{Marginalization Over Time}
+Having integrated over the extrinsic parameters numerically, it remains to marginalize over the entire time series to produce a single scalar representing the likelihood associated with a sample. While a simplistic operation in theory special attention was taken to optimize the summation process. This is due to the "width" of the data to be processed. The time series themselves can be thousands of entries long depending on the signal sample rate. Accelerating the preparation of the time series, as demonstrated in the previous steps, can be performed with brute force by flooding the calculation with threads, parallel reduction on a GPU requires finesse. In fact, it was found that this particular step was the main bottleneck in the serial code, thus it was expected that here the greatest returns would be achieved. The objective is to keep as many threads busy as possible to maintain throughput, however as we will demonstrate, the best that can be achieved without excessively complicated schemes is to start with $\frac{N_t}{2}$ threads and recursively cut the working group in half, a total of $\log_2(N_t)$ times, as per figure \ref{fig:recursive}. 
+
+
+\begin{wrapfigure}{l}{0.6\textwidth}
+\label{fig:recursive}
+\caption{Sequential addressing for parallel reduction.}
+\begin{center}
+\includegraphics[trim={0, 13cm, 0, 0}, clip, scale=0.5]{onedmarg.eps}
+\end{center}
+\end{wrapfigure}
+
+\begin{wrapfigure}{h}{0.6\textwidth}
+\label{fig:folding}
+\caption{"Folding" of the time series block for time marginalization}
+\begin{center}
+\includegraphics[trim={0, 13cm, 0, 0}, clip, scale=0.5]{marg_fold.eps}
+\end{center}
+\end{wrapfig}
+
+
+\subsection{Memory Considerations}
+Here we provide an overview of the memory resources required by the contributing structures involved in the likelihood calculation. This is a bookkeeping step necessary to select the correct sample array sizes given available hardware and tune the implementation to achieve optimal performance. 
+The samples themselves are double precision arrays of length $N_s$. For $P$ params this equates to $8PN_s$ bytes of memory. The first computation in the routine is the generation of spherical harmonics, given a maximum value of $l$. Since there are $2l+1$ possible values of $m$ for each $l$, there are 
+
+\begin{align}
+\sum_{l=0}^{L_{max}} (2l + 1) 
 \end{align}  
 
-Now, for any complex number $z = a + ib$, we have that $z*z + \Re(z^2) = 2z*z$, so $z*z = \frac{1}{2}(z*z + \Re z^2)$. Then the double sum over $l,m$ pairs becomes
+Total values of $m$ under a certain $L_{max}$. The partial sums are $S_L = (L_{max} + 1)^2$, so there are up to $16N_s(L_{max}+1)^2$ bytes of memory associated the spherical harmonics for a given value of $L_{max}$, requiring an extra factor of two to store complex numbers in double precision. Finally, we access to the complex conjugate of the spherical harmonics, this adds another factor of two bringing the total contribution to $32N_s(L_{max}+1)^2$ bytes.  
+The antenna factor is also a complex number, but there is only a single value for each sample, adding only $16N_s$ bytes to the total memory usage, with an additional $16N_s$ for the conjugate. This is amounts to an additional $32N_s$ bytes. 
+By far the greatest memory concern is the large time series block inside which the main calculation occurs. This block requires a row for each sample, multiplied by the number of modes for a total of $N_m N_s$ rows. Each of these rows holds $N_t$ elements that could, in the worst case, need to be padded by up to $T_{max} - 1$ zeros to enable proper time marginalization. Each element of this block is a double precision complex number. This equates to $16N_m N_s (N_t + T_{max} - 1)$ bytes of memory. An unfortunate shortcoming of PyCuda is that some simple operations can not be performed in place - one such operation is taking the real part of an array. This is due to the recasting of data types on the GPU itself. This means that for a brief portion of the calculation, an additional $50\%$ memory is needed raising the requirement to $24N_m N_s (N_t + T_{max} - 1)$ at peak for the main block.
+The $U$ and $V$ crossterms are complex numbers that require $16N_s$ bytes each, for a total of $32N_s$. The second term of the likelihood, which is a combination of these, is a real number of the same length, adding $8N_s$ bytes to the total.
+The sum of these contributions is the total number of bytes $B$ and is given by 
 
+\begin{align}
+N_s(8P + 32(L_{max} + 1)^2 +  24N_m(N_t + T_{max} - 1) + 72)
+\end{align}
 
-
-
-The defining feature of this form of the likelihood is the separation between intrinsic and extrinsic parameters. The intrinsic parameters of the binary exist only within the $h_{k,(l,m)}$, whereas the parameters that depend on the observer are contained entirely within the antenna factor and spherical harmonics. Work by \cite{rapidpe} (RapidPE) has shown that this can be exploited to accelerate computation of the likelihood by precomputing the orbital dynamics of the binary and marginalizing over the extrinsic parameters. The same work computes the posterior over the \textit{intrinsic} parameter space by spreading a grid of points across the $\mathcal{M}, \eta$ plane and computing the integral at each such point, since each of these integrations is independent each point for which the value of the posterior is desired may be assigned its own computational resources. This enables the necessary scaling - the posterior between the points is simply interpolated after all the cores are done. 
-
-\subsection{Precessional Effects}
-This work aims to extend and accelerate the ability for RapidPE to estimate gravitational wave parameters. RapidPE is written in Python, and prior to this work significant attention was given to code optimization to obtain the maximum performance possible through Python. Since the terms of the likelihood that may be precomputed involve computationally expensive fourier transforms, calculation of the cross terms $V$ were approximated using the properties of fourier transform to relate 
-
+Below we have tabulated $B$ for some values of $N_s$ to be used as reference when running the code.
 

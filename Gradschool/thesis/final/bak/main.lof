@@ -1,0 +1,16 @@
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {1-1}{\ignorespaces A visual depiction of the Reimann Curvature tensor. Parallel transporting a vector originally pointing in the $\sigma $ direction both ways around the loop shown yields two different vectors. The orange vector $\mathaccentV {vec}17E{d}$ points between the tips. The magnitude of the components of this vector are $R_{\rho \sigma \mu \nu }$.}}{15}
+\contentsline {figure}{\numberline {1-2}{\ignorespaces A joint probability distribution $P(x,y)$. The contours parallel with the $x$ direction represent different $P(y|x)$.}}{21}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2-1}{\ignorespaces Insertion of the antenna factor-spherical harmonic pairs. }}{43}
+\contentsline {figure}{\numberline {2-2}{\ignorespaces Downwards summation of the harmonic modes to form term one of the factored likelihood for a group of samples.}}{44}
+\contentsline {figure}{\numberline {2-3}{\ignorespaces Sequential addressing for parallel reduction.}}{45}
+\contentsline {figure}{\numberline {2-4}{\ignorespaces "Folding" of the time series block for time marginalization}}{45}
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3-1}{\ignorespaces Computation of the time marginalized, factored log likelihood. Speedup for different chunk sizes. The values on top of the columns are the ratio between the Python and CUDA implementations, averaged over ten trials, timed using Pythons timing library.}}{50}
+\contentsline {figure}{\numberline {3-2}{\ignorespaces A gamma ray burst. Radiation escaping the black hole is thought to be genreated via infalling matter from a neutron star remnant.}}{53}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {B-1}{\ignorespaces Armadillo slaying lawyer.}}{59}
+\contentsline {figure}{\numberline {B-2}{\ignorespaces Armadillo eradicating national debt.}}{60}
+\addvspace {10\p@ }
