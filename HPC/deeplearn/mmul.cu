@@ -10,6 +10,10 @@ static void HandleError (cudaError_t err, const char* file, int line) {
                 exit(1);
         }
 }
+#define HANDLE_ERROR( err ) (HandleError(err, __FILE__, __LINE__))
+
+
+
 
 
 void printDevProp(cudaDeviceProp devProp)
@@ -36,7 +40,24 @@ void printDevProp(cudaDeviceProp devProp)
     return;
 }
 
-#define HANDLE_ERROR( err ) (HandleError(err, __FILE__, __LINE__))
+
+// Kernel function
+
+__global__ void mmult(double a[], double b[], double c[], a_n, a_m, b_n, b_m) {
+    extern __shared__ double local[];
+
+    int CX   = blockIdx.x;
+    int CY   = blockIdx.y;
+    int X    = threadIdx.x;
+    int REM  = a_m % blockDim.x; 
+    int ITER = (a_m - REM) / blockDim.x; 
+    
+    double my_row = &a[] 
+
+    for (int i = 0; i < ITER; i++) {
+        local[X] = 
+    }
+}
 
 int main(int argc, char* argv[]) {
     // Initial Machinery to select the GPU
@@ -77,5 +98,42 @@ int main(int argc, char* argv[]) {
     printf("Matrices will be A = (%d x %d), B = (%d x %d) \n", A_n, A_m, B_n, B_m);
     printf("Final matrix will be C = (%d x %d) \n", A_n, B_m);
 
+    // instantiate matrices
+    
+    double* A = (double *)malloc(A_n*A_m*sizeof(double));
+    double* B = (double *)malloc(B_n*B_m*sizeof(double));
+
+    double* A_gpu;
+    double* B_gpu;
+
+
+    for (int i = 0; i < A_n*A_m; i++) {
+        A[i] = double(i);  
+    }
+    for (int i = 0; i < B_n*B_m; i++) {
+        B[i] = double(i);  
+    }
+     
+
+
+    // Copy data down to GPU
+    if ( cudaSuccess != cudaMalloc((void**)&A_gpu, A_n*A_m*sizeof(double)) ) {
+        printf("cudaMalloc Failed...\n");
+        exit(1);
+    }
+    if ( cudaSuccess != cudaMalloc((void**)&B_gpu, B_n*B_m*sizeof(double)) ) {
+        printf("cudaMalloc Failed...\n");
+        exit(1);
+    }
+
+    cudaMemcpy(A_gpu, A, A_n*A_m*sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(B_gpu, B, B_n*B_m*sizeof(double), cudaMemcpyHostToDevice);
+
+
+
+    free(A);
+    free(B);
+    cudaFree(A_gpu);
+    cudaFree(B_gpu);
     return 0;
 }
