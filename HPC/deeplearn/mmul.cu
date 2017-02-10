@@ -40,24 +40,63 @@ void printDevProp(cudaDeviceProp devProp)
     return;
 }
 
+def _get_block_dimensions(int DIM, int TMAX) {
+    // Want 1024 threads per block
+    int xdim;
+
+    if (DIM < TMAX) {
+        ret = TMAX;        
+    }
+    else {
+        ret = ceil(DIM / TMAX) 
+    }
+    return ret
+}
+
+
+def _get_gid_2d_2d() {
+    return ((blockIdx.x * blockDim.x) + threadIdx.x) + (blockDim.x * gridDim.x) * blockIdx.y;
+}
+
+def _get_gid_2d_2d_T() {
+    return ((blockIdx.y * blockDim.y) + threadIdx.y) + (blockDim.y * gridDim.y) * blockIdx.x;
+}
 
 // Kernel function
 
-__global__ void mmult(double a[], double b[], double c[], a_n, a_m, b_n, b_m) {
-    extern __shared__ double local[];
+__global__ void mmult(double a[], double b[], double c[], int INDIM) {
+    int GID = _get_gid_2d_2d()
+    int* ROW = &a[blockIdx.y * blockDim.y + threadIdx.y];
+    int* COL = &b[blockIdx.x * blockDim.x + threadIdx.x];
 
-    int CX   = blockIdx.x;
-    int CY   = blockIdx.y;
-    int X    = threadIdx.x;
-    int REM  = a_m % blockDim.x; 
-    int ITER = (a_m - REM) / blockDim.x; 
-    
-    double my_row = &a[] 
-
-    for (int i = 0; i < ITER; i++) {
-        local[X] = 
+    int TOT
+    for (int i = 0; i < INDIM; i++) {
+        TOT += ROW[i]*COL[i];
     }
+    
+    c[GID] = TOT; 
+     
 }
+
+__global__ void transpose_2d_double(double mat[], int N, int M) {
+    int GID  = _get_gid_2d_2d(); 
+    int L    = N * M - 1 
+ 
+    int GIDX;
+    if GID == L {
+        GIDX = L;
+    }
+    else {
+        GIDX = (GID * M) % L;
+    }
+
+    val = mat[GID]; 
+    __syncthreads();
+    mat[GIDX] = val;
+   
+ 
+}
+
 
 int main(int argc, char* argv[]) {
     // Initial Machinery to select the GPU
@@ -129,7 +168,14 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(A_gpu, A, A_n*A_m*sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(B_gpu, B, B_n*B_m*sizeof(double), cudaMemcpyHostToDevice);
 
+    // Size the grid
+    // Want 32 X 32 Blocks 
+ 
+    block_x = _get_block_dimensions(A_n, 32);
+    block_y = _get_block_dimensions(B_m, 32);
 
+    dim3 block = (block_x, block_y, 1)
+    # HERE
 
     free(A);
     free(B);
